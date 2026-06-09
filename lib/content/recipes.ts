@@ -1,0 +1,267 @@
+import type { Recipe } from './types'
+
+export const recipes: Recipe[] = [
+  {
+    slug: 'klassischer-espresso',
+    title: 'Klassischer Espresso',
+    excerpt:
+      'Die Grundlage jeder guten Kaffeekreation – kräftig, aromatisch und mit feiner Crema.',
+    type: 'espresso',
+    difficulty: 'Mittel',
+    totalTime: 5,
+    baseServings: 1,
+    rating: 4.8,
+    ratingCount: 124,
+    image: '/images/recipe-espresso.png',
+    author: 'jonas-keller',
+    date: '2025-05-22',
+    featured: true,
+    ingredients: [
+      { name: 'Espressobohnen, fein gemahlen', amount: 18, unit: 'g' },
+      { name: 'Frisches Wasser', amount: 36, unit: 'ml' },
+    ],
+    steps: [
+      { title: 'Mahlen', text: 'Bohnen fein mahlen und in den Siebträger geben.' },
+      { title: 'Tampen', text: 'Das Kaffeemehl gleichmäßig mit rund 15 kg Druck andrücken.' },
+      { title: 'Brühen', text: 'Siebträger einspannen und in 25–30 Sekunden extrahieren.' },
+      { title: 'Genießen', text: 'Den Espresso sofort servieren – mit goldbrauner Crema.' },
+    ],
+    tips: [
+      'Achte auf eine frische Röstung für die beste Crema.',
+      'Variiere den Mahlgrad, falls die Extraktion zu schnell oder zu langsam läuft.',
+    ],
+    nutrition: { kcal: 3, fett: 0, kohlenhydrate: 0, eiweiss: 0 },
+  },
+  {
+    slug: 'handgebruehter-filterkaffee',
+    title: 'Handgebrühter Filterkaffee',
+    excerpt:
+      'Mit dem Handaufguss holst du feine, klare Aromen aus deiner Lieblingsbohne heraus.',
+    type: 'filterkaffee',
+    difficulty: 'Einfach',
+    totalTime: 8,
+    baseServings: 2,
+    rating: 4.7,
+    ratingCount: 98,
+    image: '/images/recipe-filter.png',
+    author: 'lena-brandt',
+    date: '2025-05-19',
+    featured: true,
+    ingredients: [
+      { name: 'Kaffee, mittel gemahlen', amount: 30, unit: 'g' },
+      { name: 'Wasser (ca. 94 °C)', amount: 500, unit: 'ml' },
+    ],
+    steps: [
+      { title: 'Filter spülen', text: 'Papierfilter einlegen und mit heißem Wasser ausspülen.' },
+      { title: 'Blooming', text: 'Kaffee einfüllen, mit 60 ml Wasser benetzen und 30 Sekunden quellen lassen.' },
+      { title: 'Aufgießen', text: 'In kreisenden Bewegungen das restliche Wasser in mehreren Güssen aufgießen.' },
+      { title: 'Servieren', text: 'Sobald das Wasser durchgelaufen ist, sofort genießen.' },
+    ],
+    tips: [
+      'Eine Küchenwaage hilft dir, das Verhältnis genau zu treffen.',
+      'Frisch gemahlener Kaffee macht den größten Unterschied.',
+    ],
+    nutrition: { kcal: 5, fett: 0, kohlenhydrate: 1, eiweiss: 0 },
+  },
+  {
+    slug: 'cold-brew-klassisch',
+    title: 'Cold Brew klassisch',
+    excerpt:
+      'Über Nacht kalt extrahiert – mild, säurearm und herrlich erfrischend.',
+    type: 'cold-brew',
+    difficulty: 'Einfach',
+    totalTime: 720,
+    baseServings: 4,
+    rating: 4.9,
+    ratingCount: 156,
+    image: '/images/recipe-coldbrew.png',
+    author: 'marie-hoffmann',
+    date: '2025-05-15',
+    featured: true,
+    ingredients: [
+      { name: 'Kaffee, grob gemahlen', amount: 100, unit: 'g' },
+      { name: 'Kaltes Wasser', amount: 1000, unit: 'ml' },
+      { name: 'Eiswürfel zum Servieren', amount: 8, unit: 'Stück' },
+    ],
+    steps: [
+      { title: 'Ansetzen', text: 'Kaffee und Wasser in einem Gefäß vermischen.' },
+      { title: 'Ziehen lassen', text: 'Abgedeckt 12 Stunden im Kühlschrank extrahieren lassen.' },
+      { title: 'Filtern', text: 'Durch ein feines Sieb oder einen Filter abseihen.' },
+      { title: 'Servieren', text: 'Über Eiswürfel gießen und nach Belieben verdünnen.' },
+    ],
+    tips: [
+      'Das Konzentrat hält sich bis zu einer Woche im Kühlschrank.',
+      'Mit Milch oder Tonic Water entstehen spannende Varianten.',
+    ],
+    nutrition: { kcal: 8, fett: 0, kohlenhydrate: 2, eiweiss: 0 },
+  },
+  {
+    slug: 'cremiger-cappuccino',
+    title: 'Cremiger Cappuccino',
+    excerpt:
+      'Espresso und samtiger Milchschaum im perfekten Gleichgewicht.',
+    type: 'cappuccino',
+    difficulty: 'Mittel',
+    totalTime: 7,
+    baseServings: 1,
+    rating: 4.8,
+    ratingCount: 142,
+    image: '/images/recipe-cappuccino.png',
+    author: 'marie-hoffmann',
+    date: '2025-05-11',
+    ingredients: [
+      { name: 'Espressobohnen, fein gemahlen', amount: 18, unit: 'g' },
+      { name: 'Vollmilch', amount: 120, unit: 'ml' },
+      { name: 'Wasser', amount: 36, unit: 'ml' },
+    ],
+    steps: [
+      { title: 'Espresso brühen', text: 'Einen kräftigen Espresso in die Tasse extrahieren.' },
+      { title: 'Milch aufschäumen', text: 'Milch auf etwa 65 °C erhitzen und feinporig aufschäumen.' },
+      { title: 'Einschenken', text: 'Den Milchschaum vorsichtig auf den Espresso gießen.' },
+      { title: 'Verzieren', text: 'Mit etwas Übung gelingt ein Herz oder eine Rosetta.' },
+    ],
+    tips: [
+      'Kalte Milch lässt sich am besten aufschäumen.',
+      'Klopfe die Kanne kurz auf, um große Blasen zu lösen.',
+    ],
+    nutrition: { kcal: 80, fett: 4, kohlenhydrate: 6, eiweiss: 4 },
+  },
+  {
+    slug: 'latte-macchiato-schichten',
+    title: 'Latte Macchiato in Schichten',
+    excerpt:
+      'Drei Schichten aus Milch, Espresso und Schaum – ein echter Hingucker.',
+    type: 'latte-macchiato',
+    difficulty: 'Mittel',
+    totalTime: 8,
+    baseServings: 1,
+    rating: 4.6,
+    ratingCount: 87,
+    image: '/images/recipe-latte.png',
+    author: 'marie-hoffmann',
+    date: '2025-05-07',
+    ingredients: [
+      { name: 'Vollmilch', amount: 200, unit: 'ml' },
+      { name: 'Espresso', amount: 36, unit: 'ml' },
+      { name: 'Zuckersirup (optional)', amount: 1, unit: 'EL' },
+    ],
+    steps: [
+      { title: 'Milch erwärmen', text: 'Milch erhitzen und aufschäumen, dann in ein hohes Glas füllen.' },
+      { title: 'Setzen lassen', text: 'Kurz warten, bis sich Schaum und flüssige Milch trennen.' },
+      { title: 'Espresso zugeben', text: 'Den Espresso langsam über einen Löffel eingießen, damit er eine Schicht bildet.' },
+      { title: 'Servieren', text: 'Mit langem Löffel servieren und genießen.' },
+    ],
+    tips: [
+      'Ein warmes Glas verbessert die Schichtbildung.',
+      'Langsames Eingießen ist der Schlüssel zu klaren Schichten.',
+    ],
+    nutrition: { kcal: 140, fett: 7, kohlenhydrate: 11, eiweiss: 7 },
+  },
+  {
+    slug: 'iced-coffee-erfrischend',
+    title: 'Erfrischender Iced Coffee',
+    excerpt:
+      'Schnell gemacht und ideal für heiße Tage – mit Milch und einem Hauch Süße.',
+    type: 'iced-coffee',
+    difficulty: 'Einfach',
+    totalTime: 5,
+    baseServings: 1,
+    rating: 4.5,
+    ratingCount: 76,
+    image: '/images/recipe-iced.png',
+    author: 'marie-hoffmann',
+    date: '2025-05-03',
+    ingredients: [
+      { name: 'Espresso oder starker Kaffee', amount: 60, unit: 'ml' },
+      { name: 'Kalte Milch', amount: 150, unit: 'ml' },
+      { name: 'Eiswürfel', amount: 6, unit: 'Stück' },
+      { name: 'Ahornsirup (optional)', amount: 1, unit: 'TL' },
+    ],
+    steps: [
+      { title: 'Kaffee kühlen', text: 'Frisch gebrühten Kaffee kurz abkühlen lassen.' },
+      { title: 'Glas füllen', text: 'Eiswürfel ins Glas geben und mit Milch auffüllen.' },
+      { title: 'Kaffee zugeben', text: 'Den Kaffee darüber gießen und nach Geschmack süßen.' },
+      { title: 'Umrühren', text: 'Kurz umrühren und sofort genießen.' },
+    ],
+    tips: [
+      'Kaffee-Eiswürfel verhindern, dass der Drink verwässert.',
+      'Pflanzendrinks wie Hafer passen hervorragend.',
+    ],
+    nutrition: { kcal: 95, fett: 4, kohlenhydrate: 9, eiweiss: 5 },
+  },
+  {
+    slug: 'wiener-mokka-sahne',
+    title: 'Wiener Mokka mit Sahne',
+    excerpt:
+      'Eine süße Versuchung: kräftiger Kaffee mit Schlagsahne und Kakao.',
+    type: 'suess',
+    difficulty: 'Einfach',
+    totalTime: 10,
+    baseServings: 2,
+    rating: 4.7,
+    ratingCount: 64,
+    image: '/images/recipe-mocha.png',
+    author: 'marie-hoffmann',
+    date: '2025-04-28',
+    ingredients: [
+      { name: 'Starker Kaffee', amount: 300, unit: 'ml' },
+      { name: 'Schlagsahne', amount: 100, unit: 'ml' },
+      { name: 'Zucker', amount: 2, unit: 'TL' },
+      { name: 'Kakaopulver', amount: 1, unit: 'TL' },
+    ],
+    steps: [
+      { title: 'Kaffee kochen', text: 'Starken Kaffee aufbrühen und auf zwei Tassen verteilen.' },
+      { title: 'Süßen', text: 'Nach Geschmack mit Zucker süßen.' },
+      { title: 'Sahne schlagen', text: 'Sahne steif schlagen und auf den Kaffee setzen.' },
+      { title: 'Bestäuben', text: 'Mit Kakaopulver bestäuben und servieren.' },
+    ],
+    tips: [
+      'Ein Schuss Vanille verfeinert den Geschmack.',
+      'Die Sahne sollte nicht zu fest sein, damit sie schön aufliegt.',
+    ],
+    nutrition: { kcal: 180, fett: 15, kohlenhydrate: 9, eiweiss: 2 },
+  },
+  {
+    slug: 'kuerbis-gewuerz-latte',
+    title: 'Kürbis-Gewürz-Latte (alkoholfrei)',
+    excerpt:
+      'Die herbstliche Spezialität mit Kürbispüree und wärmenden Gewürzen.',
+    type: 'alkoholfrei',
+    difficulty: 'Mittel',
+    totalTime: 15,
+    baseServings: 2,
+    rating: 4.8,
+    ratingCount: 112,
+    image: '/images/recipe-pumpkin.png',
+    author: 'marie-hoffmann',
+    date: '2025-04-22',
+    featured: true,
+    ingredients: [
+      { name: 'Espresso', amount: 72, unit: 'ml' },
+      { name: 'Milch', amount: 300, unit: 'ml' },
+      { name: 'Kürbispüree', amount: 2, unit: 'EL' },
+      { name: 'Ahornsirup', amount: 2, unit: 'EL' },
+      { name: 'Lebkuchengewürz', amount: 1, unit: 'TL' },
+      { name: 'Zimt zum Bestäuben', amount: 1, unit: 'Prise' },
+    ],
+    steps: [
+      { title: 'Würzmilch erhitzen', text: 'Milch mit Kürbispüree, Sirup und Gewürz erwärmen.' },
+      { title: 'Aufschäumen', text: 'Die Mischung cremig aufschäumen.' },
+      { title: 'Espresso zugeben', text: 'Espresso aufbrühen und auf die Tassen verteilen.' },
+      { title: 'Vollenden', text: 'Mit Würzmilch auffüllen und mit Zimt bestäuben.' },
+    ],
+    tips: [
+      'Selbstgemachtes Kürbispüree schmeckt besonders intensiv.',
+      'Auch mit Hafermilch gelingt der Latte wunderbar.',
+    ],
+    nutrition: { kcal: 165, fett: 5, kohlenhydrate: 24, eiweiss: 6 },
+  },
+]
+
+export function getRecipe(slug: string): Recipe | undefined {
+  return recipes.find((r) => r.slug === slug)
+}
+
+export function getFeaturedRecipes(): Recipe[] {
+  return recipes.filter((r) => r.featured)
+}
