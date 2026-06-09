@@ -4,7 +4,15 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Check, X, Clock, MessageCircle } from 'lucide-react'
 import { setCommentStatus } from '@/app/actions/comments'
-import type { Comment } from '@/lib/db/schema'
+
+interface Comment {
+  _id: string
+  authorName: string
+  body: string
+  contentType: string
+  contentSlug: string
+  createdAt: string
+}
 
 const contentLabels: Record<string, string> = {
   artikel: 'Artikel',
@@ -12,7 +20,7 @@ const contentLabels: Record<string, string> = {
   rezepte: 'Rezept',
 }
 
-function formatDate(date: Date): string {
+function formatDate(date: string): string {
   return new Date(date).toLocaleString('de-DE', {
     day: '2-digit',
     month: 'short',
@@ -32,13 +40,13 @@ export function ModerationList({
   const router = useRouter()
   const [pending, setPending] = useState(initialPending)
   const [isPending, startTransition] = useTransition()
-  const [busyId, setBusyId] = useState<number | null>(null)
+  const [busyId, setBusyId] = useState<string | null>(null)
 
-  function moderate(id: number, status: 'approved' | 'rejected') {
+  function moderate(id: string, status: 'approved' | 'rejected') {
     setBusyId(id)
     startTransition(async () => {
       await setCommentStatus(id, status)
-      setPending((prev) => prev.filter((c) => c.id !== id))
+      setPending((prev) => prev.filter((c) => c._id !== id))
       setBusyId(null)
       router.refresh()
     })
@@ -95,7 +103,7 @@ export function ModerationList({
         <ul className="mt-4 flex flex-col gap-4">
           {pending.map((c) => (
             <li
-              key={c.id}
+              key={c._id}
               className="rounded-xl border border-border bg-card p-5"
             >
               <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -115,8 +123,8 @@ export function ModerationList({
               <div className="mt-4 flex gap-3">
                 <button
                   type="button"
-                  disabled={isPending && busyId === c.id}
-                  onClick={() => moderate(c.id, 'approved')}
+                  disabled={isPending && busyId === c._id}
+                  onClick={() => moderate(c._id, 'approved')}
                   className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   <Check className="h-4 w-4" />
@@ -124,8 +132,8 @@ export function ModerationList({
                 </button>
                 <button
                   type="button"
-                  disabled={isPending && busyId === c.id}
-                  onClick={() => moderate(c.id, 'rejected')}
+                  disabled={isPending && busyId === c._id}
+                  onClick={() => moderate(c._id, 'rejected')}
                   className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary disabled:opacity-50"
                 >
                   <X className="h-4 w-4" />
