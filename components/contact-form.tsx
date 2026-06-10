@@ -27,17 +27,53 @@ const contactInfo = [
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   // Honeypot: legitime Nutzer lassen dieses Feld leer, Bots füllen es oft aus.
   const [trap, setTrap] = useState('')
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    // Verdächtige Einsendung (Honeypot befüllt) still verwerfen.
+    setError('')
+    setLoading(true)
+
+    // Honeypot-Check
     if (trap.trim() !== '') {
       setSubmitted(true)
+      setLoading(false)
       return
     }
-    setSubmitted(true)
+
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      subject: formData.get('subject'),
+      message: formData.get('message'),
+      website: formData.get('website'),
+    }
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        const result = await response.json()
+        setError(result.error || 'Ein Fehler ist aufgetreten.')
+        setLoading(false)
+        return
+      }
+
+      setSubmitted(true)
+    } catch (err) {
+      setError('Verbindungsfehler. Bitte versuche es später erneut.')
+      console.error('[Contact] Error:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -91,10 +127,21 @@ export function ContactForm() {
             onSubmit={handleSubmit}
             className="relative rounded-2xl border border-border bg-card p-6 sm:p-8"
           >
+            {error && (
+              <div className="mb-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                {error}
+              </div>
+            )}
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" required placeholder="Dein Name" />
+                <Input
+                  id="name"
+                  name="name"
+                  required
+                  placeholder="Dein Name"
+                  disabled={loading}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">E-Mail</Label>
@@ -104,6 +151,7 @@ export function ContactForm() {
                   type="email"
                   required
                   placeholder="du@beispiel.de"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -114,6 +162,7 @@ export function ContactForm() {
                 name="subject"
                 required
                 placeholder="Worum geht es?"
+                disabled={loading}
               />
             </div>
             <div className="mt-5 space-y-2">
@@ -124,6 +173,7 @@ export function ContactForm() {
                 required
                 rows={6}
                 placeholder="Deine Nachricht an uns ..."
+                disabled={loading}
               />
             </div>
             {/* Honeypot-Feld: für Menschen unsichtbar, fängt Spam-Bots ab. */}
@@ -141,8 +191,8 @@ export function ContactForm() {
                 />
               </label>
             </div>
-            <Button type="submit" className="mt-6 w-full sm:w-auto">
-              Nachricht senden
+            <Button type="submit" className="mt-6 w-full sm:w-auto" disabled={loading}>
+              {loading ? 'Wird gesendet...' : 'Nachricht senden'}
             </Button>
           </form>
         )}

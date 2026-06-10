@@ -39,6 +39,9 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "kaffee-magazin-website-v2.8",
+    "kaffee-magazin-website-v2.8.bak",
+    "dist"
   ]
 }

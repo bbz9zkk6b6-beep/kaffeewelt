@@ -25,3 +25,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# alte Versionen / Backups
+kaffee-magazin-website-v2.8/
+kaffee-magazin-website-v2.8.bak/
+kaffee-magazin-website-v2.8.zip
+*.OLD
+dist/

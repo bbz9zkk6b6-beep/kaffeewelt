@@ -323,7 +323,8 @@ export function getRecommendation(input: string): BaristaRecommendation {
         source: 'rules',
         parsed,
         paragraphs,
-        recipes: pickRecipes(relatedMethod).map(toRecipeSuggestion),
+        // Bei reinen Definitionsfragen keine Rezepte anzeigen.
+        recipes: [],
         glossary: pickGlossary(
           mergeSlugs(glossarySlugs, discovered.glossary),
         ),
@@ -428,13 +429,16 @@ export function getRecommendation(input: string): BaristaRecommendation {
 
   const amounts = buildAmounts(method, servings)
   const discovered = discoverByKeywords(deriveKeywords(parsed, method))
+  const recipeList = pickRecipes(method).map(toRecipeSuggestion)
 
   return {
     source: 'rules',
     parsed,
     paragraphs,
-    amounts,
-    recipes: pickRecipes(method).map(toRecipeSuggestion),
+    // Mengenempfehlung nur anzeigen, wenn Rezepte vorhanden ODER
+    // die Frage explizit eine Methode genannt hat.
+    amounts: recipeList.length > 0 || parsed.method ? amounts : undefined,
+    recipes: recipeList,
     glossary: pickGlossary(
       mergeSlugs(methodGlossary[method] ?? [], discovered.glossary),
     ),

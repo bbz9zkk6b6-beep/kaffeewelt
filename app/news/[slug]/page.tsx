@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getNewsItem, news, getCategory, newsCrumbs } from '@/lib/content'
+import { getNewsItem, news, getCategory, newsCrumbs, getAffiliateProductsForNews } from '@/lib/content'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleCard } from '@/components/article-card'
 import { AuthorByline, AuthorBox, BackLink } from '@/components/author-byline'
 import { Breadcrumbs } from '@/components/breadcrumbs'
+import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
 import { getApprovedComments } from '@/app/actions/comments'
 
@@ -40,6 +41,7 @@ export default async function NewsDetailPage({
   const category = getCategory(item.category)
   const related = news.filter((n) => n.slug !== item.slug).slice(0, 3)
   const comments = await getApprovedComments('news', item.slug)
+  const affiliateProducts = getAffiliateProductsForNews(item.slug)
 
   return (
     <article>
@@ -86,6 +88,9 @@ export default async function NewsDetailPage({
 
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <ArticleBody blocks={item.content} autolink />
+        {affiliateProducts.length > 0 && (
+          <AffiliateBox products={affiliateProducts} />
+        )}
         <div className="mt-10">
           <AuthorBox authorSlug={item.author} />
         </div>
