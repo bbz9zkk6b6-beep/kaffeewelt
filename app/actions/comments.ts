@@ -74,7 +74,6 @@ export async function submitComment(
 
   const ipHash = await getClientIpHash()
 
-  // Rate-Limit: max 3 Kommentare pro IP in 5 Min
   if (ipHash) {
     const since = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString()
     const recent = await client.fetch(

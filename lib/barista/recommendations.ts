@@ -370,21 +370,22 @@ export function getRecommendation(input: string): BaristaRecommendation {
     ]
     const amounts = buildAmounts(method, servings)
     const discovered = discoverByKeywords(deriveKeywords(parsed, method))
+    const recipeList = pickRecipes(parsed.method ? method : undefined).map(
+      toRecipeSuggestion,
+    )
     return {
       source: 'rules',
       parsed,
       paragraphs,
-      amounts: parsed.method ? amounts : undefined,
-      recipes: pickRecipes(parsed.method ? method : undefined).map(
-        toRecipeSuggestion,
-      ),
+      amounts: recipeList.length > 0 ? amounts : undefined,
+      recipes: recipeList,
       glossary: pickGlossary(mergeSlugs(glossarySlugs, discovered.glossary)),
       articles: pickArticles(
         mergeSlugs(methodArticles[method] ?? [], discovered.articles),
       ),
       news: pickNews(discovered.news),
       calculator:
-        parsed.method && amounts
+        recipeList.length > 0 && amounts
           ? { methodId: amounts.methodId, servings }
           : undefined,
     }
@@ -435,9 +436,8 @@ export function getRecommendation(input: string): BaristaRecommendation {
     source: 'rules',
     parsed,
     paragraphs,
-    // Mengenempfehlung nur anzeigen, wenn Rezepte vorhanden ODER
-    // die Frage explizit eine Methode genannt hat.
-    amounts: recipeList.length > 0 || parsed.method ? amounts : undefined,
+    // Mengenempfehlung nur anzeigen, wenn Rezepte vorhanden sind.
+    amounts: recipeList.length > 0 ? amounts : undefined,
     recipes: recipeList,
     glossary: pickGlossary(
       mergeSlugs(methodGlossary[method] ?? [], discovered.glossary),
@@ -446,6 +446,6 @@ export function getRecommendation(input: string): BaristaRecommendation {
       mergeSlugs(methodArticles[method] ?? [], discovered.articles),
     ),
     news: pickNews(discovered.news),
-    calculator: amounts ? { methodId: amounts.methodId, servings } : undefined,
+    calculator: recipeList.length > 0 && amounts ? { methodId: amounts.methodId, servings } : undefined,
   }
 }

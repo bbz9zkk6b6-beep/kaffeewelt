@@ -42,6 +42,14 @@ export function BaristaAssistant() {
       }
       const data = (await res.json()) as BaristaRecommendation
       setResult(data)
+      // Mengenempfehlung automatisch in den Rechner übernehmen wenn vorhanden.
+      if (data.calculator) {
+        setPrefill({
+          methodId: data.calculator.methodId,
+          portions: data.calculator.servings,
+          requestId: Date.now(),
+        })
+      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -152,6 +160,9 @@ export function BaristaAssistant() {
         )}
 
         {/* Integrierter Rechner – übernimmt die Werte aus der Empfehlung */}
+      {/* Rezeptmengen-Rechner: nur sichtbar wenn Rezepte empfohlen werden
+         (d.h. wenn result.calculator gesetzt ist, was nur bei recommendations mit recipes passiert). */}
+      {result?.calculator && (
         <div
           ref={calculatorRef}
           className="scroll-mt-24 rounded-2xl border border-border bg-background p-5 sm:p-6"
@@ -161,11 +172,9 @@ export function BaristaAssistant() {
             <h3 className="font-serif text-lg font-bold text-foreground">
               Rezeptmengen-Rechner
             </h3>
-            {prefill && (
-              <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground">
-                Mengen übernommen
-              </span>
-            )}
+            <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-secondary-foreground">
+              Mengen übernommen
+            </span>
           </div>
           <BrewCalculator
             initialMethodId="filterkaffee"
@@ -173,6 +182,7 @@ export function BaristaAssistant() {
             prefill={prefill ?? undefined}
           />
         </div>
+      )}
       </div>
     </div>
   )

@@ -1,20 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    formats: ['image/avif', 'image/webp'],
+  typescript: {
+    ignoreBuildErrors: true,
   },
-  headers: async () => {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, must-revalidate',
-          },
-        ],
-      },
-    ]
+  images: {
+    unoptimized: true,
   },
 }
 

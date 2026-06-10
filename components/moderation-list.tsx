@@ -20,7 +20,7 @@ const contentLabels: Record<string, string> = {
   rezepte: 'Rezept',
 }
 
-function formatDate(date: string): string {
+function formatDate(date: Date): string {
   return new Date(date).toLocaleString('de-DE', {
     day: '2-digit',
     month: 'short',

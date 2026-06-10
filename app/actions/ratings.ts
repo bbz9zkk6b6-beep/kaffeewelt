@@ -101,7 +101,6 @@ export async function submitRecipeRating(
     })
   }
 
-  // Prüfe ob Voter schon bewertet hat
   const existing = await client.fetch(
     `*[_type == "rating" && recipeSlug == $recipeSlug && voterKey == $voterKey][0]._id`,
     { recipeSlug, voterKey }

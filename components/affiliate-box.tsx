@@ -39,11 +39,6 @@ export function AffiliateBox({ products }: { products: AffiliateProduct[] }) {
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 {product.description}
               </p>
-              {product.price && (
-                <p className="mt-1 text-sm font-medium text-foreground">
-                  {product.price}
-                </p>
-              )}
             </div>
             <a
               href={product.url}
@@ -51,7 +46,7 @@ export function AffiliateBox({ products }: { products: AffiliateProduct[] }) {
               rel="sponsored nofollow noopener noreferrer"
               className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
             >
-              Bei {product.retailer} ansehen
+              Ansehen
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
           </li>
