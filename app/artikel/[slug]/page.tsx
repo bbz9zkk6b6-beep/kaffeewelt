@@ -10,6 +10,7 @@ import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
 import { getApprovedComments } from '@/app/actions/comments'
 import { getAllArticles, getArticleBySlug } from '@/sanity/lib/fetch'
+import { formatDate } from '@/lib/content'
 
 export const revalidate = 60
 
@@ -76,7 +77,7 @@ export default async function ArticleDetailPage({
           {article.excerpt}
         </p>
         <div className="mt-6">
-          <p className="text-sm text-muted-foreground">{article.date} · {article.readingTime} Min. Lesezeit</p>
+          <p className="text-sm text-muted-foreground">{formatDate(article.date)} · {article.readingTime} Min. Lesezeit</p>
         </div>
       </header>
 
