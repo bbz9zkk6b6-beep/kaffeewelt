@@ -43,7 +43,7 @@ export default function ImpressumPage() {
             <p className="mt-3">
               Telefon: +49 (0) 40 123 456 78
               <br />
-              E-Mail: hallo@kleine-kaffeewelt.de
+              E-Mail: ol.wulf@meine-kleine-kaffeewelt.de
             </p>
           </section>
 

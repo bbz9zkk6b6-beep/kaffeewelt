@@ -38,7 +38,8 @@ export default function DatenschutzPage() {
             </h2>
             <p className="mt-3">
               Verantwortlich für die Datenverarbeitung auf dieser Website ist
-              Meine kleine Kaffeewelt, Röstgasse 7, 20095 Hamburg. Die
+              Meine kleine Kaffeewelt, Röstgasse 7, 20095 Hamburg,
+              E-Mail: ol.wulf@meine-kleine-kaffeewelt.de. Die
               verantwortliche Stelle entscheidet allein oder gemeinsam mit anderen
               über die Zwecke und Mittel der Verarbeitung personenbezogener
               Daten.
