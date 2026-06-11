@@ -35,7 +35,7 @@ export default function ImpressumPage() {
               Kontakt
             </h2>
             <p className="mt-3">
-              E-Mail: ol.wulf@meine-kleine-kaffeewelt.de
+              E-Mail: ol.wulf (at) meine-kleine-kaffeewelt.de
             </p>
           </section>
 

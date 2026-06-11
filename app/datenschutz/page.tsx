@@ -39,7 +39,7 @@ export default function DatenschutzPage() {
             <p className="mt-3">
               Verantwortlich für die Datenverarbeitung auf dieser Website ist
               Meine kleine Kaffeewelt, Olaf Wulf, Adalbert-Stifter-Straße 12,
-              30655 Hannover, E-Mail: ol.wulf@meine-kleine-kaffeewelt.de. Die
+              30655 Hannover, E-Mail: ol.wulf (at) meine-kleine-kaffeewelt.de. Die
               verantwortliche Stelle entscheidet allein oder gemeinsam mit anderen
               über die Zwecke und Mittel der Verarbeitung personenbezogener
               Daten.

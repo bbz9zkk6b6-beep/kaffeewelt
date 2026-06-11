@@ -11,7 +11,7 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'E-Mail',
-    value: 'ol.wulf@meine-kleine-kaffeewelt.de',
+    value: 'ol.wulf (at) meine-kleine-kaffeewelt.de',
   },
   {
     icon: MapPin,

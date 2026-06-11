@@ -4,12 +4,11 @@ import Link from 'next/link'
 import { Coffee, Heart, Leaf, Target } from 'lucide-react'
 import { PageHeader } from '@/components/page-header'
 import { Breadcrumbs } from '@/components/breadcrumbs'
-import { authors } from '@/lib/content'
 
 export const metadata: Metadata = {
-  title: 'Über uns | Meine kleine Kaffeewelt',
+  title: 'Über mich | Meine kleine Kaffeewelt',
   description:
-    'Lerne das Team hinter Meine kleine Kaffeewelt kennen – unsere Mission, unsere Werte und unsere Leidenschaft für guten Kaffee.',
+    'Wer steckt hinter Meine kleine Kaffeewelt? Die Geschichte, die Idee und die Leidenschaft für guten Kaffee.',
 }
 
 const values = [
@@ -34,7 +33,7 @@ export default function UeberUnsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Über uns"
+        eyebrow="Über mich"
         title="Aus Liebe zum Kaffee"
         description="Meine kleine Kaffeewelt ist das Online-Magazin für alle, die Kaffee nicht nur trinken, sondern erleben wollen."
         breadcrumbs={<Breadcrumbs items={[{ name: 'Über uns' }]} />}
@@ -53,22 +52,22 @@ export default function UeberUnsPage() {
           </div>
           <div>
             <h2 className="font-serif text-2xl font-bold text-foreground sm:text-3xl">
-              Unsere Geschichte
+              Meine Geschichte
             </h2>
             <div className="mt-4 space-y-4 leading-relaxed text-muted-foreground">
               <p>
-                Was als kleiner Blog in einer Hamburger Küche begann, ist heute
-                eine wachsende Community von Kaffeeliebhabern. Wir haben uns
-                gefragt: Warum gibt es so wenig verständliches, ehrliches Wissen
-                über Kaffee auf Deutsch?
+                Was als kleine Idee aus Leidenschaft begann, ist heute eine
+                wachsende Community von Kaffeeliebhabern. Ich habe mich gefragt:
+                Warum gibt es so wenig verständliches, ehrliches Wissen über
+                Kaffee auf Deutsch?
               </p>
               <p>
-                Also haben wir es selbst in die Hand genommen. Seitdem teilen wir
+                Also habe ich es selbst in die Hand genommen. Seitdem teile ich
                 fundiertes Wissen, erprobte Rezepte und ehrliche Tests – immer
                 mit dem Ziel, dir zu deiner besten Tasse zu verhelfen.
               </p>
               <p>
-                Ob blutiger Anfänger oder erfahrener Home-Barista: Bei uns findest
+                Ob blutiger Anfänger oder erfahrener Home-Barista: Hier findest
                 du Inspiration, Anleitung und Antworten auf all deine Fragen rund
                 um die schwarze Bohne.
               </p>
@@ -100,41 +99,6 @@ export default function UeberUnsPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
-        <h2 className="text-center font-serif text-2xl font-bold text-foreground sm:text-3xl">
-          Das Team
-        </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center leading-relaxed text-muted-foreground">
-          Hinter jedem Artikel und Rezept stecken echte Menschen mit echter
-          Begeisterung für Kaffee.
-        </p>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {authors.map((author) => (
-            <div
-              key={author.slug}
-              className="flex flex-col items-center rounded-2xl border border-border bg-card p-6 text-center"
-            >
-              <div className="relative h-24 w-24 overflow-hidden rounded-full">
-                <Image
-                  src={author.avatar || '/placeholder.svg'}
-                  alt={author.name}
-                  fill
-                  sizes="96px"
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">
-                {author.name}
-              </h3>
-              <p className="text-sm font-medium text-accent">{author.role}</p>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {author.bio}
-              </p>
-            </div>
-          ))}
         </div>
       </section>
 
