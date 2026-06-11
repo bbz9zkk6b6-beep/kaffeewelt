@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getNewsItem, news, getCategory, newsCrumbs, getAffiliateProductsForNews } from '@/lib/content'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleCard } from '@/components/article-card'
-import { AuthorByline, AuthorBox, BackLink } from '@/components/author-byline'
+import { BackLink } from '@/components/author-byline'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
@@ -65,11 +65,7 @@ export default async function NewsDetailPage({
           {item.excerpt}
         </p>
         <div className="mt-6">
-          <AuthorByline
-            authorSlug={item.author}
-            date={item.date}
-            readingTime={item.readingTime}
-          />
+          <p className="text-sm text-muted-foreground">{item.date} · {item.readingTime} Min. Lesezeit</p>
         </div>
       </header>
 
@@ -91,9 +87,6 @@ export default async function NewsDetailPage({
         {affiliateProducts.length > 0 && (
           <AffiliateBox products={affiliateProducts} />
         )}
-        <div className="mt-10">
-          <AuthorBox authorSlug={item.author} />
-        </div>
         <div className="mt-12">
           <CommentsSection
             contentType="news"

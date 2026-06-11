@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { getArticle, articles, getCategory, articleCrumbs, getAffiliateProducts } from '@/lib/content'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleCard } from '@/components/article-card'
-import { AuthorByline, AuthorBox, BackLink } from '@/components/author-byline'
+import { BackLink } from '@/components/author-byline'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
@@ -70,11 +70,7 @@ export default async function ArticleDetailPage({
           {article.excerpt}
         </p>
         <div className="mt-6">
-          <AuthorByline
-            authorSlug={article.author}
-            date={article.date}
-            readingTime={article.readingTime}
-          />
+          <p className="text-sm text-muted-foreground">{article.date} · {article.readingTime} Min. Lesezeit</p>
         </div>
       </header>
 
@@ -97,9 +93,6 @@ export default async function ArticleDetailPage({
           {affiliateProducts.length > 0 && (
             <AffiliateBox products={affiliateProducts} />
           )}
-          <div className="mt-10">
-            <AuthorBox authorSlug={article.author} />
-          </div>
           <div className="mt-12">
             <CommentsSection
               contentType="artikel"

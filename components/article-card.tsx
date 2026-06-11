@@ -55,11 +55,6 @@ export function ArticleCard({
         <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
           {post.excerpt}
         </p>
-        {author && (
-          <p className="mt-4 text-xs font-medium text-foreground/70">
-            von {author.name}
-          </p>
-        )}
       </div>
     </article>
   )

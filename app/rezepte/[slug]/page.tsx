@@ -13,7 +13,7 @@ import {
 import { PortionCalculator } from '@/components/portion-calculator'
 import { RatingStars } from '@/components/rating-stars'
 import { RecipeCard } from '@/components/recipe-card'
-import { AuthorBox, BackLink } from '@/components/author-byline'
+import { BackLink } from '@/components/author-byline'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { RecipeRatingWidget } from '@/components/recipe-rating-widget'
 import { SaveRecipeButton } from '@/components/save-recipe-button'
@@ -310,9 +310,6 @@ export default async function RecipeDetailPage({
             <RecipeRatingWidget recipeSlug={recipe.slug} initial={ratingData} />
           </div>
 
-          <div className="no-print mt-10">
-            <AuthorBox authorSlug={recipe.author} />
-          </div>
 
           <div className="no-print mt-12">
             <CommentsSection
