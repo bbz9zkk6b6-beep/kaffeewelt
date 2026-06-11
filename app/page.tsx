@@ -7,7 +7,7 @@ import { RecipeCard } from '@/components/recipe-card'
 import { Newsletter } from '@/components/newsletter'
 import { CategoryIcon } from '@/components/category-icon'
 import { HomeHighlights } from '@/components/home-highlights'
-import { BaristaAssistant } from '@/components/barista/BaristaAssistant'
+import { BaristaButton } from '@/components/barista-button'
 import { categories } from '@/lib/content/categories'
 import { articles, getFeaturedArticles } from '@/lib/content/articles'
 import { news } from '@/lib/content/news'
@@ -50,10 +50,7 @@ export default function HomePage() {
               Kaffee.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="#barista" className={buttonVariants({ size: 'lg' })}>
-                <Sparkles className="mr-1 h-4 w-4" />
-                Frag den Barista
-              </Link>
+              <BaristaButton />
               <Link
                 href="/rezepte"
                 className={buttonVariants({ size: 'lg', variant: 'outline' })}
@@ -73,16 +70,6 @@ export default function HomePage() {
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
-        </div>
-      </section>
-
-      {/* Frag den Barista – prominent direkt unter dem Hero */}
-      <section
-        id="barista"
-        className="scroll-mt-20 border-b border-border bg-secondary/40"
-      >
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <BaristaAssistant />
         </div>
       </section>
 

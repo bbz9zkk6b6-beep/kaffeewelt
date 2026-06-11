@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { Menu, X, Search, Heart } from 'lucide-react'
+import { useState } from 'react'
+import { Menu, X, Heart, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/logo'
-import { SearchOverlay } from '@/components/search-overlay'
+import { useSearch } from '@/components/search-context'
 
 const navItems = [
   { label: 'Startseite', href: '/' },
@@ -20,18 +20,7 @@ const navItems = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault()
-        setSearchOpen(true)
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  const { isSearchOpen, setSearchOpen } = useSearch()
 
   return (
     <header className="no-print sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur-md">
@@ -54,12 +43,12 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            aria-label="Suche öffnen"
-            className="hidden h-9 items-center gap-2 rounded-md px-3 text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground sm:flex"
+            aria-label="Frag den Barista"
+            className="hidden items-center gap-3 rounded-full bg-amber-900 px-6 py-3 font-semibold text-white transition-all hover:shadow-lg hover:scale-105 sm:flex"
           >
-            <Search className="h-5 w-5" />
-            <span className="hidden text-sm text-muted-foreground lg:inline">
-              Suchen
+            <Sparkles className="h-6 w-6" />
+            <span className="text-base">
+              Frag den Barista
             </span>
           </button>
           <Link
@@ -98,10 +87,10 @@ export function SiteHeader() {
               setOpen(false)
               setSearchOpen(true)
             }}
-            className="flex items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground sm:hidden"
+            className="flex items-center gap-2 rounded-full bg-amber-900 px-5 py-2.5 text-base font-semibold text-white transition-all hover:shadow-lg sm:hidden"
           >
-            <Search className="h-4 w-4" />
-            Suchen
+            <Sparkles className="h-4 w-4" />
+            Frag den Barista
           </button>
           <Link
             href="/favoriten"
@@ -123,8 +112,6 @@ export function SiteHeader() {
           ))}
         </nav>
       </div>
-
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   )
 }

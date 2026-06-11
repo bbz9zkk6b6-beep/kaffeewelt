@@ -32,3 +32,6 @@ kaffee-magazin-website-v2.8.bak/
 kaffee-magazin-website-v2.8.zip
 *.OLD
 dist/
+# alte/neue Versions-Exporte
+kaffee-magazin-website */
+*.zip

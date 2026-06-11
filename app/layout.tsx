@@ -3,6 +3,8 @@ import { Inter, Fraunces } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
+import { SearchProvider } from '@/components/search-context'
+import { RootClientWrapper } from '@/app/root-client'
 import './globals.css'
 
 const inter = Inter({
@@ -55,13 +57,19 @@ export default function RootLayout({
       className={`${inter.variable} ${fraunces.variable} bg-background`}
     >
       <body className="font-sans antialiased">
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
+        <SearchProvider>
+          <RootClientWrapper>
+            <div className="flex min-h-screen flex-col">
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+              <SiteFooter />
+            </div>
+          </RootClientWrapper>
+        </SearchProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
 }
+
+

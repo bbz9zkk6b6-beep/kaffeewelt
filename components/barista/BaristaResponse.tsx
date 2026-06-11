@@ -2,22 +2,11 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Clock, Coffee, Droplets, Gauge, Scale, Thermometer, Snowflake, ArrowRight, BookOpen, Newspaper } from 'lucide-react'
+import { Clock, Coffee, ArrowRight, BookOpen, Newspaper } from 'lucide-react'
 import type { BaristaRecommendation } from '@/lib/barista/recommendations'
 import { autolinkGlossary } from '@/lib/glossary-autolink'
 import { RatingStars } from '@/components/rating-stars'
 import { formatTime } from '@/lib/content'
-
-function formatNumber(value: number): string {
-  return value.toLocaleString('de-DE', { maximumFractionDigits: 0 })
-}
-
-function formatLiquid(ml: number): string {
-  if (ml >= 1000) {
-    return `${(ml / 1000).toLocaleString('de-DE', { maximumFractionDigits: 2 })} l`
-  }
-  return `${formatNumber(ml)} ml`
-}
 
 export function BaristaResponse({
   recommendation,
@@ -26,7 +15,7 @@ export function BaristaResponse({
   recommendation: BaristaRecommendation
   onUseAmounts?: (methodId: string, servings: number) => void
 }) {
-  const { paragraphs, amounts, recipes, glossary, articles, news, calculator } =
+  const { paragraphs, recipes, glossary, articles, news } =
     recommendation
 
   // Jeder Begriff im gesamten Antwortblock wird nur einmal automatisch verlinkt.
@@ -51,109 +40,7 @@ export function BaristaResponse({
         </div>
       </div>
 
-      {/* Mengenempfehlung */}
-      {amounts && (
-        <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <h3 className="font-serif text-lg font-bold text-foreground">
-              Mengenempfehlung · {amounts.methodLabel}
-            </h3>
-            <span className="rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
-              {amounts.servings} {amounts.portionUnit}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-xl bg-secondary/50 p-4 text-center">
-              <div className="font-serif text-2xl font-bold text-accent">
-                {formatNumber(amounts.coffeeG)}
-                <span className="text-base"> g</span>
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">Kaffee</div>
-            </div>
-            {amounts.waterMl !== undefined && (
-              <div className="rounded-xl bg-secondary/50 p-4 text-center">
-                <div className="font-serif text-2xl font-bold text-accent">
-                  {formatLiquid(amounts.waterMl)}
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">Wasser</div>
-              </div>
-            )}
-            {amounts.drinkG !== undefined && (
-              <div className="rounded-xl bg-secondary/50 p-4 text-center">
-                <div className="font-serif text-2xl font-bold text-accent">
-                  {formatNumber(amounts.drinkG)}
-                  <span className="text-base"> g</span>
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  Espresso
-                </div>
-              </div>
-            )}
-            {amounts.milkMl !== undefined && (
-              <div className="rounded-xl bg-secondary/50 p-4 text-center">
-                <div className="font-serif text-2xl font-bold text-accent">
-                  {formatLiquid(amounts.milkMl)}
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">Milch</div>
-              </div>
-            )}
-            {amounts.withIce && (
-              <div className="rounded-xl bg-secondary/50 p-4 text-center">
-                <div className="flex justify-center font-serif text-2xl font-bold text-accent">
-                  <Snowflake className="h-6 w-6" />
-                </div>
-                <div className="mt-1 text-xs text-muted-foreground">Eis</div>
-              </div>
-            )}
-          </div>
-
-          <dl className="mt-4 grid gap-3 sm:grid-cols-3">
-            <div className="flex items-start gap-2 text-sm">
-              <Scale className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Verhältnis
-                </dt>
-                <dd className="font-medium text-foreground">{amounts.ratio}</dd>
-              </div>
-            </div>
-            <div className="flex items-start gap-2 text-sm">
-              <Gauge className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Mahlgrad
-                </dt>
-                <dd className="font-medium text-foreground">{amounts.grind}</dd>
-              </div>
-            </div>
-            <div className="flex items-start gap-2 text-sm">
-              <Thermometer className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                  Brühtemperatur
-                </dt>
-                <dd className="font-medium text-foreground">
-                  {amounts.temperature}
-                </dd>
-              </div>
-            </div>
-          </dl>
-
-          {calculator && onUseAmounts && (
-            <button
-              type="button"
-              onClick={() =>
-                onUseAmounts(calculator.methodId, calculator.servings)
-              }
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
-            >
-              <Droplets className="h-4 w-4" />
-              Mengen in den Rechner übernehmen
-            </button>
-          )}
-        </div>
-      )}
+      {/* Mengenempfehlung: ENTFERNT — wird nur bei Bedarf im Modal angezeigt */}
 
       {/* Passende Rezepte */}
       {recipes.length > 0 && (

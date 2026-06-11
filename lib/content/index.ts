@@ -10,6 +10,7 @@ export * from './brewing'
 export * from './glossary'
 export * from './search'
 export * from './affiliate'
+export * from './integrated-search'
 
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('de-DE', {
