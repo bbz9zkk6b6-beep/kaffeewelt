@@ -57,14 +57,14 @@ export default async function ArticleDetailPage({
 
   return (
     <article>
-      <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-5xl px-4 pt-8 sm:px-6">
         <Breadcrumbs items={articleCrumbs(article)} />
         <div className="mt-4">
           <BackLink href="/kategorien" label="Zur Übersicht" />
         </div>
       </div>
 
-      <header className="mx-auto max-w-3xl px-4 pt-6 sm:px-6">
+      <header className="mx-auto max-w-5xl px-4 pt-6 sm:px-6">
         {category && (
           <span className="text-sm font-medium uppercase tracking-wider text-accent">
             {category.name}
@@ -81,8 +81,8 @@ export default async function ArticleDetailPage({
         </div>
       </header>
 
-      <div className="mx-auto mt-8 max-w-4xl px-4 sm:px-6">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
+      <div className="mx-auto mt-8 max-w-5xl px-4 sm:px-6">
+        <div className="relative aspect-[21/9] overflow-hidden rounded-2xl">
           <Image
             src={article.image || '/placeholder.svg'}
             alt={article.title}
