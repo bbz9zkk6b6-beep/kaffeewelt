@@ -24,8 +24,9 @@ export default function ImpressumPage() {
             <p className="mt-3">
               Meine kleine Kaffeewelt
               <br />
-              Röstgasse 7<br />
-              20095 Hamburg
+              Olaf Wulf<br />
+              Adalbert-Stifter-Straße 12<br />
+              30655 Hannover
             </p>
           </section>
 
@@ -33,7 +34,7 @@ export default function ImpressumPage() {
             <h2 className="font-serif text-xl font-semibold text-foreground">
               Vertreten durch
             </h2>
-            <p className="mt-3">Lena Brandt</p>
+            <p className="mt-3">Olaf Wulf</p>
           </section>
 
           <section>
@@ -52,9 +53,9 @@ export default function ImpressumPage() {
               Redaktionell verantwortlich
             </h2>
             <p className="mt-3">
-              Lena Brandt
+              Olaf Wulf
               <br />
-              Röstgasse 7, 20095 Hamburg
+              Adalbert-Stifter-Straße 12, 30655 Hannover
             </p>
           </section>
 

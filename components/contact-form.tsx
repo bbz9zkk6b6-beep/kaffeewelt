@@ -16,7 +16,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: 'Adresse',
-    value: 'Röstgasse 7, 20095 Hamburg',
+    value: 'Adalbert-Stifter-Straße 12, 30655 Hannover',
   },
   {
     icon: MessageSquare,

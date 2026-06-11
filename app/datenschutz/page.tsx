@@ -38,8 +38,8 @@ export default function DatenschutzPage() {
             </h2>
             <p className="mt-3">
               Verantwortlich für die Datenverarbeitung auf dieser Website ist
-              Meine kleine Kaffeewelt, Röstgasse 7, 20095 Hamburg,
-              E-Mail: ol.wulf@meine-kleine-kaffeewelt.de. Die
+              Meine kleine Kaffeewelt, Olaf Wulf, Adalbert-Stifter-Straße 12,
+              30655 Hannover, E-Mail: ol.wulf@meine-kleine-kaffeewelt.de. Die
               verantwortliche Stelle entscheidet allein oder gemeinsam mit anderen
               über die Zwecke und Mittel der Verarbeitung personenbezogener
               Daten.
@@ -48,7 +48,24 @@ export default function DatenschutzPage() {
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              3. Newsletter
+              3. Hosting
+            </h2>
+            <p className="mt-3">
+              Diese Website wird bei Vercel Inc., 340 S Lemon Ave #4133, Walnut,
+              CA 91789, USA, gehostet. Beim Aufruf der Seiten werden technisch
+              notwendige Daten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs,
+              aufgerufene Seite) in Server-Logfiles verarbeitet. Rechtsgrundlage
+              ist Art. 6 Abs. 1 lit. f DSGVO – unser berechtigtes Interesse an
+              einer stabilen und sicheren Bereitstellung der Website. Mit Vercel
+              besteht ein Auftragsverarbeitungsvertrag. Da Vercel Daten auch in
+              den USA verarbeiten kann, erfolgt die Übermittlung auf Grundlage
+              der EU-Standardvertragsklauseln.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-serif text-xl font-semibold text-foreground">
+              4. Newsletter
             </h2>
             <p className="mt-3">
               Wenn du den auf der Website angebotenen Newsletter beziehen
@@ -61,7 +78,7 @@ export default function DatenschutzPage() {
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              4. Kontaktformular
+              5. Kontaktformular
             </h2>
             <p className="mt-3">
               Wenn du uns per Kontaktformular Anfragen zukommen lässt, werden
@@ -73,7 +90,7 @@ export default function DatenschutzPage() {
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              5. Deine Rechte
+              6. Deine Rechte
             </h2>
             <p className="mt-3">
               Du hast jederzeit das Recht auf unentgeltliche Auskunft über deine
