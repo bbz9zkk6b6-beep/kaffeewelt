@@ -69,12 +69,6 @@ export default function HomePage() {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-              <div className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg">
-                <Sparkles className="h-4 w-4" />
-                Frag den Barista
-              </div>
-            </div>
           </div>
         </div>
       </section>
