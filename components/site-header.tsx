@@ -44,7 +44,7 @@ export function SiteHeader() {
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Frag den Barista"
-            className="hidden items-center gap-3 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-all hover:shadow-lg hover:scale-105 sm:flex"
+            className="hidden items-center gap-1.5 rounded-lg bg-primary px-2.5 h-9 text-sm font-semibold text-primary-foreground transition-all hover:shadow-lg hover:scale-105 sm:flex"
           >
             <Sparkles className="h-6 w-6" />
             <span className="text-base">
