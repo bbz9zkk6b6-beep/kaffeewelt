@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { X, MessageCircle, Loader2, AlertCircle } from 'lucide-react'
+import { X, MessageCircle, Loader2, AlertCircle, Sparkles } from 'lucide-react'
 import type { BaristaRecommendation } from '@/lib/barista/recommendations'
 import { integratedSearch } from '@/lib/content/integrated-search'
 import { SuggestionChips } from '@/components/barista/SuggestionChips'
@@ -133,11 +133,9 @@ export function UnifiedSearchOverlay({
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border bg-background/95 backdrop-blur-sm px-6 py-4 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-accent" />
-              <h2 className="font-serif text-lg font-bold text-foreground">
-                Frag den Barista
-              </h2>
+            <div className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+              <Sparkles className="h-4 w-4" />
+              Frag den Barista
             </div>
             <button
               onClick={onClose}
