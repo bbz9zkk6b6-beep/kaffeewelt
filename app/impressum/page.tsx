@@ -32,30 +32,10 @@ export default function ImpressumPage() {
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              Vertreten durch
-            </h2>
-            <p className="mt-3">Olaf Wulf</p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-semibold text-foreground">
               Kontakt
             </h2>
             <p className="mt-3">
-              Telefon: +49 (0) 40 123 456 78
-              <br />
               E-Mail: ol.wulf@meine-kleine-kaffeewelt.de
-            </p>
-          </section>
-
-          <section>
-            <h2 className="font-serif text-xl font-semibold text-foreground">
-              Redaktionell verantwortlich
-            </h2>
-            <p className="mt-3">
-              Olaf Wulf
-              <br />
-              Adalbert-Stifter-Straße 12, 30655 Hannover
             </p>
           </section>
 
