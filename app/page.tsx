@@ -69,6 +69,10 @@ export default function HomePage() {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
+            <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-lg pointer-events-none select-none">
+              <Sparkles className="h-4 w-4" />
+              Frag den Barista
+            </div>
           </div>
         </div>
       </section>
