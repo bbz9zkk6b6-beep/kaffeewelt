@@ -1,6 +1,6 @@
 # Übergabe: Meine kleine Kaffeewelt
 
-Stand: 09.06.2026
+Stand: 11.06.2026
 
 ---
 
@@ -102,17 +102,40 @@ URL: `https://kaffeewelt.vercel.app/admin/kommentare?token=DEIN_ADMIN_TOKEN`
 
 ---
 
+## Bereits erledigt (Stand 11.06.2026)
+
+- [x] Domain `meine-kleine-kaffeewelt.de` mit Vercel verbunden (A-Record 216.198.79.1 bei Strato)
+- [x] Impressum: echte Kontaktdaten (Olaf Wulf, Hannover), Telefon entfernt
+- [x] Datenschutz: Vercel-Hosting-Abschnitt ergänzt, korrekte Verantwortliche
+- [x] Über-uns: Team-Sektion entfernt, ich-Form, kein Fake-Team
+- [x] E-Mail seitenübergreifend auf `ol.wulf (at) meine-kleine-kaffeewelt.de` (Anti-Spam)
+- [x] Fake-Autorenboxen (Lena Brandt, Jonas Keller, Marie Hoffmann) aus allen Seiten entfernt
+- [x] "Frag den Barista"-Button im Dialog-Header korrekt integriert
+- [x] Content-Agenten eingerichtet: artikel-recherche, humanizer, news-kurator, rezept-ersteller, glossar-agent
+- [x] Content-Ordnerstruktur: `_recherche/KW-XX/wochentag/` und `_content/artikel|news|rezepte/KW-XX/wochentag/`
+- [x] 4 Recherche-Briefings erstellt (KW-24): Röstgrade, Mühle, Kaffeeanbau, Latte Art, Wasser
+- [x] Röstgrade-Artikel vollständig geschrieben (SEO + humanizer) → `_content/artikel/KW-24/donnerstag/FERTIG_roestgrade-verstehen.md`
+- [x] **Sanity-Migration Artikel:** `/artikel` und `/artikel/[slug]` holen Daten jetzt aus Sanity (ISR 60s)
+  - `sanity/lib/fetch.ts` — neue typensichere Fetch-Funktionen
+  - `sanity/lib/queries.ts` — ARTICLE_QUERY Content-Projektion aktualisiert
+  - Startseite async, Featured Articles aus Sanity
+  - Build grün, kein Fehler
+
+---
+
 ## Was noch zu tun ist
 
-### Vor dem Launch
-- [ ] Inhalte in Sanity Studio eingeben (Artikel, Rezepte, Glossar, Autor-Profil)
-- [ ] `robots.txt` leeren oder löschen wenn ready (`/public/robots.txt`)
+### Nächster Schritt: Erster Artikel in Sanity einpflegen
+1. https://kaffeewelt.sanity.studio öffnen
+2. **Autor** anlegen: Name "Olaf Wulf", Slug "olaf-wulf"
+3. **Kategorie** anlegen: z.B. "Bohnenkunde", Slug "bohnenkunde"
+4. **Artikel** anlegen: Slug `roestgrade-verstehen`, Text aus `_content/artikel/KW-24/donnerstag/FERTIG_roestgrade-verstehen.md`, Featured ankreuzen
+5. → erscheint nach max. 60 Sekunden live
 
-### Domain verbinden
-1. In Vercel: Projekt → Domains → `meine-kleine-kaffeewelt.de` hinzufügen
-2. Bei Strato: DNS-Eintrag auf Vercel zeigen lassen (Vercel gibt die genauen Werte vor)
-3. Sanity CORS: `https://meine-kleine-kaffeewelt.de` bei sanity.io → API → CORS origins eintragen
-4. Vercel Env Variable `NEXT_PUBLIC_BASE_URL` auf `https://meine-kleine-kaffeewelt.de` ändern
+### Vor dem Launch
+- [ ] `robots.txt` leeren — aktuell blockiert es alle Crawler (`/public/robots.txt`)
+- [ ] Sanity CORS: `https://meine-kleine-kaffeewelt.de` in sanity.io → API → CORS origins eintragen
+- [ ] Vercel Env: `NEXT_PUBLIC_BASE_URL` auf `https://meine-kleine-kaffeewelt.de` ändern
 
 ### Optional
 - [ ] Google Search Console einrichten (nach Domain-Verbindung)

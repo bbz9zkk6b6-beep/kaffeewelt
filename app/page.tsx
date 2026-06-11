@@ -9,17 +9,20 @@ import { CategoryIcon } from '@/components/category-icon'
 import { HomeHighlights } from '@/components/home-highlights'
 import { BaristaButton } from '@/components/barista-button'
 import { categories } from '@/lib/content/categories'
-import { articles, getFeaturedArticles } from '@/lib/content/articles'
 import { news } from '@/lib/content/news'
 import { getFeaturedRecipes, recipes } from '@/lib/content/recipes'
 import { getCategory, formatDate } from '@/lib/content'
+import { getAllArticles } from '@/sanity/lib/fetch'
 
-export default function HomePage() {
-  const featured = getFeaturedArticles()[0] ?? articles[0]
-  const featuredCategory = getCategory(featured.category)
-  const secondaryArticles = articles
-    .filter((a) => a.slug !== featured.slug)
-    .slice(0, 3)
+export const revalidate = 60
+
+export default async function HomePage() {
+  const sanityArticles = await getAllArticles()
+  const featured = sanityArticles.find((a) => a.featured) ?? sanityArticles[0]
+  const featuredCategory = featured ? getCategory(featured.category) : null
+  const secondaryArticles = featured
+    ? sanityArticles.filter((a) => a.slug !== featured.slug).slice(0, 3)
+    : []
   const latestNews = news.slice(0, 4)
   const featuredRecipes = getFeaturedRecipes().length
     ? getFeaturedRecipes()
@@ -141,37 +144,39 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <Link
-              href={`/artikel/${featured.slug}`}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <Image
-                  src={featured.image || '/placeholder.svg'}
-                  alt={featured.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-              <div className="flex flex-1 flex-col gap-3 p-6">
-                {featuredCategory && (
-                  <span className="text-sm font-medium text-accent">
-                    {featuredCategory.name}
+            {featured && (
+              <Link
+                href={`/artikel/${featured.slug}`}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={featured.image || '/placeholder.svg'}
+                    alt={featured.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-6">
+                  {featuredCategory && (
+                    <span className="text-sm font-medium text-accent">
+                      {featuredCategory.name}
+                    </span>
+                  )}
+                  <h3 className="text-balance font-serif text-2xl font-bold text-foreground">
+                    {featured.title}
+                  </h3>
+                  <p className="text-pretty leading-relaxed text-muted-foreground">
+                    {featured.excerpt}
+                  </p>
+                  <span className="mt-auto text-sm text-muted-foreground">
+                    {formatDate(featured.date)} · {featured.readingTime} Min.
+                    Lesezeit
                   </span>
-                )}
-                <h3 className="text-balance font-serif text-2xl font-bold text-foreground">
-                  {featured.title}
-                </h3>
-                <p className="text-pretty leading-relaxed text-muted-foreground">
-                  {featured.excerpt}
-                </p>
-                <span className="mt-auto text-sm text-muted-foreground">
-                  {formatDate(featured.date)} · {featured.readingTime} Min.
-                  Lesezeit
-                </span>
-              </div>
-            </Link>
+                </div>
+              </Link>
+            )}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
               {secondaryArticles.map((article) => (
                 <ArticleCard

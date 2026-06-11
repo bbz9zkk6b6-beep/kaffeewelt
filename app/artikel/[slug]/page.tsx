@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getArticle, articles, getCategory, articleCrumbs, getAffiliateProducts } from '@/lib/content'
+import { getCategory, articleCrumbs, getAffiliateProducts } from '@/lib/content'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleCard } from '@/components/article-card'
 import { BackLink } from '@/components/author-byline'
@@ -9,8 +9,12 @@ import { Breadcrumbs } from '@/components/breadcrumbs'
 import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
 import { getApprovedComments } from '@/app/actions/comments'
+import { getAllArticles, getArticleBySlug } from '@/sanity/lib/fetch'
 
-export function generateStaticParams() {
+export const revalidate = 60
+
+export async function generateStaticParams() {
+  const articles = await getAllArticles()
   return articles.map((a) => ({ slug: a.slug }))
 }
 
@@ -20,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const article = getArticle(slug)
+  const article = await getArticleBySlug(slug)
   if (!article) return { title: 'Artikel nicht gefunden' }
   return {
     title: article.title,
@@ -35,15 +39,17 @@ export default async function ArticleDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const article = getArticle(slug)
+  const [article, allArticles] = await Promise.all([
+    getArticleBySlug(slug),
+    getAllArticles(),
+  ])
   if (!article) notFound()
 
   const category = getCategory(article.category)
-  const related = articles.filter((a) => a.slug !== article.slug).slice(0, 3)
+  const related = allArticles.filter((a) => a.slug !== article.slug).slice(0, 3)
   const comments = await getApprovedComments('artikel', article.slug)
   const affiliateProducts = getAffiliateProducts(article)
 
-  // Inhaltsverzeichnis aus Überschriften
   const headings = article.content.filter(
     (b): b is Extract<typeof b, { type: 'heading' }> => b.type === 'heading',
   )

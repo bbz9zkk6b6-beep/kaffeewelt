@@ -4,8 +4,10 @@ import { PageHeader } from '@/components/page-header'
 import { ArticleFilter } from '@/components/article-filter'
 import { Newsletter } from '@/components/newsletter'
 import { Breadcrumbs } from '@/components/breadcrumbs'
-import { articles } from '@/lib/content/articles'
 import { sectionCrumbs } from '@/lib/content/taxonomy'
+import { getAllArticles } from '@/sanity/lib/fetch'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Artikel & Ratgeber',
@@ -13,8 +15,8 @@ export const metadata: Metadata = {
     'Fundierte Artikel rund um Kaffee: Bohnenkunde, Zubereitung, Zubehör und mehr – verständlich erklärt.',
 }
 
-export default function ArticlesPage() {
-  // Neueste zuerst
+export default async function ArticlesPage() {
+  const articles = await getAllArticles()
   const sorted = [...articles].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   )

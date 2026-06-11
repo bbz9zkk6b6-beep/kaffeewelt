@@ -12,10 +12,15 @@ export const ARTICLES_QUERY = groq`
 
 export const ARTICLE_QUERY = groq`
   *[_type == "article" && slug.current == $slug][0] {
-    slug, title, excerpt, date, readingTime, featured, content,
+    slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
-    "author": author->{name, role, bio, "avatar": avatar.asset->url},
-    "image": image.asset->url
+    "image": image.asset->url,
+    "content": content[]{
+      "type": _type,
+      "id": _key,
+      text,
+      cite
+    }
   }
 `
 
