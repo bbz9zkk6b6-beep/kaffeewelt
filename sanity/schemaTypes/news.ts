@@ -63,18 +63,18 @@ export default defineType({
       type: 'array',
       of: [
         {
-          type: 'object',
-          name: 'heading',
-          fields: [
-            {name: 'text', type: 'string', title: 'Text'},
+          type: 'block',
+          styles: [
+            {title: 'Normal', value: 'normal'},
+            {title: 'Überschrift H2', value: 'h2'},
+            {title: 'Überschrift H3', value: 'h3'},
           ],
-        },
-        {
-          type: 'object',
-          name: 'paragraph',
-          fields: [
-            {name: 'text', type: 'text', title: 'Text', rows: 3},
-          ],
+          marks: {
+            decorators: [
+              {title: 'Fett', value: 'strong'},
+              {title: 'Kursiv', value: 'em'},
+            ],
+          },
         },
       ],
     }),

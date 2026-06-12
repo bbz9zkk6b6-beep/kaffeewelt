@@ -128,27 +128,15 @@ function parseNewsContent(blocks: any[]): ArticleBlock[] {
 
   blocks.forEach((b) => {
     if (!b) return
+    if (b._type !== 'block' || !Array.isArray(b.children)) return
 
-    // Custom object format: {_type: 'heading'|'paragraph', text: '...'}
-    if (b._type === 'heading' && b.text) {
-      result.push({ type: 'heading' as const, id: `h${headingCount++}`, text: b.text })
-      return
-    }
-    if (b._type === 'paragraph' && b.text) {
-      result.push({ type: 'paragraph' as const, text: b.text })
-      return
-    }
+    const text = b.children.map((c: any) => c.text ?? '').join('')
+    if (!text) return
 
-    // Portable Text format: {_type: 'block', children: [...], style: '...'}
-    if (b._type === 'block' && Array.isArray(b.children)) {
-      const text = b.children.map((c: any) => c.text ?? '').join('')
-      if (!text) return
-
-      if (b.style === 'h2' || b.style === 'h3') {
-        result.push({ type: 'heading' as const, id: `h${headingCount++}`, text })
-      } else {
-        result.push({ type: 'paragraph' as const, text })
-      }
+    if (b.style === 'h2' || b.style === 'h3') {
+      result.push({ type: 'heading' as const, id: `h${headingCount++}`, text })
+    } else {
+      result.push({ type: 'paragraph' as const, text })
     }
   })
 
