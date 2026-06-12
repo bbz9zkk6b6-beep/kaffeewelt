@@ -88,6 +88,25 @@ export default async function NewsDetailPage({
       </div>
 
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+        {item.content.filter((b) => b.type === 'heading').length > 1 && (
+          <nav className="mb-8 rounded-2xl border border-border bg-card px-5 py-4">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Inhalt</p>
+            <ol className="flex flex-col gap-2">
+              {item.content
+                .filter((b): b is Extract<typeof b, { type: 'heading' }> => b.type === 'heading')
+                .map((b) => (
+                  <li key={b.id}>
+                    <a
+                      href={`#${b.id}`}
+                      className="text-sm text-foreground hover:text-accent transition-colors"
+                    >
+                      {b.text}
+                    </a>
+                  </li>
+                ))}
+            </ol>
+          </nav>
+        )}
         <ArticleBody blocks={item.content} autolink />
         {affiliateProducts.length > 0 && (
           <AffiliateBox products={affiliateProducts} />
