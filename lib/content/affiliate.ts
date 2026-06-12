@@ -54,14 +54,14 @@ export const affiliateProducts: Record<string, AffiliateProduct> = {
     name: 'Espressomaschine (Siebträger)',
     description: 'Der Einstieg in echten Espresso — mit Dampflanze für Milchschaum.',
     url: `https://www.amazon.de/s?k=espressomaschine+siebträger+einsteiger&tag=${TAG}`,
-    image: '/images/affiliate-grinder.png',
+    image: '/images/affiliate-kettle.png', // TODO: echtes Produktbild ersetzen
   },
   vollautomat: {
     id: 'vollautomat',
     name: 'Kaffeevollautomat',
     description: 'Bohne rein, Kaffee raus — mit Mahlwerk, Brühgruppe und Milchsystem.',
     url: `https://www.amazon.de/s?k=kaffeevollautomat+mit+mahlwerk&tag=${TAG}`,
-    image: '/images/affiliate-grinder.png',
+    image: '/images/affiliate-kettle.png', // TODO: echtes Produktbild ersetzen
   },
   water_filter: {
     id: 'water_filter',
