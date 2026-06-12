@@ -122,15 +122,24 @@ const NEWS_ITEM_QUERY = `*[_type == "news" && slug.current == $slug][0] {
 }`
 
 function parsePortableText(blocks: any[]): ArticleBlock[] {
-  return (blocks ?? [])
-    .filter((b) => b._type === 'block' && b.children?.length > 0)
-    .map((b, idx) => {
-      const text = b.children?.map((c: any) => c.text).join('') ?? ''
-      if (b.style === 'h2' || b.style === 'h3') {
-        return { type: 'heading' as const, id: `h${idx}`, text }
-      }
-      return { type: 'paragraph' as const, text }
-    })
+  if (!Array.isArray(blocks)) return []
+  const result: ArticleBlock[] = []
+  let headingCount = 0
+
+  blocks.forEach((b, idx) => {
+    if (b._type !== 'block' || !Array.isArray(b.children)) return
+
+    const text = b.children.map((c: any) => c.text ?? '').join('')
+    if (!text) return
+
+    if (b.style === 'h2' || b.style === 'h3') {
+      result.push({ type: 'heading' as const, id: `h${headingCount++}`, text })
+    } else {
+      result.push({ type: 'paragraph' as const, text })
+    }
+  })
+
+  return result
 }
 
 export async function getAllNews(): Promise<NewsItem[]> {
