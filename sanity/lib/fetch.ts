@@ -1,5 +1,5 @@
 import { client } from './client'
-import { ARTICLES_QUERY, ARTICLE_QUERY } from './queries'
+import { ARTICLES_QUERY, ARTICLE_QUERY, PRODUCTS_QUERY, PRODUCT_QUERY } from './queries'
 import type { Article, ArticleBlock } from '@/lib/content/types'
 
 type SanityBlock = {
@@ -80,4 +80,68 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   )
   if (!data) return null
   return toArticle(data)
+}
+
+// ── Produkte ──────────────────────────────────────────────────────────────
+
+export type SanityProduct = {
+  slug: string
+  title: string
+  excerpt: string
+  category: string
+  featured: boolean
+  priceHint?: string
+  pros?: string[]
+  cons?: string[]
+  affiliateUrl?: string
+  affiliateSlug?: string
+  image: string
+  body?: Array<{ type: string; id: string; text?: string }>
+}
+
+type SanityProductRaw = {
+  slug: { current: string }
+  title: string
+  excerpt: string
+  category: string
+  featured?: boolean
+  priceHint?: string
+  pros?: string[]
+  cons?: string[]
+  affiliateUrl?: string
+  affiliateSlug?: string
+  image?: string
+  body?: Array<{ type: string; id: string; text?: string }>
+}
+
+function toProduct(raw: SanityProductRaw): SanityProduct {
+  return {
+    slug: raw.slug.current,
+    title: raw.title,
+    excerpt: raw.excerpt,
+    category: raw.category,
+    featured: raw.featured ?? false,
+    priceHint: raw.priceHint,
+    pros: raw.pros ?? [],
+    cons: raw.cons ?? [],
+    affiliateUrl: raw.affiliateUrl,
+    affiliateSlug: raw.affiliateSlug,
+    image: optimizeSanityImage(raw.image, 800),
+    body: raw.body ?? [],
+  }
+}
+
+export async function getAllProducts(): Promise<SanityProduct[]> {
+  const data: SanityProductRaw[] = await client.fetch(PRODUCTS_QUERY, {}, fetchOpts)
+  return data.map(toProduct)
+}
+
+export async function getProductBySlug(slug: string): Promise<SanityProduct | null> {
+  const data: SanityProductRaw | null = await client.fetch(
+    PRODUCT_QUERY,
+    { slug },
+    fetchOpts,
+  )
+  if (!data) return null
+  return toProduct(data)
 }

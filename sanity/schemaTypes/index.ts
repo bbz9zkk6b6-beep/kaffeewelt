@@ -6,6 +6,7 @@ import author from './author'
 import category from './category'
 import comment from './comment'
 import rating from './rating'
+import product from './product'
 
 export const schemaTypes = [
   recipe,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   category,
   comment,
   rating,
+  product,
 ]

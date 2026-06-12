@@ -62,6 +62,37 @@ export const GLOSSARY_QUERY = groq`
   }
 `
 
+// Produkte
+export const PRODUCTS_QUERY = groq`
+  *[_type == "product"] | order(featured desc, title asc) {
+    slug, title, excerpt, category, featured, priceHint, pros, cons,
+    "affiliateSlug": affiliateSlug.current,
+    "image": image.asset->url
+  }
+`
+
+export const PRODUCT_QUERY = groq`
+  *[_type == "product" && slug.current == $slug][0] {
+    slug, title, excerpt, category, featured, priceHint, pros, cons,
+    affiliateUrl,
+    "affiliateSlug": affiliateSlug.current,
+    "image": image.asset->url,
+    "body": body[]{
+      "type": _type,
+      "id": _key,
+      text
+    }
+  }
+`
+
+export const PRODUCTS_BY_CATEGORY_QUERY = groq`
+  *[_type == "product" && category == $category] | order(featured desc, title asc) {
+    slug, title, excerpt, category, featured, priceHint,
+    "affiliateSlug": affiliateSlug.current,
+    "image": image.asset->url
+  }
+`
+
 // Kommentare (nur freigegebene)
 export const COMMENTS_QUERY = groq`
   *[_type == "comment" && contentType == $contentType && contentSlug == $contentSlug && status == "approved"] | order(createdAt desc) {
