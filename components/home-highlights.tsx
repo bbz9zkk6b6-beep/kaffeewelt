@@ -10,7 +10,7 @@ export function HomeHighlights({
   tested,
 }: {
   recipeOfWeek: Recipe
-  trend: NewsItem
+  trend: NewsItem | null
   tested: Recipe
 }) {
   const fact = getFactOfTheDay()
@@ -35,21 +35,23 @@ export function HomeHighlights({
         </span>
       </Link>
 
-      <Link
-        href={`/news/${trend.slug}`}
-        className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-accent"
-      >
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-accent">
-          <TrendingUp className="h-5 w-5" />
-        </span>
-        <span className="text-xs font-semibold uppercase tracking-wide text-accent">
-          Trend des Monats
-        </span>
-        <span className="font-serif text-lg font-bold leading-snug text-foreground group-hover:text-accent">
-          {trend.title}
-        </span>
-        <span className="text-sm text-muted-foreground">{trend.excerpt}</span>
-      </Link>
+      {trend && (
+        <Link
+          href={`/news/${trend.slug}`}
+          className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-accent"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-accent">
+            <TrendingUp className="h-5 w-5" />
+          </span>
+          <span className="text-xs font-semibold uppercase tracking-wide text-accent">
+            Trend des Monats
+          </span>
+          <span className="font-serif text-lg font-bold leading-snug text-foreground group-hover:text-accent">
+            {trend.title}
+          </span>
+          <span className="text-sm text-muted-foreground">{trend.excerpt}</span>
+        </Link>
+      )}
 
       <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-accent">

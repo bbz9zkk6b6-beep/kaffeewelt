@@ -32,7 +32,7 @@ export default async function HomePage() {
   // Highlights
   const recipeOfWeek = featuredRecipes[0] ?? recipes[0]
   const tested = recipes[recipes.length - 1]
-  const trend = news[0]
+  const trend = news[0] ?? null
 
   return (
     <div className="flex flex-col">
