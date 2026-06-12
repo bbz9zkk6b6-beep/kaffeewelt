@@ -7,6 +7,9 @@ type SanityBlock = {
   id: string
   text?: string
   cite?: string
+  url?: string
+  alt?: string
+  caption?: string
 }
 
 type SanityArticleRaw = {
@@ -29,9 +32,20 @@ function mapBlock(b: SanityBlock): ArticleBlock | null {
       return { type: 'paragraph', text: b.text ?? '' }
     case 'quote':
       return { type: 'quote', text: b.text ?? '', cite: b.cite }
+    case 'inlineImage':
+      if (!b.url) return null
+      return { type: 'inlineImage', url: b.url, alt: b.alt, caption: b.caption }
     default:
       return null
   }
+}
+
+// Sanity CDN-URL auf optimierte Größe bringen:
+// 21:9-Header → 1200px breit, WebP, Q80 → ~100-200 KB statt 2-3 MB
+function optimizeSanityImage(url: string | undefined, width = 1200): string {
+  if (!url) return '/placeholder.svg'
+  if (!url.startsWith('https://cdn.sanity.io')) return url
+  return `${url}?w=${width}&auto=format&q=80&fit=crop`
 }
 
 function toArticle(raw: SanityArticleRaw): Article {
@@ -44,7 +58,7 @@ function toArticle(raw: SanityArticleRaw): Article {
     featured: raw.featured ?? false,
     category: raw.category ?? '',
     author: '',
-    image: raw.image ?? '/placeholder.svg',
+    image: optimizeSanityImage(raw.image),
     content: (raw.content ?? [])
       .map(mapBlock)
       .filter((b): b is ArticleBlock => b !== null),
