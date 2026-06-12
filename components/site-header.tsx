@@ -14,8 +14,6 @@ const navItems = [
   { label: 'Rezepte', href: '/rezepte' },
   { label: 'Kategorien', href: '/kategorien' },
   { label: 'Glossar', href: '/glossar' },
-  { label: 'Über uns', href: '/ueber-uns' },
-  { label: 'Kontakt', href: '/kontakt' },
 ]
 
 export function SiteHeader() {
