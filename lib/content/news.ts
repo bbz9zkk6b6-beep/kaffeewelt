@@ -1,6 +1,8 @@
 import type { NewsItem } from './types'
 
-export const news: NewsItem[] = [
+export const news: NewsItem[] = []
+
+const _archived: NewsItem[] = [
   {
     slug: 'neue-espressomaschinen-generation-2025',
     title: 'Neue Generation smarter Espressomaschinen vorgestellt',
