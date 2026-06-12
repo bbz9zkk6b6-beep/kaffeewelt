@@ -161,7 +161,8 @@ export async function getAllNews(): Promise<NewsItem[]> {
   const sanityItems = sanityData.map(toNews)
   const sanitySlugs = new Set(sanityItems.map((n) => n.slug))
   const localOnly = localNews.filter((n) => !sanitySlugs.has(n.slug))
-  return [...sanityItems, ...localOnly]
+  const combined = [...sanityItems, ...localOnly]
+  return combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
