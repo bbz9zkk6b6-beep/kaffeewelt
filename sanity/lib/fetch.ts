@@ -118,8 +118,20 @@ const NEWS_QUERY = `*[_type == "news"] | order(date desc) {
 const NEWS_ITEM_QUERY = `*[_type == "news" && slug.current == $slug][0] {
   slug, title, excerpt, date, readingTime,
   "image": image.asset->url,
-  "content": content[]{ "type": _type, "id": _key, text }
+  content
 }`
+
+function parsePortableText(blocks: any[]): ArticleBlock[] {
+  return (blocks ?? [])
+    .filter((b) => b._type === 'block' && b.children?.length > 0)
+    .map((b, idx) => {
+      const text = b.children?.map((c: any) => c.text).join('') ?? ''
+      if (b.style === 'h2' || b.style === 'h3') {
+        return { type: 'heading' as const, id: `h${idx}`, text }
+      }
+      return { type: 'paragraph' as const, text }
+    })
+}
 
 export async function getAllNews(): Promise<NewsItem[]> {
   const { news: localNews } = await import('@/lib/content/news')
@@ -131,16 +143,10 @@ export async function getAllNews(): Promise<NewsItem[]> {
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
-  const data: SanityNewsRaw | null = await client.fetch(NEWS_ITEM_QUERY, { slug }, fetchOpts)
+  const data: any = await client.fetch(NEWS_ITEM_QUERY, { slug }, fetchOpts)
   if (data) {
     const item = toNews(data)
-    const raw = data as SanityNewsRaw & { content?: Array<{ type: string; id: string; text?: string }> }
-    item.content = (raw.content ?? [])
-      .filter((b) => b.text)
-      .map((b) => b.type === 'heading'
-        ? { type: 'heading' as const, id: b.id, text: b.text ?? '' }
-        : { type: 'paragraph' as const, text: b.text ?? '' }
-      )
+    item.content = parsePortableText(data.content)
     return item
   }
   // Fallback: lokale News für alte URLs
