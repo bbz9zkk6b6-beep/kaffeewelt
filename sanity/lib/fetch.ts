@@ -1,5 +1,12 @@
 import { client } from './client'
-import { ARTICLES_QUERY, ARTICLE_QUERY, PRODUCTS_QUERY, PRODUCT_QUERY } from './queries'
+import {
+  ARTICLES_QUERY,
+  ARTICLE_QUERY,
+  NEWS_ITEM_QUERY,
+  NEWS_QUERY,
+  PRODUCTS_QUERY,
+  PRODUCT_QUERY,
+} from './queries'
 import type { Article, ArticleBlock } from '@/lib/content/types'
 
 type SanityBlock = {
@@ -101,7 +108,7 @@ function toNews(raw: SanityNewsRaw): NewsItem {
     slug: raw.slug.current,
     title: raw.title,
     excerpt: raw.excerpt ?? '',
-    category: 'kaffee-news',
+    category: raw.category ?? '',
     author: '',
     date: raw.date?.slice(0, 10) ?? '',
     readingTime: raw.readingTime ?? 2,
@@ -109,17 +116,6 @@ function toNews(raw: SanityNewsRaw): NewsItem {
     content: [],
   }
 }
-
-const NEWS_QUERY = `*[_type == "news"] | order(date desc) {
-  slug, title, excerpt, date, readingTime,
-  "image": image.asset->url
-}`
-
-const NEWS_ITEM_QUERY = `*[_type == "news" && slug.current == $slug][0] {
-  slug, title, excerpt, date, readingTime,
-  "image": image.asset->url,
-  content
-}`
 
 function parseNewsContent(blocks: any[]): ArticleBlock[] {
   if (!Array.isArray(blocks)) return []

@@ -55,6 +55,16 @@ export const NEWS_QUERY = groq`
   }
 `
 
+export const NEWS_ITEM_QUERY = groq`
+  *[_type == "news" && slug.current == $slug][0] {
+    slug, title, excerpt, date, readingTime,
+    "category": category->slug.current,
+    "author": author->slug.current,
+    "image": image.asset->url,
+    content
+  }
+`
+
 // Glossar
 export const GLOSSARY_QUERY = groq`
   *[_type == "glossaryTerm"] | order(term asc) {
