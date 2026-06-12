@@ -50,14 +50,14 @@ export default async function NewsDetailPage({
 
   return (
     <article>
-      <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6">
+      <div className="mx-auto max-w-5xl px-4 pt-8 sm:px-6">
         <Breadcrumbs items={newsCrumbs(item)} />
         <div className="mt-4">
           <BackLink href="/news" label="Zurück zu den News" />
         </div>
       </div>
 
-      <header className="mx-auto max-w-3xl px-4 pt-6 sm:px-6">
+      <header className="mx-auto max-w-5xl px-4 pt-6 sm:px-6">
         {category && (
           <span className="text-sm font-medium uppercase tracking-wider text-accent">
             {category.name}
@@ -74,7 +74,7 @@ export default async function NewsDetailPage({
         </div>
       </header>
 
-      <div className="mx-auto mt-8 max-w-4xl px-4 sm:px-6">
+      <div className="mx-auto mt-8 max-w-5xl px-4 sm:px-6">
         <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
           <Image
             src={item.image || '/placeholder.svg'}
@@ -87,7 +87,7 @@ export default async function NewsDetailPage({
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
         <ArticleBody blocks={item.content} autolink />
         {affiliateProducts.length > 0 && (
           <AffiliateBox products={affiliateProducts} />
