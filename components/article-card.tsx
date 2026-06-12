@@ -20,7 +20,7 @@ export function ArticleCard({
     <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all hover:-translate-y-1 hover:shadow-lg">
       <Link
         href={`/${basePath}/${post.slug}`}
-        className={`relative block overflow-hidden ${basePath === 'news' ? 'aspect-[3/2]' : 'aspect-[16/10]'}`}
+        className={`relative block overflow-hidden ${basePath === 'news' ? 'aspect-[4/3]' : 'aspect-[16/10]'}`}
       >
         <Image
           src={post.image || '/placeholder.svg'}
