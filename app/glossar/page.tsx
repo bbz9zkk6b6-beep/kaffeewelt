@@ -1,36 +1,50 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BookOpen } from 'lucide-react'
-import {
-  getGlossaryByLetter,
-  glossaryCategoryLabels,
-  type GlossaryCategory,
-} from '@/lib/content'
-import { Breadcrumbs } from '@/components/breadcrumbs'
+import { getAllGlossaryTerms } from '@/sanity/lib/fetch'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Kaffee-Glossar: Begriffe einfach erklärt',
+  title: 'Kaffee-Glossar: Begriffe einfach erklärt — Meine kleine Kaffeewelt',
   description:
-    'Von Arabica bis Terroir – das Kaffee-Glossar von Meine kleine Kaffeewelt erklärt die wichtigsten Begriffe rund um Bohne, Röstung, Mahlgrad und Zubereitung.',
+    'Von Arabica bis Terroir – das Kaffee-Glossar erklärt die wichtigsten Begriffe rund um Bohne, Röstung, Mahlgrad und Zubereitung.',
 }
 
-const categoryStyles: Record<GlossaryCategory, string> = {
-  bohne: 'bg-primary/10 text-primary',
-  roesten: 'bg-accent/15 text-accent',
-  mahlen: 'bg-secondary text-secondary-foreground',
-  zubereitung: 'bg-accent/15 text-accent',
-  geschmack: 'bg-primary/10 text-primary',
-  ausstattung: 'bg-muted text-muted-foreground',
+const CATEGORY_LABELS: Record<string, string> = {
+  zubereitungsmethoden: 'Zubereitung',
+  'bohnen-herkunft': 'Herkunft',
+  'anbau-aufbereitung': 'Anbau',
+  roestung: 'Röstung',
+  sensorik: 'Sensorik',
+  geraete: 'Geräte',
+  kaffeekultur: 'Kultur',
 }
 
-export default function GlossaryPage() {
-  const groups = getGlossaryByLetter()
-  const letters = groups.map((g) => g.letter)
+const CATEGORY_STYLES: Record<string, string> = {
+  zubereitungsmethoden: 'bg-accent/15 text-accent',
+  'bohnen-herkunft': 'bg-primary/10 text-primary',
+  'anbau-aufbereitung': 'bg-primary/10 text-primary',
+  roestung: 'bg-accent/15 text-accent',
+  sensorik: 'bg-primary/10 text-primary',
+  geraete: 'bg-muted text-muted-foreground',
+  kaffeekultur: 'bg-secondary text-secondary-foreground',
+}
+
+export default async function GlossaryPage() {
+  const terms = await getAllGlossaryTerms()
+
+  const groups = terms.reduce<Record<string, typeof terms>>((acc, t) => {
+    const letter = t.term[0].toUpperCase()
+    if (!acc[letter]) acc[letter] = []
+    acc[letter].push(t)
+    return acc
+  }, {})
+
+  const letters = Object.keys(groups).sort()
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <Breadcrumbs items={[{ name: 'Glossar' }]} />
-
       <header className="mt-6 max-w-2xl">
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/15 text-accent">
@@ -41,17 +55,11 @@ export default function GlossaryPage() {
           </h1>
         </div>
         <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-          Die wichtigsten Begriffe rund um Kaffee – von der Bohne über die
-          Röstung bis zur Zubereitung. Klick dich durch und vertiefe dein Wissen
-          Begriff für Begriff.
+          {terms.length} Begriffe rund um Kaffee — von der Bohne über die Röstung bis zur Zubereitung.
         </p>
       </header>
 
-      {/* A–Z Sprungnavigation */}
-      <nav
-        aria-label="Alphabetische Navigation"
-        className="mt-8 flex flex-wrap gap-2"
-      >
+      <nav aria-label="Alphabetische Navigation" className="mt-8 flex flex-wrap gap-2">
         {letters.map((letter) => (
           <a
             key={letter}
@@ -64,17 +72,11 @@ export default function GlossaryPage() {
       </nav>
 
       <div className="mt-10 flex flex-col gap-10">
-        {groups.map((group) => (
-          <section
-            key={group.letter}
-            id={`buchstabe-${group.letter}`}
-            className="scroll-mt-24"
-          >
-            <h2 className="mb-4 font-serif text-2xl font-bold text-accent">
-              {group.letter}
-            </h2>
+        {letters.map((letter) => (
+          <section key={letter} id={`buchstabe-${letter}`} className="scroll-mt-24">
+            <h2 className="mb-4 font-serif text-2xl font-bold text-accent">{letter}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              {group.terms.map((term) => (
+              {groups[letter].map((term) => (
                 <Link
                   key={term.slug}
                   href={`/glossar/${term.slug}`}
@@ -84,14 +86,14 @@ export default function GlossaryPage() {
                     <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-accent">
                       {term.term}
                     </h3>
-                    <span
-                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${categoryStyles[term.category]}`}
-                    >
-                      {glossaryCategoryLabels[term.category]}
-                    </span>
+                    {term.category && (
+                      <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${CATEGORY_STYLES[term.category] ?? 'bg-muted text-muted-foreground'}`}>
+                        {CATEGORY_LABELS[term.category] ?? term.category}
+                      </span>
+                    )}
                   </div>
-                  <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">
-                    {term.shortDef}
+                  <p className="mt-2 line-clamp-2 text-pretty text-sm leading-relaxed text-muted-foreground">
+                    {term.definition}
                   </p>
                 </Link>
               ))}

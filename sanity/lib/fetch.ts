@@ -82,6 +82,33 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   return toArticle(data)
 }
 
+// ── Glossar ───────────────────────────────────────────────────────────────
+
+export type SanityGlossaryTerm = {
+  slug: string
+  term: string
+  definition: string
+  category: string
+}
+
+export async function getAllGlossaryTerms(): Promise<SanityGlossaryTerm[]> {
+  const data = await client.fetch(
+    `*[_type == "glossaryTerm"] | order(term asc) { "slug": slug.current, term, definition, category }`,
+    {},
+    fetchOpts,
+  )
+  return data
+}
+
+export async function getGlossaryTermBySlug(slug: string): Promise<SanityGlossaryTerm | null> {
+  const data = await client.fetch(
+    `*[_type == "glossaryTerm" && slug.current == $slug][0] { "slug": slug.current, term, definition, category }`,
+    { slug },
+    fetchOpts,
+  )
+  return data ?? null
+}
+
 // ── Produkte ──────────────────────────────────────────────────────────────
 
 export type SanityProduct = {
