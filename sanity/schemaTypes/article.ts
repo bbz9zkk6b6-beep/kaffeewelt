@@ -63,6 +63,13 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'published',
+      title: 'Veröffentlicht',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Nur veröffentlichte Artikel erscheinen auf der Seite.',
+    }),
+    defineField({
       name: 'featured',
       title: 'Highlighted/Featured',
       type: 'boolean',
@@ -93,6 +100,16 @@ export default defineType({
           fields: [
             {name: 'text', type: 'text', title: 'Zitat', rows: 2},
             {name: 'cite', type: 'string', title: 'Quelle'},
+          ],
+        },
+        {
+          type: 'object',
+          name: 'inlineImage',
+          title: 'Bild',
+          fields: [
+            {name: 'image', type: 'image', title: 'Bild', options: {hotspot: true}},
+            {name: 'alt', type: 'string', title: 'Bildbeschreibung (Alt-Text)'},
+            {name: 'caption', type: 'string', title: 'Bildunterschrift (optional)'},
           ],
         },
       ],

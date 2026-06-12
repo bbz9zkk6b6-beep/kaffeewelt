@@ -2,7 +2,7 @@ import {groq} from 'next-sanity'
 
 // Artikel
 export const ARTICLES_QUERY = groq`
-  *[_type == "article"] | order(date desc) {
+  *[_type == "article" && published == true] | order(date desc) {
     slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
     "author": author->slug.current,
@@ -11,7 +11,7 @@ export const ARTICLES_QUERY = groq`
 `
 
 export const ARTICLE_QUERY = groq`
-  *[_type == "article" && slug.current == $slug][0] {
+  *[_type == "article" && slug.current == $slug && published == true][0] {
     slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
     "image": image.asset->url,
@@ -19,7 +19,10 @@ export const ARTICLE_QUERY = groq`
       "type": _type,
       "id": _key,
       text,
-      cite
+      cite,
+      "url": image.asset->url,
+      alt,
+      caption
     }
   }
 `

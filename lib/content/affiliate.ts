@@ -8,63 +8,92 @@ export type AffiliateProduct = {
   image: string
 }
 
-// Amazon Associates Produkte — mit Affiliate-Links.
+const TAG = 'kaffeewelt21-21'
+
+// Produkt-Katalog — Amazon-Suche mit Affiliate-Tag.
+// Sobald du konkrete ASINs hast, tausche die Suchanfragen gegen direkte Links:
+// `https://www.amazon.de/dp/ASIN?tag=${TAG}`
 export const affiliateProducts: Record<string, AffiliateProduct> = {
-  grinder: {
-    id: 'grinder',
-    name: 'Premium Kaffeemühle',
-    description: 'Hochwertige Burr-Mühle für gleichmäßiges Mahlen',
-    url: 'https://amazon.de/s?k=premium+kaffeemühle&tag=YOUR_ASSOCIATE_ID',
-    image: '/images/products/grinder.jpg',
+  grinder_electric: {
+    id: 'grinder_electric',
+    name: 'Elektrische Kaffeemühle',
+    description: 'Kegelmahlwerk, 40+ Mahlstufen — der Standard für Filterkaffee und Espresso ab ~120 €.',
+    url: `https://www.amazon.de/s?k=elektrische+kaffeemühle+kegelmahlwerk&tag=${TAG}`,
+    image: '/images/affiliate-grinder.png',
+  },
+  grinder_hand: {
+    id: 'grinder_hand',
+    name: 'Handmühle (z. B. Comandante C40)',
+    description: 'Kompakt, leise, erstklassiges Mahlbild — ideal für Reisen und Single-Portionen.',
+    url: `https://www.amazon.de/s?k=comandante+c40+handmühle&tag=${TAG}`,
+    image: '/images/affiliate-grinder.png',
   },
   scale: {
     id: 'scale',
-    name: 'Digitale Kaffeewaage',
-    description: 'Genaue Skalenmessung für präzises Brühen',
-    url: 'https://amazon.de/s?k=kaffeewaage+digital&tag=YOUR_ASSOCIATE_ID',
-    image: '/images/products/scale.jpg',
+    name: 'Kaffeewaage mit Timer',
+    description: 'Präzision auf 0,1 g genau — für reproduzierbare Ergebnisse bei jeder Brühmethode.',
+    url: `https://www.amazon.de/s?k=kaffeewaage+timer+0.1g&tag=${TAG}`,
+    image: '/images/affiliate-scale.png',
   },
-  thermostat: {
-    id: 'thermostat',
-    name: 'Digitales Thermometer',
-    description: 'Temperaturmessung für optimales Brühen',
-    url: 'https://amazon.de/s?k=digitales+thermometer+kaffee&tag=YOUR_ASSOCIATE_ID',
-    image: '/images/products/thermometer.jpg',
+  kettle: {
+    id: 'kettle',
+    name: 'Wasserkocher mit Temperaturkontrolle',
+    description: '60–100 °C stufenlos einstellbar — Filter braucht 93 °C, Espresso eher 90 °C.',
+    url: `https://www.amazon.de/s?k=wasserkocher+temperaturregelung+kaffee&tag=${TAG}`,
+    image: '/images/affiliate-kettle.png',
   },
-  frenchpress: {
-    id: 'frenchpress',
-    name: 'Stilvelle French Press',
-    description: '0,8L Glas French Press für 4 Tassen',
-    url: 'https://amazon.de/s?k=french+press+0.8l&tag=YOUR_ASSOCIATE_ID',
-    image: '/images/products/frenchpress.jpg',
+  milk_frother: {
+    id: 'milk_frother',
+    name: 'Milchaufschäumer',
+    description: 'Für cremige Milch zuhause — elektrisch oder manuell, beide taugen für Latte Art.',
+    url: `https://www.amazon.de/s?k=milchaufschäumer+elektrisch&tag=${TAG}`,
+    image: '/images/affiliate-scale.png',
   },
-  pour_over: {
-    id: 'pour_over',
-    name: 'Premium Dripper Set',
-    description: 'Pour-Over-Set mit Filter und Ständer',
-    url: 'https://amazon.de/s?k=pour+over+dripper+set&tag=YOUR_ASSOCIATE_ID',
-    image: '/images/products/pourover.jpg',
+  espresso_machine: {
+    id: 'espresso_machine',
+    name: 'Espressomaschine (Siebträger)',
+    description: 'Der Einstieg in echten Espresso — mit Dampflanze für Milchschaum.',
+    url: `https://www.amazon.de/s?k=espressomaschine+siebträger+einsteiger&tag=${TAG}`,
+    image: '/images/affiliate-grinder.png',
+  },
+  vollautomat: {
+    id: 'vollautomat',
+    name: 'Kaffeevollautomat',
+    description: 'Bohne rein, Kaffee raus — mit Mahlwerk, Brühgruppe und Milchsystem.',
+    url: `https://www.amazon.de/s?k=kaffeevollautomat+mit+mahlwerk&tag=${TAG}`,
+    image: '/images/affiliate-grinder.png',
+  },
+  water_filter: {
+    id: 'water_filter',
+    name: 'Wasserfilter für Kaffee',
+    description: 'Reduziert Chlor und Kalk — macht den größten Unterschied bei hartem Leitungswasser.',
+    url: `https://www.amazon.de/s?k=wasserfilter+kaffee+brita&tag=${TAG}`,
+    image: '/images/affiliate-kettle.png',
   },
   aeropress: {
     id: 'aeropress',
-    name: 'Aeropress Coffee Maker',
-    description: 'Tragbare Aeropress für unterwegs',
-    url: 'https://amazon.de/s?k=aeropress+coffee+maker&tag=YOUR_ASSOCIATE_ID',
-    image: '/images/products/aeropress.jpg',
+    name: 'AeroPress Coffee Maker',
+    description: 'Schnell, kompakt, flexibel — funktioniert mit jeder Röstung, überall.',
+    url: `https://www.amazon.de/s?k=aeropress+coffee+maker&tag=${TAG}`,
+    image: '/images/affiliate-scale.png',
   },
 }
 
-// Zuordnung: welcher Artikel zeigt welche Produkte.
+// Artikel → Produktempfehlungen (maximal 2–3 pro Artikel).
 const articleAffiliateMap: Record<string, string[]> = {
-  'die-richtige-muehle': ['grinder', 'scale'],
+  'die-richtige-muehle':          ['grinder_electric', 'grinder_hand', 'scale'],
+  'kaffeeanbau-weltweit':         ['grinder_electric', 'scale'],
+  'latte-art-fuer-einsteiger':    ['milk_frother', 'espresso_machine', 'scale'],
+  'wasser-die-unterschaetzte-zutat': ['kettle', 'water_filter'],
+  'roestgrade-verstehen':         ['grinder_electric', 'scale'],
+  'roestung-espresso':            ['espresso_machine', 'grinder_electric'],
+  'koffein-dunkle-roestung':      ['grinder_electric', 'scale'],
+  'roestung-vollautomat':         ['vollautomat'],
+  'saeurearmer-roestgrad':        ['grinder_electric', 'aeropress'],
 }
 
-// Zuordnung: welcher News-Artikel zeigt welche Produkte.
-const newsAffiliateMap: Record<string, string[]> = {
-  // Beispiel: 'neue-espressomaschinen-generation-2025': ['thermostat', 'scale'],
-}
+const newsAffiliateMap: Record<string, string[]> = {}
 
-/** Liefert die Affiliate-Produkte für einen Artikel (falls hinterlegt). */
 export function getAffiliateProducts(article: Article): AffiliateProduct[] {
   const ids = articleAffiliateMap[article.slug] ?? []
   return ids
@@ -72,7 +101,6 @@ export function getAffiliateProducts(article: Article): AffiliateProduct[] {
     .filter((p): p is AffiliateProduct => Boolean(p))
 }
 
-/** Liefert die Affiliate-Produkte für einen News-Artikel (falls hinterlegt). */
 export function getAffiliateProductsForNews(slug: string): AffiliateProduct[] {
   const ids = newsAffiliateMap[slug] ?? []
   return ids
