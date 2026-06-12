@@ -122,22 +122,30 @@ const NEWS_ITEM_QUERY = `*[_type == "news" && slug.current == $slug][0] {
 }`
 
 export async function getAllNews(): Promise<NewsItem[]> {
-  const data: SanityNewsRaw[] = await client.fetch(NEWS_QUERY, {}, fetchOpts)
-  return data.map(toNews)
+  const { news: localNews } = await import('@/lib/content/news')
+  const sanityData: SanityNewsRaw[] = await client.fetch(NEWS_QUERY, {}, fetchOpts)
+  const sanityItems = sanityData.map(toNews)
+  const sanitySlugs = new Set(sanityItems.map((n) => n.slug))
+  const localOnly = localNews.filter((n) => !sanitySlugs.has(n.slug))
+  return [...sanityItems, ...localOnly]
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
   const data: SanityNewsRaw | null = await client.fetch(NEWS_ITEM_QUERY, { slug }, fetchOpts)
-  if (!data) return null
-  const item = toNews(data)
-  const raw = data as SanityNewsRaw & { content?: Array<{ type: string; id: string; text?: string }> }
-  item.content = (raw.content ?? [])
-    .filter((b) => b.text)
-    .map((b) => b.type === 'heading'
-      ? { type: 'heading' as const, id: b.id, text: b.text ?? '' }
-      : { type: 'paragraph' as const, text: b.text ?? '' }
-    )
-  return item
+  if (data) {
+    const item = toNews(data)
+    const raw = data as SanityNewsRaw & { content?: Array<{ type: string; id: string; text?: string }> }
+    item.content = (raw.content ?? [])
+      .filter((b) => b.text)
+      .map((b) => b.type === 'heading'
+        ? { type: 'heading' as const, id: b.id, text: b.text ?? '' }
+        : { type: 'paragraph' as const, text: b.text ?? '' }
+      )
+    return item
+  }
+  // Fallback: lokale News für alte URLs
+  const { getNewsItem } = await import('@/lib/content/news')
+  return getNewsItem(slug) ?? null
 }
 
 // ── Glossar ───────────────────────────────────────────────────────────────
