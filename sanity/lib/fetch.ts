@@ -82,6 +82,64 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
   return toArticle(data)
 }
 
+// ── News ──────────────────────────────────────────────────────────────────
+
+import type { NewsItem } from '@/lib/content/types'
+
+type SanityNewsRaw = {
+  slug: { current: string }
+  title: string
+  excerpt?: string
+  date?: string
+  readingTime?: number
+  image?: string
+  category?: string
+}
+
+function toNews(raw: SanityNewsRaw): NewsItem {
+  return {
+    slug: raw.slug.current,
+    title: raw.title,
+    excerpt: raw.excerpt ?? '',
+    category: 'kaffee-news',
+    author: '',
+    date: raw.date?.slice(0, 10) ?? '',
+    readingTime: raw.readingTime ?? 2,
+    image: optimizeSanityImage(raw.image, 800),
+    content: [],
+  }
+}
+
+const NEWS_QUERY = `*[_type == "news"] | order(date desc) {
+  slug, title, excerpt, date, readingTime,
+  "image": image.asset->url
+}`
+
+const NEWS_ITEM_QUERY = `*[_type == "news" && slug.current == $slug][0] {
+  slug, title, excerpt, date, readingTime,
+  "image": image.asset->url,
+  "content": content[]{ "type": _type, "id": _key, text }
+}`
+
+export async function getAllNews(): Promise<NewsItem[]> {
+  const data: SanityNewsRaw[] = await client.fetch(NEWS_QUERY, {}, fetchOpts)
+  return data.map(toNews)
+}
+
+export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
+  const data: SanityNewsRaw | null = await client.fetch(NEWS_ITEM_QUERY, { slug }, fetchOpts)
+  if (!data) return null
+  const item = toNews(data)
+  const raw = data as SanityNewsRaw & { content?: Array<{ type: string; id: string; text?: string }> }
+  item.content = (raw.content ?? [])
+    .filter((b) => b.text)
+    .map((b) => b.type === 'heading'
+      ? { type: 'heading' as const, id: b.id, text: b.text ?? '' }
+      : { type: 'paragraph' as const, text: b.text ?? '' }
+    )
+  return item
+}
+
 // ── Glossar ───────────────────────────────────────────────────────────────
 
 export type SanityGlossaryTerm = {

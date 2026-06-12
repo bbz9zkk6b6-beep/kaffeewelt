@@ -3,8 +3,10 @@ import { PageHeader } from '@/components/page-header'
 import { ArticleCard } from '@/components/article-card'
 import { Newsletter } from '@/components/newsletter'
 import { Breadcrumbs } from '@/components/breadcrumbs'
-import { news } from '@/lib/content/news'
 import { sectionCrumbs } from '@/lib/content/taxonomy'
+import { getAllNews } from '@/sanity/lib/fetch'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Kaffee-News',
@@ -12,7 +14,8 @@ export const metadata: Metadata = {
     'Aktuelle Neuigkeiten, Trends und Entwicklungen aus der Welt des Kaffees.',
 }
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const news = await getAllNews()
   const [lead, ...rest] = news
 
   return (

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getNewsItem, news, getCategory, newsCrumbs, getAffiliateProductsForNews } from '@/lib/content'
+import { getAllNews, getNewsBySlug } from '@/sanity/lib/fetch'
+import { getCategory, newsCrumbs, getAffiliateProductsForNews } from '@/lib/content'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleCard } from '@/components/article-card'
 import { BackLink } from '@/components/author-byline'
@@ -10,7 +11,10 @@ import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
 import { getApprovedComments } from '@/app/actions/comments'
 
-export function generateStaticParams() {
+export const revalidate = 60
+
+export async function generateStaticParams() {
+  const news = await getAllNews()
   return news.map((n) => ({ slug: n.slug }))
 }
 
@@ -20,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const item = getNewsItem(slug)
+  const item = await getNewsBySlug(slug)
   if (!item) return { title: 'News nicht gefunden' }
   return {
     title: item.title,
@@ -35,11 +39,12 @@ export default async function NewsDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const item = getNewsItem(slug)
+  const item = await getNewsBySlug(slug)
   if (!item) notFound()
 
   const category = getCategory(item.category)
-  const related = news.filter((n) => n.slug !== item.slug).slice(0, 3)
+  const allNews = await getAllNews()
+  const related = allNews.filter((n) => n.slug !== item.slug).slice(0, 3)
   const comments = await getApprovedComments('news', item.slug)
   const affiliateProducts = getAffiliateProductsForNews(item.slug)
 
@@ -77,7 +82,7 @@ export default async function NewsDetailPage({
             fill
             priority
             sizes="(max-width: 768px) 100vw, 768px"
-            className="object-cover"
+            className="object-cover [filter:brightness(0.95)_saturate(0.85)_sepia(0.12)]"
           />
         </div>
       </div>
