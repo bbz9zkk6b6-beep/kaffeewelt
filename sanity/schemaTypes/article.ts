@@ -63,13 +63,6 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'published',
-      title: 'Veröffentlicht',
-      type: 'boolean',
-      initialValue: false,
-      description: 'Nur veröffentlichte Artikel erscheinen auf der Seite.',
-    }),
-    defineField({
       name: 'featured',
       title: 'Highlighted/Featured',
       type: 'boolean',

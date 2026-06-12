@@ -89,7 +89,7 @@ export default async function ArticleDetailPage({
             fill
             priority
             sizes="(max-width: 768px) 100vw, 896px"
-            className="object-cover"
+            className="object-cover [filter:brightness(0.95)_saturate(0.85)_sepia(0.12)]"
           />
         </div>
       </div>
@@ -111,21 +111,24 @@ export default async function ArticleDetailPage({
 
         {headings.length > 0 && (
           <aside className="hidden lg:block">
-            <div className="sticky top-24 rounded-xl border border-border bg-card p-5">
-              <p className="font-serif text-sm font-semibold uppercase tracking-wider text-foreground">
-                Inhalt
-              </p>
-              <nav className="mt-3 flex flex-col gap-2">
-                {headings.map((h) => (
-                  <a
-                    key={h.id}
-                    href={`#${h.id}`}
-                    className="text-sm leading-snug text-muted-foreground transition-colors hover:text-accent"
-                  >
-                    {h.text}
-                  </a>
-                ))}
-              </nav>
+            <div className="sticky top-24 flex flex-col gap-4">
+              <div className="rounded-xl border border-border bg-card p-5">
+                <p className="font-serif text-sm font-semibold uppercase tracking-wider text-foreground">
+                  Inhalt
+                </p>
+                <nav className="mt-3 flex flex-col gap-2">
+                  {headings.map((h) => (
+                    <a
+                      key={h.id}
+                      href={`#${h.id}`}
+                      className="text-sm leading-snug text-muted-foreground transition-colors hover:text-accent"
+                    >
+                      {h.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+              {/* AFFILIATE_SIDEBAR_PLACEHOLDER – wird aktiviert sobald Produkte ausgewählt */}
             </div>
           </aside>
         )}
