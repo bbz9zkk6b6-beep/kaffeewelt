@@ -1,6 +1,6 @@
 # Übergabe: Meine kleine Kaffeewelt
 
-Stand: 11.06.2026
+Stand: 12.06.2026
 
 ---
 
@@ -120,17 +120,31 @@ URL: `https://kaffeewelt.vercel.app/admin/kommentare?token=DEIN_ADMIN_TOKEN`
   - `sanity/lib/queries.ts` — ARTICLE_QUERY Content-Projektion aktualisiert
   - Startseite async, Featured Articles aus Sanity
   - Build grün, kein Fehler
+- [x] **Bilder aller Artikel** — Sanity CDN-URLs mit `?w=1200&auto=format&q=80&fit=crop` optimiert (100–200 KB statt 2–3 MB), warmer Filter via CSS auf allen Bild-Komponenten
+- [x] **Artikelsichtbarkeit** — natives Sanity Draft/Publish-System, kein eigenes `published`-Feld. Was im Studio veröffentlicht ist, erscheint live. Drafts bleiben unsichtbar.
+- [x] **Produkt-Infrastruktur (Amazon Affiliate)**
+  - `sanity/schemaTypes/product.ts` — Schema mit Pros/Cons, Kategorie, Preis-Hinweis, Body-Blocks
+  - `/produkte` — Übersicht, gruppiert nach Kategorie
+  - `/produkte/[slug]` — Detailseite mit Kauf-Button
+  - `/r/[slug]` — Server-seitiger Affiliate-Redirect (Adblocker-Bypass), loggt Klicks
+  - Amazon Partner-Tag: `kaffeewelt21-21`
+- [x] **8 Rezepte angelegt und veröffentlicht** (12.06.2026)
+  - Espresso, Cappuccino, Latte Macchiato, Cold Brew, Pour-over Filterkaffee, Iced Coffee, Café Mocha, Pumpkin Spice Latte
+  - Alle mit Zutaten, Schritten, Tipps, Nährwerten, eigenem Bild und Autor
+  - Sichtbar auf `/rezepte`
+- [x] **Glossar: 74 Einträge** in Sanity (12.06.2026)
+  - 7 Kategorien: Zubereitungsmethoden, Bohnen & Herkunft, Anbau & Aufbereitung, Röstung, Sensorik, Geräte, Kaffeekultur
+  - Sichtbar auf `/glossar`
 
 ---
 
 ## Was noch zu tun ist
 
-### Nächster Schritt: Erster Artikel in Sanity einpflegen
-1. https://kaffeewelt.sanity.studio öffnen
-2. **Autor** anlegen: Name "Olaf Wulf", Slug "olaf-wulf"
-3. **Kategorie** anlegen: z.B. "Bohnenkunde", Slug "bohnenkunde"
-4. **Artikel** anlegen: Slug `roestgrade-verstehen`, Text aus `_content/artikel/KW-24/donnerstag/FERTIG_roestgrade-verstehen.md`, Featured ankreuzen
-5. → erscheint nach max. 60 Sekunden live
+### Nächste Schritte Redaktion
+- [x] 4 Röstgrad-Artikel veröffentlicht: `roestung-espresso`, `roestung-vollautomat`, `koffein-dunkle-roestung`, `saeurearmer-roestgrad`
+- [ ] Produkte in Sanity Studio anlegen (Schema bereit, Seiten gebaut — nur noch Inhalte fehlen)
+- [ ] Affiliate-Sidebar unter Artikel-Inhaltsverzeichnis mit konkreten Produkten befüllen (gemeinsam auswählen)
+- [ ] Nächster Rezept-Batch: Nachspeisen & Backwaren mit Kaffee als Zutat (Tiramisu, Coffee Rub, Kaffeekuchen etc.)
 
 ### Vor dem Launch
 - [ ] `robots.txt` leeren — aktuell blockiert es alle Crawler (`/public/robots.txt`)

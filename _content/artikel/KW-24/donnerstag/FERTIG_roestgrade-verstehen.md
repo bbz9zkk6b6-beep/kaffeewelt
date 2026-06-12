@@ -32,7 +32,7 @@ Helle Röstungen enden kurz nach dem First Crack. Die Bohne ist hellbraun, die O
 
 Was dafür drin ist: Frucht, Säure, Komplexität. Helle Röstungen bewahren mehr von den ursprünglichen Aromen der Herkunft — ein Äthiopier kann nach Bergamotte und Zitrus schmecken, ein Kenianer nach roten Früchten. Das liegt unter anderem an der höheren Chlorogensäure, die für den fruchtigeren, säurebetonten Charakter verantwortlich ist.
 
-Und noch etwas: Entgegen dem weit verbreiteten Irrtum hat heller Kaffee mehr Koffein — rund 5–10 % mehr als dunkle Röstungen, weil Koffein beim langen Rösten teilweise abgebaut wird. Wer morgens also Dampf braucht, greift zum Hellen.
+Beim Koffein ist der Unterschied zwischen Röstgraden überraschend gering: Pro Gewichtseinheit enthalten helle und dunkle Bohnen nahezu gleich viel Koffein, weil Koffein hitzestabil ist. Dass heller Kaffee oft als koffeinhaltiger gilt, liegt daran, dass dunkle Bohnen leichter sind — wer nach Volumen dosiert (Löffel statt Waage), bekommt bei hellem Kaffee tatsächlich mehr Koffein pro Tasse.
 
 ### Mittlere Röstung (Medium Roast)
 

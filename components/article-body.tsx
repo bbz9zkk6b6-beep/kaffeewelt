@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { ArticleBlock } from '@/lib/content'
 import { autolinkGlossary } from '@/lib/glossary-autolink'
 
@@ -74,6 +75,24 @@ export function ArticleBody({
                   </li>
                 ))}
               </ul>
+            )
+          case 'inlineImage':
+            return (
+              <figure key={i} className="my-2">
+                <Image
+                  src={block.url}
+                  alt={block.alt ?? ''}
+                  width={1536}
+                  height={1024}
+                  className="w-full h-auto rounded-xl"
+                  sizes="(max-width: 768px) 100vw, 800px"
+                />
+                {block.caption && (
+                  <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+                    {block.caption}
+                  </figcaption>
+                )}
+              </figure>
             )
           default:
             return null

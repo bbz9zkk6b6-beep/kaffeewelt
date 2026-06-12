@@ -46,6 +46,7 @@ export type ArticleBlock =
   | { type: 'paragraph'; text: string }
   | { type: 'quote'; text: string; cite?: string }
   | { type: 'list'; items: string[] }
+  | { type: 'inlineImage'; url: string; alt?: string; caption?: string }
 
 export type RecipeType =
   | 'espresso'
