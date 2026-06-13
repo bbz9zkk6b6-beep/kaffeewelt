@@ -51,6 +51,7 @@ export default async function GlossaryPage() {
         </p>
       </header>
 
+      {/* A–Z Sprungnavigation */}
       <nav
         aria-label="Alphabetische Navigation"
         className="mt-8 flex flex-wrap gap-2"

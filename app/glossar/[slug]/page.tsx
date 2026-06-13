@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { getAllGlossaryTerms, getGlossaryTermBySlug } from '@/sanity/lib/fetch'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { BackLink } from '@/components/author-byline'
+import { GlossaryDiscovery } from '@/components/glossary-discovery'
 
 const SITE_URL = 'https://meine-kleine-kaffeewelt.de'
 
@@ -68,10 +69,12 @@ export default async function GlossaryTermPage({
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <script
         type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermLd) }}
       />
       <script
         type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
@@ -120,6 +123,8 @@ export default async function GlossaryTermPage({
           </div>
         </section>
       )}
+
+      <GlossaryDiscovery />
     </article>
   )
 }
