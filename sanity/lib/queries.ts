@@ -76,10 +76,29 @@ export const GLOSSARY_QUERY = groq`
 
 export const GLOSSARY_TERM_QUERY = groq`
   *[_type == "glossaryTerm" && slug.current == $slug][0] {
-    "slug": slug.current, term, definition,
+    "slug": slug.current, term, definition, synonyms,
     "category": category->value.current,
     "categoryTitle": category->title,
-    "relatedTerms": relatedTerms[]->{term, "slug": slug.current, definition}
+    "content": content[]{
+      "type": _type,
+      "id": _key,
+      text,
+      cite,
+      "url": image.asset->url,
+      alt,
+      caption
+    },
+    "faq": faq[]{question, answer},
+    "relatedTerms": relatedTerms[]->{term, "slug": slug.current, definition},
+    "relatedArticles": relatedArticles[]->{
+      "slug": slug.current, title, excerpt, date, readingTime, featured,
+      "category": category->slug.current,
+      "image": image.asset->url
+    },
+    "relatedRecipes": relatedRecipes[]->{
+      "slug": slug.current, title, excerpt, type, difficulty, totalTime,
+      "image": image.asset->url
+    }
   }
 `
 

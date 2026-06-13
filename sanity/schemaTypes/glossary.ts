@@ -22,7 +22,8 @@ export default defineType({
     }),
     defineField({
       name: 'definition',
-      title: 'Definition',
+      title: 'Kurzdefinition',
+      description: 'Ein Satz – erscheint in der Übersicht und als Teaser',
       type: 'text',
       rows: 3,
       validation: (Rule) => Rule.required(),
@@ -34,6 +35,75 @@ export default defineType({
       to: [{type: 'glossaryCategory'}],
     }),
     defineField({
+      name: 'synonyms',
+      title: 'Synonyme / alternative Schreibweisen',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {layout: 'tags'},
+    }),
+    defineField({
+      name: 'content',
+      title: 'Inhalt',
+      description: 'Ausführliche Erklärung des Begriffs',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'heading',
+          title: 'Überschrift',
+          fields: [
+            {name: 'text', type: 'string', title: 'Text'},
+          ],
+        },
+        {
+          type: 'object',
+          name: 'paragraph',
+          title: 'Absatz',
+          fields: [
+            {name: 'text', type: 'text', title: 'Text', rows: 4},
+          ],
+        },
+        {
+          type: 'object',
+          name: 'quote',
+          title: 'Zitat',
+          fields: [
+            {name: 'text', type: 'text', title: 'Zitat', rows: 2},
+            {name: 'cite', type: 'string', title: 'Quelle'},
+          ],
+        },
+        {
+          type: 'object',
+          name: 'inlineImage',
+          title: 'Bild',
+          fields: [
+            {name: 'image', type: 'image', title: 'Bild', options: {hotspot: true}},
+            {name: 'alt', type: 'string', title: 'Bildbeschreibung (Alt-Text)'},
+            {name: 'caption', type: 'string', title: 'Bildunterschrift (optional)'},
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'faq',
+      title: 'Häufige Fragen',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'faqItem',
+          title: 'Frage & Antwort',
+          fields: [
+            {name: 'question', type: 'string', title: 'Frage', validation: (Rule) => Rule.required()},
+            {name: 'answer', type: 'text', title: 'Antwort', rows: 3, validation: (Rule) => Rule.required()},
+          ],
+          preview: {
+            select: {title: 'question'},
+          },
+        },
+      ],
+    }),
+    defineField({
       name: 'relatedTerms',
       title: 'Verwandte Begriffe',
       type: 'array',
@@ -41,6 +111,28 @@ export default defineType({
         {
           type: 'reference',
           to: [{type: 'glossaryTerm'}],
+        },
+      ],
+    }),
+    defineField({
+      name: 'relatedArticles',
+      title: 'Passende Artikel',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'article'}],
+        },
+      ],
+    }),
+    defineField({
+      name: 'relatedRecipes',
+      title: 'Passende Rezepte',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'recipe'}],
         },
       ],
     }),

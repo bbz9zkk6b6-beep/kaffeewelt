@@ -175,10 +175,11 @@ export type SanityGlossaryTerm = {
   category: string
   categoryTitle: string
   synonyms?: string[]
+  content?: { type: string; id: string; text?: string; cite?: string; url?: string; alt?: string; caption?: string }[]
   faq?: { question: string; answer: string }[]
   relatedTerms?: { term: string; slug: string; definition: string }[]
-  relatedArticles?: string[]
-  relatedRecipes?: string[]
+  relatedArticles?: { slug: string; title: string; excerpt: string; date: string; readingTime: number; featured?: boolean; category?: string; image?: string }[]
+  relatedRecipes?: { slug: string; title: string; excerpt: string; type?: string; difficulty?: string; totalTime?: number; image?: string }[]
 }
 
 export async function getAllGlossaryTerms(): Promise<SanityGlossaryTerm[]> {

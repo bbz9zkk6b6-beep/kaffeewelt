@@ -3,13 +3,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowRight } from 'lucide-react'
 import { getAllGlossaryTerms, getGlossaryTermBySlug } from '@/sanity/lib/fetch'
-import { getArticle, getRecipe } from '@/lib/content'
 import { ArticleBody } from '@/components/article-body'
 import { ArticleCard } from '@/components/article-card'
 import { RecipeCard } from '@/components/recipe-card'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { BackLink } from '@/components/author-byline'
 import { GlossaryDiscovery } from '@/components/glossary-discovery'
+import type { Article } from '@/lib/content/types'
 
 const SITE_URL = 'https://meine-kleine-kaffeewelt.de'
 
@@ -46,15 +46,9 @@ export default async function GlossaryTermPage({
   const term = await getGlossaryTermBySlug(slug)
   if (!term) notFound()
 
-  const relatedArticles = (term.relatedArticles ?? [])
-    .map((s) => getArticle(s))
-    .filter((a): a is NonNullable<typeof a> => Boolean(a))
-    .slice(0, 3)
-
-  const relatedRecipes = (term.relatedRecipes ?? [])
-    .map((s) => getRecipe(s))
-    .filter((r): r is NonNullable<typeof r> => Boolean(r))
-    .slice(0, 3)
+  const content = (term.content ?? []).filter(Boolean)
+  const relatedArticles = (term.relatedArticles ?? []).slice(0, 3)
+  const relatedRecipes = (term.relatedRecipes ?? []).slice(0, 3)
 
   const definedTermLd = {
     '@context': 'https://schema.org',
@@ -137,6 +131,12 @@ export default async function GlossaryTermPage({
         )}
       </header>
 
+      {content.length > 0 && (
+        <div className="mt-10">
+          <ArticleBody blocks={content as any} autolink currentGlossarySlug={term.slug} />
+        </div>
+      )}
+
       {term.faq && term.faq.length > 0 && (
         <section className="mt-12 border-t border-border pt-8">
           <h2 className="font-serif text-xl font-bold text-foreground">
@@ -192,7 +192,7 @@ export default async function GlossaryTermPage({
           </h2>
           <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {relatedRecipes.map((r) => (
-              <RecipeCard key={r.slug} recipe={r} />
+              <RecipeCard key={r.slug} recipe={r as any} />
             ))}
           </div>
         </section>
@@ -205,7 +205,13 @@ export default async function GlossaryTermPage({
           </h2>
           <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {relatedArticles.map((a) => (
-              <ArticleCard key={a.slug} post={a} basePath="artikel" />
+              <ArticleCard key={a.slug} post={{
+                ...a,
+                author: '',
+                featured: a.featured ?? false,
+                image: a.image ?? '/placeholder.svg',
+                content: [],
+              } as Article} basePath="artikel" />
             ))}
           </div>
         </section>
