@@ -9,15 +9,17 @@ import { CategoryIcon } from '@/components/category-icon'
 import { HomeHighlights } from '@/components/home-highlights'
 import { BaristaButton } from '@/components/barista-button'
 import { categories } from '@/lib/content/categories'
-import { news } from '@/lib/content/news'
 import { getFeaturedRecipes, recipes } from '@/lib/content/recipes'
 import { getCategory, formatDate } from '@/lib/content'
-import { getAllArticles } from '@/sanity/lib/fetch'
+import { getAllArticles, getAllNews } from '@/sanity/lib/fetch'
 
 export const revalidate = 60
 
 export default async function HomePage() {
-  const sanityArticles = await getAllArticles()
+  const [sanityArticles, news] = await Promise.all([
+    getAllArticles(),
+    getAllNews(),
+  ])
   const featured = sanityArticles.find((a) => a.featured) ?? sanityArticles[0]
   const featuredCategory = featured ? getCategory(featured.category) : null
   const secondaryArticles = featured
@@ -69,7 +71,7 @@ export default async function HomePage() {
               alt="Hände halten eine warme Kaffeetasse an einem sonnigen Frühstückstisch"
               fill
               priority
-              className="object-cover"
+              className="site-image-look object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
@@ -154,7 +156,7 @@ export default async function HomePage() {
                     src={featured.image || '/placeholder.svg'}
                     alt={featured.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                 </div>

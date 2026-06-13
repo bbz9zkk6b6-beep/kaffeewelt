@@ -140,13 +140,8 @@ function parseNewsContent(blocks: any[]): ArticleBlock[] {
 }
 
 export async function getAllNews(): Promise<NewsItem[]> {
-  const { news: localNews } = await import('@/lib/content/news')
   const sanityData: SanityNewsRaw[] = await client.fetch(NEWS_QUERY, {}, fetchOpts)
-  const sanityItems = sanityData.map(toNews)
-  const sanitySlugs = new Set(sanityItems.map((n) => n.slug))
-  const localOnly = localNews.filter((n) => !sanitySlugs.has(n.slug))
-  const combined = [...sanityItems, ...localOnly]
-  return combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  return sanityData.map(toNews)
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
@@ -156,9 +151,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
     item.content = parseNewsContent(data.content)
     return item
   }
-  // Fallback: lokale News für alte URLs
-  const { getNewsItem } = await import('@/lib/content/news')
-  return getNewsItem(slug) ?? null
+  return null
 }
 
 // ── Glossar ───────────────────────────────────────────────────────────────
