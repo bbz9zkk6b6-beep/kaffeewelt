@@ -93,12 +93,25 @@ const articleAffiliateMap: Record<string, string[]> = {
 }
 
 const newsAffiliateMap: Record<string, string[]> = {
-  'arabica-rekordernte-brasilien':          ['grinder_electric', 'scale'],
-  'espressomaschinen-muehlen-neuheiten':    ['espresso_machine', 'grinder_electric'],
-  'eudr-kaffee-nachweispflicht':            ['grinder_electric', 'scale'],
-  'kaffee-zellalterung-forschung':          ['aeropress', 'kettle'],
-  'specialty-coffee-deutschland-trends':    ['grinder_hand', 'aeropress'],
-  'world-barista-championship-panama':      ['espresso_machine', 'grinder_electric', 'scale'],
+  // Sanity News
+  'arabica-rekordernte-brasilien':             ['grinder_electric', 'scale'],
+  'espressomaschinen-muehlen-neuheiten':       ['espresso_machine', 'grinder_electric'],
+  'eudr-kaffee-nachweispflicht':               ['grinder_electric', 'scale'],
+  'kaffee-zellalterung-forschung':             ['aeropress', 'kettle'],
+  'specialty-coffee-deutschland-trends':       ['grinder_hand', 'aeropress'],
+  'world-barista-championship-panama':         ['espresso_machine', 'grinder_electric'],
+  // Lokale Fallback-News
+  'neue-espressomaschinen-generation-2025':    ['espresso_machine', 'grinder_electric'],
+  'fairer-handel-rekordjahr':                  ['grinder_electric', 'scale'],
+  'trend-cold-brew-sommer':                    ['aeropress', 'kettle'],
+  'kaffeepreise-weltmarkt':                    ['grinder_electric', 'scale'],
+  'neue-roesterei-szene':                      ['grinder_hand', 'aeropress'],
+  // Neue lokale News (KW-24)
+  'smarte-espressomaschinen-2026':             ['espresso_machine', 'grinder_electric'],
+  'fairer-handel-kaffee-2024':                 ['grinder_electric', 'scale'],
+  'cold-brew-sommertrend-2026':                ['aeropress', 'kettle'],
+  'rohkaffee-weltmarktpreise-2026':            ['grinder_electric', 'scale'],
+  'specialty-coffee-roestereien-deutschland-2025': ['grinder_hand', 'aeropress'],
 }
 
 export function getAffiliateProducts(article: Article): AffiliateProduct[] {
