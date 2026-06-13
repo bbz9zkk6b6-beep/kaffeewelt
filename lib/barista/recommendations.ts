@@ -2,7 +2,6 @@
 // Alle Mengen, Rezepte, Begriffe und Artikel stammen aus der lokalen
 // Datenbasis – es werden keine Inhalte erfunden.
 import { brewMethods, type BrewMethodId } from '@/lib/content/brewing'
-import { recipes } from '@/lib/content/recipes'
 import { glossary } from '@/lib/content/glossary'
 import { articles } from '@/lib/content/articles'
 import { news } from '@/lib/content/news'
@@ -114,18 +113,17 @@ function toRecipeSuggestion(r: Recipe): RecipeSuggestion {
   }
 }
 
-function pickRecipes(method: RecognizedMethod | undefined): Recipe[] {
+function pickRecipes(method: RecognizedMethod | undefined, recipePool: Recipe[]): Recipe[] {
   if (method) {
     const types = methodRecipeTypes[method]
-    const matched = recipes.filter((r) => types.includes(r.type))
+    const matched = recipePool.filter((r) => types.includes(r.type))
     if (matched.length > 0) {
       return [...matched]
-        .sort((a, b) => b.rating - a.rating)
+        .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
         .slice(0, 3)
     }
   }
-  // Fallback: bestbewertete Rezepte.
-  return [...recipes].sort((a, b) => b.rating - a.rating).slice(0, 3)
+  return [...recipePool].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 3)
 }
 
 function pickGlossary(slugs: string[]): GlossarySuggestion[] {
@@ -291,7 +289,7 @@ function intensityWord(intensity?: string): string {
 }
 
 // Hauptfunktion der regelbasierten Engine.
-export function getRecommendation(input: string): BaristaRecommendation {
+export function getRecommendation(input: string, recipePool: Recipe[] = []): BaristaRecommendation {
   const parsed = parseQuery(input)
   const paragraphs: string[] = []
 
@@ -370,7 +368,7 @@ export function getRecommendation(input: string): BaristaRecommendation {
     ]
     const amounts = buildAmounts(method, servings)
     const discovered = discoverByKeywords(deriveKeywords(parsed, method))
-    const recipeList = pickRecipes(parsed.method ? method : undefined).map(
+    const recipeList = pickRecipes(parsed.method ? method : undefined, recipePool).map(
       toRecipeSuggestion,
     )
     return {
@@ -430,7 +428,7 @@ export function getRecommendation(input: string): BaristaRecommendation {
 
   const amounts = buildAmounts(method, servings)
   const discovered = discoverByKeywords(deriveKeywords(parsed, method))
-  const recipeList = pickRecipes(method).map(toRecipeSuggestion)
+  const recipeList = pickRecipes(method, recipePool).map(toRecipeSuggestion)
 
   return {
     source: 'rules',

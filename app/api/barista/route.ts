@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getRecommendation } from '@/lib/barista/recommendations'
 import type { BaristaRecommendation } from '@/lib/barista/recommendations'
+import type { Recipe } from '@/lib/content/types'
 import { client } from '@/sanity/lib/client'
 
 export const runtime = 'nodejs'
@@ -16,6 +17,29 @@ Gelegentlich ein Emoji ☕ 🔥 🎯. Kurze, konkrete Sätze. Immer mit Zahlen (
 Antworte auf Deutsch. Max. 4–5 Sätze. Kein Markdown, keine Listen, keine Code-Blöcke — nur Fließtext.`
 
 type KnowledgeEntry = { thema: string; wissen: string }
+
+async function loadRecipes(): Promise<Recipe[]> {
+  try {
+    return await client.fetch<Recipe[]>(
+      `*[_type == "recipe"]{
+        "slug": slug.current,
+        title,
+        excerpt,
+        type,
+        "image": mainImage.asset->url,
+        "rating": coalesce(rating, 0),
+        "ratingCount": coalesce(ratingCount, 0),
+        "totalTime": coalesce(cookTime + prepTime, 5),
+        baseServings,
+        difficulty,
+        author,
+        date
+      }`,
+    )
+  } catch {
+    return []
+  }
+}
 
 async function loadKnowledge(question: string): Promise<string> {
   try {
@@ -96,11 +120,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Bitte stelle eine Frage.' }, { status: 400 })
   }
 
-  // Lokale Empfehlung (Rezepte, Glossar, Artikel)
-  const base: BaristaRecommendation = getRecommendation(question)
+  // Rezepte + Wissen parallel aus Sanity laden
+  const [recipePool, knowledge] = await Promise.all([loadRecipes(), loadKnowledge(question)])
 
-  // Kontext zusammenstellen: Sanity-Wissen + lokale Daten
-  const [knowledge] = await Promise.all([loadKnowledge(question)])
+  // Regelbasierte Empfehlung mit Sanity-Rezepten
+  const base: BaristaRecommendation = getRecommendation(question, recipePool)
 
   const contextParts: string[] = []
   if (knowledge) contextParts.push(knowledge)
