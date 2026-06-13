@@ -152,7 +152,7 @@ export default async function HomePage() {
                 href={`/artikel/${featured.slug}`}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-background sm:flex-row"
               >
-                <div className="relative aspect-[4/3] shrink-0 overflow-hidden sm:aspect-auto sm:w-2/5">
+                <div className="relative aspect-[4/3] shrink-0 overflow-hidden sm:aspect-auto sm:w-1/2">
                   <Image
                     src={featured.image || '/placeholder.svg'}
                     alt={featured.title}
