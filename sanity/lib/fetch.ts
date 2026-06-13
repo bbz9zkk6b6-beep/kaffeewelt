@@ -174,7 +174,11 @@ export type SanityGlossaryTerm = {
   definition: string
   category: string
   categoryTitle: string
+  synonyms?: string[]
+  faq?: { question: string; answer: string }[]
   relatedTerms?: { term: string; slug: string; definition: string }[]
+  relatedArticles?: string[]
+  relatedRecipes?: string[]
 }
 
 export async function getAllGlossaryTerms(): Promise<SanityGlossaryTerm[]> {
