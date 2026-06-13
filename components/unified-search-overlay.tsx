@@ -2,42 +2,84 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { X, MessageCircle, Loader2, AlertCircle, Sparkles } from 'lucide-react'
+import { X, Loader2, Sparkles, Send, Coffee } from 'lucide-react'
 import type { BaristaRecommendation } from '@/lib/barista/recommendations'
 import { integratedSearch } from '@/lib/content/integrated-search'
-import { SuggestionChips } from '@/components/barista/SuggestionChips'
 import { BaristaResponse } from '@/components/barista/BaristaResponse'
-import { BrewCalculator } from '@/components/brew-calculator'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
-type UnifiedSearchOverlayProps = {
+type Message = {
+  role: 'user' | 'assistant'
+  content: string
+  recommendation?: BaristaRecommendation
+}
+
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`[^`]*`/g, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/_(.+?)_/g, '$1')
+    .replace(/#+\s/g, '')
+    .replace(/^[-*•]\s+/gm, '')
+    .replace(/\n{2,}/g, ' ')
+    .replace(/\n/g, ' ')
+    .trim()
+}
+
+const SUGGESTIONS = [
+  'Ich bekomme Besuch',
+  'Mein Espresso schmeckt bitter',
+  'Was ist Crema?',
+  'Ich möchte Cold Brew machen',
+  'Ich habe eine French Press',
+  'Was bedeutet Blooming?',
+]
+
+type Props = {
   isOpen: boolean
   onClose: () => void
 }
 
-export function UnifiedSearchOverlay({
-  isOpen,
-  onClose,
-}: UnifiedSearchOverlayProps) {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [question, setQuestion] = useState('')
+export function UnifiedSearchOverlay({ isOpen, onClose }: Props) {
+  const [input, setInput] = useState('')
+  const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [result, setResult] = useState<BaristaRecommendation | null>(null)
-  const [showCalculator, setShowCalculator] = useState(false)
-  const responseRef = useRef<HTMLDivElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const lastAssistantRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // Live-Such-Ergebnisse
-  const searchResults = integratedSearch(searchQuery)
+  // Live-Suche für Autocomplete
+  const searchResults = integratedSearch(input)
 
-  // Barista-Request
-  async function askBarista(value: string) {
-    const trimmed = value.trim()
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 300)
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => lastAssistantRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    }
+  }, [messages])
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [isOpen, onClose])
+
+  async function send(text: string) {
+    const trimmed = text.trim()
     if (!trimmed || loading) return
 
+    setInput('')
+    const userMsg: Message = { role: 'user', content: trimmed }
+    setMessages((prev) => [...prev, userMsg])
     setLoading(true)
-    setError(null)
-    setSearchQuery('') // Suche leeren bei Barista-Request
 
     try {
       const res = await fetch('/api/barista', {
@@ -46,291 +88,207 @@ export function UnifiedSearchOverlay({
         body: JSON.stringify({ question: trimmed }),
       })
 
-      if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as
-          | { error?: string }
-          | null
-        throw new Error(data?.error ?? 'Es ist ein Fehler aufgetreten.')
-      }
+      const data = (await res.json()) as BaristaRecommendation & { aiText?: string }
 
-      const data = (await res.json()) as BaristaRecommendation
-      console.log('[v0] Barista response:', data)
-      setResult(data)
-      setQuestion(trimmed)
-
-      // Auto-Scroll
-      setTimeout(() => {
-        responseRef.current?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'Es ist ein Fehler aufgetreten.',
+      const replyText = stripMarkdown(
+        data.aiText ?? (data.paragraphs?.join(' ') || 'Ich habe leider keine passende Antwort gefunden.')
       )
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: replyText,
+          recommendation: data,
+        },
+      ])
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: 'Kurz offline — versuch es gleich noch mal. ☕' },
+      ])
     } finally {
       setLoading(false)
     }
   }
 
-  // ESC zum Schließen
-  useEffect(() => {
-    if (!isOpen) return
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
-
-  if (!isOpen) return null
-
   return (
-    <>
-      {/* Backdrop - Full page dark overlay with inline styles */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 40,
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          backdropFilter: 'blur(4px)',
-          cursor: 'pointer',
-          width: '100%',
-          height: '100%',
-        }}
-        onClick={onClose}
-        aria-hidden="true"
-      />
+    <div
+      className={cn(
+        'fixed left-0 right-0 top-20 z-40 transition-transform duration-300 ease-in-out',
+        isOpen ? 'translate-y-0' : '-translate-y-[calc(100%+5rem)]',
+      )}
+    >
+      {/* Chat-Panel — startet direkt oben, shadow nach unten */}
+      <div className="mx-auto max-w-3xl overflow-hidden rounded-xl border border-border bg-background shadow-[0_16px_48px_rgba(0,0,0,0.22),0_2px_8px_rgba(0,0,0,0.12)]" style={{ maxHeight: 'calc(100vh - 5rem)', marginTop: '6px' }}>
 
-      {/* Modal - Centered in viewport (above header) */}
-      <div 
-        className="fixed z-50 flex items-center justify-center p-4"
-        style={{
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          height: '100vh',
-          pointerEvents: 'none'
-        }}
-      >
-        <div
-          className="pointer-events-auto relative w-full max-w-2xl rounded-3xl border border-border bg-background shadow-2xl flex flex-col"
-          style={{ maxHeight: '85vh' }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-border bg-background/95 backdrop-blur-sm px-6 py-4 flex-shrink-0">
-            <div className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-              <Sparkles className="h-4 w-4" />
-              Frag den Barista
-            </div>
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-secondary rounded-lg transition-colors"
-              aria-label="Schließen"
-            >
-              <X className="h-5 w-5 text-muted-foreground" />
-            </button>
+        {/* Brauner Titelbalken */}
+        <div className="flex h-12 items-center justify-between bg-primary px-5">
+          <div className="flex items-center gap-2 text-sm font-semibold text-primary-foreground">
+            <Sparkles className="h-4 w-4" />
+            Frag den Barista — Max antwortet
           </div>
+          <button
+            onClick={onClose}
+            className="rounded-md p-1.5 text-primary-foreground/70 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            aria-label="Schließen"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
-          {/* Scrollable Content */}
-          <div className="overflow-y-auto flex-1">
-            <div className="p-6 space-y-6">
-              {/* Input + Suggestions Bereich */}
-              {!result ? (
-                <div className="space-y-4">
-                  {/* Intro Text */}
-                  <div className="space-y-3 pb-4 border-b border-border/50">
-                    <p className="text-sm font-semibold text-foreground">
-                      Das Glossar erklärt. Der Barista berät.
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Erhalte Empfehlungen, Mengenangaben und passende Rezepte für deinen perfekten Kaffee – und lass dir Fachbegriffe aus dem Glossar erklären.
-                    </p>
-                  </div>
+        {/* Chat-Bereich */}
+        <div className="overflow-y-auto px-4 py-4" style={{ maxHeight: 'calc(100vh - 5rem - 3rem - 4rem - 80px)' }}>
+          <div className="rounded-xl px-4 py-4 flex flex-col gap-0" style={{ backgroundColor: '#ead9c4', boxShadow: 'inset 0 6px 16px rgba(0,0,0,0.08), inset 0 2px 4px rgba(0,0,0,0.05)' }}>
 
-                  {/* Input-Bereich */}
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={searchQuery || question}
-                        onChange={(e) => {
-                          const val = e.target.value
-                          if (result) {
-                            setQuestion(val)
-                          } else {
-                            setSearchQuery(val)
-                          }
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault()
-                            askBarista(searchQuery || question)
-                          }
-                        }}
-                        placeholder="Stelle eine Frage zu Kaffee oder beschreibe deine Vorlieben..."
-                        autoFocus
-                        disabled={loading}
-                        className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 disabled:opacity-50"
-                      />
-                      <Button
-                        onClick={() => askBarista(searchQuery || question)}
-                        disabled={loading || !(searchQuery || question).trim()}
-                        size="sm"
-                        className="gap-2"
-                      >
-                        {loading ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          'Fragen'
-                        )}
-                      </Button>
-                    </div>
-                  </div>
+          {/* Leerer Zustand */}
+          {messages.length === 0 && !loading && (
+            <div className="flex flex-1 flex-col gap-6">
+              <div className="space-y-1">
+                <p className="font-serif text-lg font-semibold text-foreground">
+                  Das Glossar erklärt. Der Barista berät.
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Frag nach Rezepten, Brühmethoden oder Fachbegriffen — Max findet passende Antworten aus dem Magazin.
+                </p>
+              </div>
 
-                  {/* Live-Such-Ergebnisse */}
-                  {searchQuery && searchResults.hasResults && (
-                    <div className="rounded-xl bg-secondary/30 p-4 space-y-3">
-                      <p className="text-xs uppercase font-medium text-muted-foreground">
-                        Schnelle Ergebnisse
-                      </p>
+              <div>
+                <p className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Beispielfragen
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => send(s)}
+                      className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground transition-colors hover:border-accent hover:bg-secondary"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
-                      {/* Glossar */}
-                      {searchResults.glossary.length > 0 && (
-                        <div className="space-y-1.5">
-                          {searchResults.glossary.slice(0, 3).map((term) => (
-                            <Link
-                              key={term.slug}
-                              href={term.link}
-                              onClick={onClose}
-                              className="block rounded-lg bg-background/60 px-3 py-2 text-sm hover:bg-accent/20 transition-colors group"
-                            >
-                              <span className="font-medium text-foreground group-hover:text-accent">
-                                {term.title}
-                              </span>
-                              <p className="text-xs text-muted-foreground line-clamp-1">
-                                {term.description}
-                              </p>
-                            </Link>
-                          ))}
+          {/* Nachrichten */}
+          {messages.map((msg, i) => {
+            const isLastAssistant = msg.role === 'assistant' && i === messages.length - 1
+            const hasCards = msg.recommendation && (
+              msg.recommendation.recipes.length > 0 ||
+              msg.recommendation.glossary.length > 0 ||
+              msg.recommendation.news.length > 0
+            )
+            return (
+              <div
+                key={i}
+                ref={isLastAssistant ? lastAssistantRef : undefined}
+                className={cn('mb-4', msg.role === 'user' ? 'flex justify-end' : 'flex justify-start gap-3')}
+              >
+                {msg.role === 'assistant' && (
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground mt-0.5">
+                    <Coffee className="h-4 w-4" />
+                  </span>
+                )}
+                <div className={cn(
+                  'max-w-[80%]',
+                  msg.role === 'user'
+                    ? 'rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground'
+                    : 'flex flex-col gap-4',
+                )}>
+                  {msg.role === 'user' ? (
+                    <span>{msg.content}</span>
+                  ) : (
+                    <>
+                      <p className="text-base leading-relaxed text-foreground">{msg.content}</p>
+                      {hasCards && (
+                        <div className="mt-2">
+                          <BaristaResponse recommendation={{ ...msg.recommendation!, paragraphs: [], articles: [] }} />
                         </div>
                       )}
-
-                      {/* Rezept */}
-                      {searchResults.recipe && (
-                        <Link
-                          href={searchResults.recipe.link}
-                          onClick={onClose}
-                          className="block rounded-lg border border-accent/30 bg-accent/10 px-3 py-2 hover:bg-accent/20 transition-colors"
-                        >
-                          <p className="text-xs font-medium text-accent">Rezept</p>
-                          <p className="font-medium text-foreground text-sm">
-                            {searchResults.recipe.title}
-                          </p>
-                        </Link>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Suggestion-Chips */}
-                  <div className="space-y-2">
-                    <p className="text-xs uppercase font-medium text-muted-foreground">
-                      Beispielfragen
-                    </p>
-                    <SuggestionChips
-                      onSelect={(chip) => {
-                        setSearchQuery('')
-                        setQuestion(chip)
-                        askBarista(chip)
-                      }}
-                      disabled={loading}
-                    />
-                  </div>
-
-                  {/* Error */}
-                  {error && (
-                    <div className="flex gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-                      <AlertCircle className="h-4 w-4 shrink-0 text-destructive mt-0.5" />
-                      <p className="text-sm text-destructive">{error}</p>
-                    </div>
+                    </>
                   )}
                 </div>
-              ) : null}
+              </div>
+            )
+          })}
 
-              {/* Barista-Antwort */}
-              {result && (
-                <div ref={responseRef} className="space-y-4">
-                  {/* Frage Display */}
-                  <div className="p-3 bg-secondary/40 rounded-lg border border-border/50">
-                    <p className="text-xs uppercase font-medium text-muted-foreground mb-1">
-                      Deine Frage
-                    </p>
-                    <p className="text-sm text-foreground">{question}</p>
-                  </div>
+          {/* Typing indicator */}
+          {loading && (
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+                <Coffee className="h-4 w-4" />
+              </span>
+              <div className="flex items-center gap-1.5 rounded-2xl bg-secondary px-4 py-3">
+                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
+                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
+                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
+              </div>
+            </div>
+          )}
 
-                  {/* Antwort mit Links */}
-                  <BaristaResponse recommendation={result} />
+          <div ref={bottomRef} />
+          </div>
+        </div>
 
-                  {/* Mengenrechner – immer anzeigen als Standard */}
-                  <div className="space-y-3 border-t border-border/50 pt-4">
-                    <button
-                      onClick={() => setShowCalculator(!showCalculator)}
-                      className="w-full text-left p-4 rounded-lg border border-accent/30 bg-accent/10 hover:bg-accent/20 transition-colors font-medium"
-                    >
-                      <p className="text-sm font-bold text-accent flex items-center gap-2">
-                        📐 Rezeptmengen-Rechner
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {showCalculator
-                          ? 'Klick um zu verstecken'
-                          : 'Klick zum Öffnen – Mengen einfach anpassen'}
-                      </p>
-                    </button>
-
-                    {showCalculator && (
-                      <div className="rounded-xl border border-border p-4 bg-secondary/20">
-                        <BrewCalculator
-                          initialMethodId="filterkaffee"
-                          initialPortions={2}
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Neue Frage Button */}
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setResult(null)
-                      setQuestion('')
-                      setSearchQuery('')
-                      setError(null)
-                      setShowCalculator(false)
-                    }}
-                    className="w-full"
-                  >
-                    Neue Frage stellen
-                  </Button>
-                </div>
+        {/* Live-Suche Dropdown */}
+        {input.length > 1 && searchResults.hasResults && messages.length === 0 && (
+          <div className="border-t border-border bg-secondary/30 px-5 py-3">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Schnelle Ergebnisse</p>
+            <div className="flex flex-col gap-1">
+              {searchResults.glossary.slice(0, 2).map((term) => (
+                <Link
+                  key={term.slug}
+                  href={term.link}
+                  onClick={onClose}
+                  className="rounded-lg px-3 py-2 text-sm hover:bg-background transition-colors"
+                >
+                  <span className="font-medium text-foreground">{term.title}</span>
+                  <span className="ml-2 text-xs text-muted-foreground line-clamp-1">{term.description}</span>
+                </Link>
+              ))}
+              {searchResults.recipe && (
+                <Link
+                  href={searchResults.recipe.link}
+                  onClick={onClose}
+                  className="rounded-lg px-3 py-2 text-sm text-accent hover:bg-background transition-colors"
+                >
+                  Rezept: {searchResults.recipe.title}
+                </Link>
               )}
             </div>
           </div>
+        )}
+
+        {/* Input */}
+        <div className="flex items-center gap-3 border-t border-border px-5 py-4">
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                send(input)
+              }
+            }}
+            placeholder="Frag Max etwas über Kaffee..."
+            disabled={loading}
+            className="flex-1 rounded-xl border border-border bg-secondary/50 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 disabled:opacity-50"
+            style={{ boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.07), inset 0 1px 2px rgba(0,0,0,0.05)' }}
+          />
+          <button
+            onClick={() => send(input)}
+            disabled={loading || !input.trim()}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+            aria-label="Senden"
+          >
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }

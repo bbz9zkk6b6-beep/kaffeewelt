@@ -24,7 +24,7 @@ export function BaristaResponse({
   return (
     <div className="flex flex-col gap-8">
       {/* Antworttext mit automatischer Glossar-Verlinkung */}
-      <div className="flex gap-4">
+      {paragraphs.length > 0 && <div className="flex gap-4">
         <span
           aria-hidden="true"
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground"
@@ -38,7 +38,7 @@ export function BaristaResponse({
             </p>
           ))}
         </div>
-      </div>
+      </div>}
 
       {/* Mengenempfehlung: ENTFERNT — wird nur bei Bedarf im Modal angezeigt */}
 
@@ -61,7 +61,7 @@ export function BaristaResponse({
                     alt={r.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-4">
@@ -143,7 +143,7 @@ export function BaristaResponse({
                     alt={a.title}
                     fill
                     sizes="64px"
-                    className="object-cover"
+                    className="site-image-look object-cover"
                   />
                 </span>
                 <span className="flex flex-1 flex-col gap-1">
@@ -182,7 +182,7 @@ export function BaristaResponse({
                     alt={n.title}
                     fill
                     sizes="64px"
-                    className="object-cover"
+                    className="site-image-look object-cover"
                   />
                 </span>
                 <span className="flex flex-1 flex-col gap-1">

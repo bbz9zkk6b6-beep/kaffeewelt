@@ -8,6 +8,7 @@ import category from './category'
 import comment from './comment'
 import rating from './rating'
 import product from './product'
+import baristaKnowledge from './baristaKnowledge'
 
 export const schemaTypes = [
   recipe,
@@ -20,4 +21,5 @@ export const schemaTypes = [
   comment,
   rating,
   product,
+  baristaKnowledge,
 ]
