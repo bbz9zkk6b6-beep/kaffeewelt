@@ -17,8 +17,22 @@ export default defineType({
       type: 'slug',
       options: {
         source: 'title',
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, ''),
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().custom((value) => {
+          if (!value?.current) return true
+          return value.current === value.current.trim()
+            ? true
+            : 'Der Slug darf keine Leerzeichen am Anfang oder Ende enthalten.'
+        }),
     }),
     defineField({
       name: 'excerpt',
