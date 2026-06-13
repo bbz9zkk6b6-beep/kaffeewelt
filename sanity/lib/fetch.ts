@@ -127,12 +127,22 @@ function parseNewsContent(blocks: any[]): ArticleBlock[] {
     if (b._type !== 'block' || !Array.isArray(b.children)) return
 
     const text = b.children.map((c: any) => c.text ?? '').join('')
-    if (!text) return
+    const paragraphs = text
+      .split(/\n\s*\n+/)
+      .map((part: string) => part.trim())
+      .filter(Boolean)
+    if (paragraphs.length === 0) return
 
     if (b.style === 'h2' || b.style === 'h3') {
-      result.push({ type: 'heading' as const, id: `h${headingCount++}`, text })
+      result.push({
+        type: 'heading' as const,
+        id: `h${headingCount++}`,
+        text: paragraphs.join(' '),
+      })
     } else {
-      result.push({ type: 'paragraph' as const, text })
+      paragraphs.forEach((paragraph: string) => {
+        result.push({ type: 'paragraph' as const, text: paragraph })
+      })
     }
   })
 
