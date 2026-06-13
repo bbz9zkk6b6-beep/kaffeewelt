@@ -72,10 +72,12 @@ export function BaristaResponse({
                     {r.excerpt}
                   </p>
                   <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <RatingStars rating={r.rating} size={12} />
-                      {r.rating.toFixed(1)}
-                    </span>
+                    {r.rating > 0 ? (
+                      <span className="flex items-center gap-1">
+                        <RatingStars rating={r.rating} size={12} />
+                        {r.rating.toFixed(1)}
+                      </span>
+                    ) : <span />}
                     <span className="flex items-center gap-1">
                       <Clock className="h-3.5 w-3.5" />
                       {formatTime(r.totalTime)}
