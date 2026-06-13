@@ -68,7 +68,9 @@ export const NEWS_ITEM_QUERY = groq`
 // Glossar
 export const GLOSSARY_QUERY = groq`
   *[_type == "glossaryTerm"] | order(term asc) {
-    slug, term, definition, category
+    slug, term, definition,
+    "category": category->value.current,
+    "categoryTitle": category->title
   }
 `
 

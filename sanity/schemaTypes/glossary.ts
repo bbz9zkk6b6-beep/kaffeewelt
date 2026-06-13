@@ -30,16 +30,8 @@ export default defineType({
     defineField({
       name: 'category',
       title: 'Kategorie',
-      type: 'string',
-      options: {
-        list: [
-          'basics',
-          'equipment',
-          'techniques',
-          'origins',
-          'health',
-        ],
-      },
+      type: 'reference',
+      to: [{type: 'glossaryCategory'}],
     }),
     defineField({
       name: 'relatedTerms',
