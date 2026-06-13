@@ -22,27 +22,32 @@ export default function DatenschutzPage() {
         <div className="space-y-8 leading-relaxed text-muted-foreground">
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              1. Datenschutz auf einen Blick
+              1. Verantwortliche Stelle
             </h2>
             <p className="mt-3">
-              Die folgenden Hinweise geben einen einfachen Überblick darüber, was
-              mit deinen personenbezogenen Daten passiert, wenn du diese Website
-              besuchst. Personenbezogene Daten sind alle Daten, mit denen du
-              persönlich identifiziert werden kannst.
+              Verantwortlich für die Datenverarbeitung auf dieser Website im Sinne der DSGVO ist:
+            </p>
+            <p className="mt-3">
+              Meine kleine Kaffeewelt<br />
+              Olaf Wulf<br />
+              Adalbert-Stifter-Straße 12<br />
+              30655 Hannover<br />
+              E-Mail: ol.wulf (at) meine-kleine-kaffeewelt.de
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              2. Verantwortliche Stelle
+              2. Welche Daten wir erheben und warum
             </h2>
             <p className="mt-3">
-              Verantwortlich für die Datenverarbeitung auf dieser Website ist
-              Meine kleine Kaffeewelt, Olaf Wulf, Adalbert-Stifter-Straße 12,
-              30655 Hannover, E-Mail: ol.wulf (at) meine-kleine-kaffeewelt.de. Die
-              verantwortliche Stelle entscheidet allein oder gemeinsam mit anderen
-              über die Zwecke und Mittel der Verarbeitung personenbezogener
-              Daten.
+              Beim Aufruf dieser Website werden technisch notwendige Daten in sogenannten Server-Logfiles erfasst. Dazu gehören IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite, verwendeter Browser und Betriebssystem sowie die Referrer-URL. Diese Daten werden ausschließlich zur Sicherstellung des Betriebs und zur Fehleranalyse verarbeitet und nicht mit anderen Daten zusammengeführt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).
+            </p>
+            <p className="mt-3">
+              Wenn du das Kommentarformular nutzt, speichern wir deinen Namen und deinen Kommentartext. Kommentare werden erst nach manueller Freigabe veröffentlicht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).
+            </p>
+            <p className="mt-3">
+              Wenn du dich für den Newsletter anmeldest, speichern wir deine E-Mail-Adresse. Die Verarbeitung erfolgt ausschließlich auf Grundlage deiner Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Du kannst deine Einwilligung jederzeit widerrufen, indem du dich über den Abmeldelink im Newsletter abmeldest oder uns per E-Mail kontaktierst.
             </p>
           </section>
 
@@ -51,40 +56,25 @@ export default function DatenschutzPage() {
               3. Hosting
             </h2>
             <p className="mt-3">
-              Diese Website wird bei Vercel Inc., 340 S Lemon Ave #4133, Walnut,
-              CA 91789, USA, gehostet. Beim Aufruf der Seiten werden technisch
-              notwendige Daten (z. B. IP-Adresse, Datum und Uhrzeit des Zugriffs,
-              aufgerufene Seite) in Server-Logfiles verarbeitet. Rechtsgrundlage
-              ist Art. 6 Abs. 1 lit. f DSGVO – unser berechtigtes Interesse an
-              einer stabilen und sicheren Bereitstellung der Website. Mit Vercel
-              besteht ein Auftragsverarbeitungsvertrag. Da Vercel Daten auch in
-              den USA verarbeiten kann, erfolgt die Übermittlung auf Grundlage
-              der EU-Standardvertragsklauseln.
+              Diese Website wird bei Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA, gehostet. Mit Vercel besteht ein Auftragsverarbeitungsvertrag. Da Vercel Daten auch in den USA verarbeiten kann, erfolgt die Übermittlung auf Grundlage der EU-Standardvertragsklauseln gemäß Art. 46 Abs. 2 lit. c DSGVO.
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              4. Newsletter
+              4. Affiliate-Links
             </h2>
             <p className="mt-3">
-              Wenn du den auf der Website angebotenen Newsletter beziehen
-              möchtest, benötigen wir von dir eine E-Mail-Adresse. Die
-              Verarbeitung der eingegebenen Daten erfolgt ausschließlich auf
-              Grundlage deiner Einwilligung. Du kannst diese Einwilligung
-              jederzeit widerrufen.
+              Diese Website enthält Affiliate-Links, insbesondere zu Amazon. Wenn du auf einen solchen Link klickst, wird eine Verbindung zu den Servern des jeweiligen Anbieters hergestellt. Dabei können technische Daten wie deine IP-Adresse übermittelt werden. Wir sind am Amazon-Partnerprogramm beteiligt (Partner-Tag: kaffeewelt21-21). Als Amazon-Partner verdienen wir an qualifizierten Verkäufen. Affiliate-Links sind auf dieser Website als „Anzeige" oder „Affiliate-Link" gekennzeichnet.
             </p>
           </section>
 
           <section>
             <h2 className="font-serif text-xl font-semibold text-foreground">
-              5. Kontaktformular
+              5. Keine Analyse- oder Tracking-Dienste
             </h2>
             <p className="mt-3">
-              Wenn du uns per Kontaktformular Anfragen zukommen lässt, werden
-              deine Angaben aus dem Anfrageformular inklusive der von dir dort
-              angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage bei uns
-              gespeichert.
+              Diese Website verwendet kein Google Analytics, kein Facebook Pixel und keine vergleichbaren Tracking-Dienste. Es werden keine Cookies für Werbe- oder Analysezwecke gesetzt.
             </p>
           </section>
 
@@ -93,15 +83,18 @@ export default function DatenschutzPage() {
               6. Deine Rechte
             </h2>
             <p className="mt-3">
-              Du hast jederzeit das Recht auf unentgeltliche Auskunft über deine
-              gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger
-              sowie den Zweck der Datenverarbeitung und ggf. ein Recht auf
-              Berichtigung oder Löschung dieser Daten.
+              Du hast das Recht auf Auskunft über die zu deiner Person gespeicherten Daten (Art. 15 DSGVO), auf Berichtigung unrichtiger Daten (Art. 16 DSGVO), auf Löschung (Art. 17 DSGVO), auf Einschränkung der Verarbeitung (Art. 18 DSGVO) sowie auf Datenübertragbarkeit (Art. 20 DSGVO). Soweit die Verarbeitung auf einer Einwilligung beruht, kannst du diese jederzeit mit Wirkung für die Zukunft widerrufen.
+            </p>
+            <p className="mt-3">
+              Außerdem steht dir ein Beschwerderecht bei der zuständigen Datenschutzaufsichtsbehörde zu. In Niedersachsen ist das die Landesbeauftragte für den Datenschutz Niedersachsen (LfD Niedersachsen), Prinzenstraße 5, 30159 Hannover.
+            </p>
+            <p className="mt-3">
+              Anfragen zu deinen Rechten richtest du bitte an: ol.wulf (at) meine-kleine-kaffeewelt.de
             </p>
           </section>
 
-          <p className="text-sm">
-            Dies ist eine fiktive Datenschutzerklärung für ein Demo-Projekt.
+          <p className="mt-4 text-xs">
+            Stand: Juni 2026
           </p>
         </div>
       </div>

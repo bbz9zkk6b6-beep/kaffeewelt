@@ -44,11 +44,7 @@ export default function ImpressumPage() {
               Haftung für Inhalte
             </h2>
             <p className="mt-3">
-              Als Diensteanbieter sind wir gemäß den allgemeinen Gesetzen für
-              eigene Inhalte auf diesen Seiten verantwortlich. Wir sind jedoch
-              nicht verpflichtet, übermittelte oder gespeicherte fremde
-              Informationen zu überwachen oder nach Umständen zu forschen, die
-              auf eine rechtswidrige Tätigkeit hinweisen.
+              Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.
             </p>
           </section>
 
@@ -57,11 +53,7 @@ export default function ImpressumPage() {
               Haftung für Links
             </h2>
             <p className="mt-3">
-              Unser Angebot enthält Links zu externen Websites Dritter, auf deren
-              Inhalte wir keinen Einfluss haben. Deshalb können wir für diese
-              fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der
-              verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber
-              der Seiten verantwortlich.
+              Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
             </p>
           </section>
 
@@ -70,18 +62,9 @@ export default function ImpressumPage() {
               Bildnachweise
             </h2>
             <p className="mt-3">
-              Sämtliche auf dieser Website verwendeten Fotografien und Porträts
-              wurden mit Hilfe künstlicher Intelligenz (KI) erzeugt. Es handelt
-              sich nicht um Aufnahmen realer Personen, Orte oder Produkte;
-              etwaige Ähnlichkeiten mit tatsächlichen Personen sind zufällig und
-              nicht beabsichtigt. Die abgebildeten Autorinnen und Autoren sind
-              fiktiv.
+              Sämtliche auf dieser Website verwendeten Fotografien und Porträts wurden mit Hilfe künstlicher Intelligenz (KI) erzeugt. Es handelt sich nicht um Aufnahmen realer Personen, Orte oder Produkte; etwaige Ähnlichkeiten mit tatsächlichen Personen sind zufällig und nicht beabsichtigt. Die abgebildeten Autorinnen und Autoren sind fiktiv.
             </p>
           </section>
-
-          <p className="text-sm">
-            Dies ist ein fiktives Impressum für ein Demo-Projekt.
-          </p>
         </div>
       </div>
     </>
