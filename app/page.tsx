@@ -23,7 +23,7 @@ export default async function HomePage() {
   const featured = sanityArticles.find((a) => a.featured) ?? sanityArticles[0]
   const featuredCategory = featured ? getCategory(featured.category) : null
   const secondaryArticles = featured
-    ? sanityArticles.filter((a) => a.slug !== featured.slug).slice(0, 3)
+    ? sanityArticles.filter((a) => a.slug !== featured.slug).slice(0, 4)
     : []
   const latestNews = news.slice(0, 4)
   const featuredRecipes = getFeaturedRecipes().length
@@ -145,41 +145,42 @@ export default async function HomePage() {
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="flex flex-col gap-6">
+            {/* Featured — horizontal */}
             {featured && (
               <Link
                 href={`/artikel/${featured.slug}`}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-background sm:flex-row"
               >
-                <div className="relative aspect-[16/10] overflow-hidden">
+                <div className="relative aspect-[4/3] shrink-0 overflow-hidden sm:aspect-auto sm:w-2/5">
                   <Image
                     src={featured.image || '/placeholder.svg'}
                     alt={featured.title}
                     fill
                     className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    sizes="(max-width: 640px) 100vw, 40vw"
                   />
                 </div>
-                <div className="flex flex-1 flex-col gap-3 p-6">
+                <div className="flex flex-1 flex-col justify-center gap-3 p-6 lg:p-8">
                   {featuredCategory && (
                     <span className="text-sm font-medium text-accent">
                       {featuredCategory.name}
                     </span>
                   )}
-                  <h3 className="text-balance font-serif text-2xl font-bold text-foreground">
+                  <h3 className="text-balance font-serif text-2xl font-bold text-foreground lg:text-3xl">
                     {featured.title}
                   </h3>
                   <p className="text-pretty leading-relaxed text-muted-foreground">
                     {featured.excerpt}
                   </p>
                   <span className="mt-auto text-sm text-muted-foreground">
-                    {formatDate(featured.date)} · {featured.readingTime} Min.
-                    Lesezeit
+                    {formatDate(featured.date)} · {featured.readingTime} Min. Lesezeit
                   </span>
                 </div>
               </Link>
             )}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
+            {/* 2×2 Grid */}
+            <div className="grid gap-6 sm:grid-cols-2">
               {secondaryArticles.map((article) => (
                 <ArticleCard
                   key={article.slug}
