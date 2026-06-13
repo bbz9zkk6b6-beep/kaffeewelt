@@ -31,6 +31,28 @@ function parsePortableText(blocks: any[]): ArticleBlock[] {
   blocks.forEach((b) => {
     if (!b) return
 
+    // Bereits konvertierte Custom-Typen (aus alter Migration)
+    if (b._type === 'paragraph' && b.text) {
+      result.push({ type: 'paragraph', text: b.text })
+      return
+    }
+    if (b._type === 'heading' && b.text) {
+      result.push({ type: 'heading', id: b.id ?? `h${headingCount++}`, text: b.text })
+      return
+    }
+    if (b._type === 'quote' && b.text) {
+      result.push({ type: 'quote', text: b.text, cite: b.cite })
+      return
+    }
+    if (b._type === 'list' && Array.isArray(b.items)) {
+      result.push({ type: 'list', items: b.items })
+      return
+    }
+    if (b._type === 'inlineImage' && b.url) {
+      result.push({ type: 'inlineImage', url: b.url, alt: b.alt, caption: b.caption })
+      return
+    }
+
     if (b._type === 'image' && b.asset) {
       const url = b.asset?.url ?? b.asset?._ref ?? ''
       if (url) result.push({ type: 'inlineImage', url, alt: b.alt, caption: b.caption })
