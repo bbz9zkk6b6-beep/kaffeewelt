@@ -150,9 +150,9 @@ export default async function HomePage() {
             {featured && (
               <Link
                 href={`/artikel/${featured.slug}`}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-background sm:flex-row"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-background sm:flex-row sm:items-stretch"
               >
-                <div className="relative aspect-[16/10] shrink-0 overflow-hidden sm:w-1/2">
+                <div className="relative aspect-[16/10] shrink-0 self-start overflow-hidden sm:w-1/2">
                   <Image
                     src={featured.image || '/placeholder.svg'}
                     alt={featured.title}
