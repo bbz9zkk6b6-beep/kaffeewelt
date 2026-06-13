@@ -92,7 +92,14 @@ const articleAffiliateMap: Record<string, string[]> = {
   'saeurearmer-roestgrad':        ['grinder_electric', 'aeropress'],
 }
 
-const newsAffiliateMap: Record<string, string[]> = {}
+const newsAffiliateMap: Record<string, string[]> = {
+  'arabica-rekordernte-brasilien':          ['grinder_electric', 'scale'],
+  'espressomaschinen-muehlen-neuheiten':    ['espresso_machine', 'grinder_electric'],
+  'eudr-kaffee-nachweispflicht':            ['grinder_electric', 'scale'],
+  'kaffee-zellalterung-forschung':          ['aeropress', 'kettle'],
+  'specialty-coffee-deutschland-trends':    ['grinder_hand', 'aeropress'],
+  'world-barista-championship-panama':      ['espresso_machine', 'grinder_electric', 'scale'],
+}
 
 export function getAffiliateProducts(article: Article): AffiliateProduct[] {
   const ids = articleAffiliateMap[article.slug] ?? []
