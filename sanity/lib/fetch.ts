@@ -29,7 +29,6 @@ function parsePortableText(blocks: any[]): ArticleBlock[] {
   blocks.forEach((b) => {
     if (!b) return
 
-    // Bild
     if (b._type === 'image' && b.asset) {
       const url = b.asset?.url ?? b.asset?._ref ?? ''
       if (url) result.push({ type: 'inlineImage', url, alt: b.alt, caption: b.caption })
@@ -38,6 +37,19 @@ function parsePortableText(blocks: any[]): ArticleBlock[] {
 
     if (b._type !== 'block' || !Array.isArray(b.children)) return
     const text = b.children.map((c: any) => c.text ?? '').join('')
+    if (!text.trim()) return
+
+    // Bullet-Liste: an letztes list-Element anhängen oder neu anlegen
+    if (b.listItem === 'bullet') {
+      const last = result[result.length - 1]
+      if (last && last.type === 'list') {
+        ;(last as { type: 'list'; items: string[] }).items.push(text)
+      } else {
+        result.push({ type: 'list', items: [text] })
+      }
+      return
+    }
+
     const parts = text.split(/\n\s*\n+/).map((p: string) => p.trim()).filter(Boolean)
     if (!parts.length) return
 

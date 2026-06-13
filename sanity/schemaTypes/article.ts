@@ -81,6 +81,7 @@ export default defineType({
             {title: 'Überschrift H3', value: 'h3'},
             {title: 'Zitat', value: 'blockquote'},
           ],
+          lists: [{title: 'Aufzählung', value: 'bullet'}],
           marks: {
             decorators: [
               {title: 'Fett', value: 'strong'},
