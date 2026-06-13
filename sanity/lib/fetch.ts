@@ -98,13 +98,31 @@ export async function getAllArticles(): Promise<Article[]> {
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-  const data: SanityArticleRaw | null = await client.fetch(
-    ARTICLE_QUERY,
-    { slug },
-    fetchOpts,
-  )
+  const data: any = await client.fetch(ARTICLE_QUERY, { slug }, fetchOpts)
   if (!data) return null
-  return toArticle(data)
+  const article = toArticle(data) as any
+  article.relatedArticles = (data.relatedArticles ?? []).map((a: any) => ({
+    slug: a.slug,
+    title: a.title,
+    excerpt: a.excerpt ?? '',
+    category: a.category ?? '',
+    author: '',
+    date: a.date?.slice(0, 10) ?? '',
+    readingTime: a.readingTime ?? 5,
+    featured: a.featured ?? false,
+    image: optimizeSanityImage(a.image),
+    content: [],
+  }))
+  article.relatedRecipes = (data.relatedRecipes ?? []).map((r: any) => ({
+    slug: r.slug,
+    title: r.title,
+    excerpt: r.excerpt ?? '',
+    type: r.type ?? '',
+    difficulty: r.difficulty ?? '',
+    totalTime: r.totalTime ?? 0,
+    image: optimizeSanityImage(r.image, 800),
+  }))
+  return article
 }
 
 // ── News ──────────────────────────────────────────────────────────────────
