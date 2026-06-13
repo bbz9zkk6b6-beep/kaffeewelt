@@ -146,8 +146,29 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
   if (data) {
     const item = toNews(data) as any
     item.content = parsePortableText(data.content)
-    item.relatedNews = (data.relatedNews ?? []).map(toNews)
-    item.relatedArticles = data.relatedArticles ?? []
+    item.relatedNews = (data.relatedNews ?? []).map((n: any) => ({
+      slug: n.slug,
+      title: n.title,
+      excerpt: n.excerpt ?? '',
+      category: n.category ?? '',
+      author: '',
+      date: n.date?.slice(0, 10) ?? '',
+      readingTime: n.readingTime ?? 2,
+      image: optimizeSanityImage(n.image, 800),
+      content: [],
+    }))
+    item.relatedArticles = (data.relatedArticles ?? []).map((a: any) => ({
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.excerpt ?? '',
+      category: a.category ?? '',
+      author: '',
+      date: a.date?.slice(0, 10) ?? '',
+      readingTime: a.readingTime ?? 5,
+      featured: a.featured ?? false,
+      image: optimizeSanityImage(a.image),
+      content: [],
+    }))
     return item
   }
   return null
