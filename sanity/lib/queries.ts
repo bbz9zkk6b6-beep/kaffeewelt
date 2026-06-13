@@ -15,7 +15,16 @@ export const ARTICLE_QUERY = groq`
     slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
     "image": image.asset->url,
-    content
+    content,
+    "relatedArticles": *[_type == "article" && slug.current != $slug] | order(date desc)[0...3]{
+      "slug": slug.current, title, excerpt, date, readingTime, featured,
+      "category": category->slug.current,
+      "image": image.asset->url
+    },
+    "relatedRecipes": *[_type == "recipe"] | order(date desc)[0...3]{
+      "slug": slug.current, title, excerpt, type, difficulty, totalTime,
+      "image": image.asset->url
+    }
   }
 `
 
@@ -53,7 +62,17 @@ export const NEWS_ITEM_QUERY = groq`
     "category": category->slug.current,
     "author": author->slug.current,
     "image": image.asset->url,
-    content
+    content,
+    "relatedNews": *[_type == "news" && slug.current != $slug] | order(date desc)[0...3]{
+      "slug": slug.current, title, excerpt, date, readingTime,
+      "category": category->slug.current,
+      "image": image.asset->url
+    },
+    "relatedArticles": *[_type == "article"] | order(date desc)[0...2]{
+      "slug": slug.current, title, excerpt, date, readingTime,
+      "category": category->slug.current,
+      "image": image.asset->url
+    }
   }
 `
 

@@ -19,6 +19,8 @@ type SanityArticleRaw = {
   category?: string
   image?: string
   content?: any[]
+  relatedArticles?: any[]
+  relatedRecipes?: any[]
 }
 
 function parsePortableText(blocks: any[]): ArticleBlock[] {
@@ -142,8 +144,10 @@ export async function getAllNews(): Promise<NewsItem[]> {
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
   const data: any = await client.fetch(NEWS_ITEM_QUERY, { slug }, fetchOpts)
   if (data) {
-    const item = toNews(data)
+    const item = toNews(data) as any
     item.content = parsePortableText(data.content)
+    item.relatedNews = (data.relatedNews ?? []).map(toNews)
+    item.relatedArticles = data.relatedArticles ?? []
     return item
   }
   return null

@@ -43,8 +43,8 @@ export default async function NewsDetailPage({
   if (!item) notFound()
 
   const category = getCategory(item.category)
-  const allNews = await getAllNews()
-  const related = allNews.filter((n) => n.slug !== item.slug).slice(0, 3)
+  const related = (item as any).relatedNews ?? []
+  const relatedArticles = (item as any).relatedArticles ?? []
   const comments = await getApprovedComments('news', item.slug)
   const affiliateProducts = getAffiliateProductsForNews(item.slug)
 
@@ -174,8 +174,23 @@ export default async function NewsDetailPage({
               Weitere News
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((n) => (
+              {related.map((n: any) => (
                 <ArticleCard key={n.slug} post={n} basePath="news" />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {relatedArticles.length > 0 && (
+        <section className="border-t border-border bg-card">
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+            <h2 className="mb-8 font-serif text-2xl font-bold text-foreground">
+              Passende Artikel
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedArticles.map((a: any) => (
+                <ArticleCard key={a.slug} post={a} basePath="artikel" />
               ))}
             </div>
           </div>

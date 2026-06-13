@@ -10,6 +10,7 @@ import { AffiliateBox } from '@/components/affiliate-box'
 import { CommentsSection } from '@/components/comments-section'
 import { getApprovedComments } from '@/app/actions/comments'
 import { getAllArticles, getArticleBySlug } from '@/sanity/lib/fetch'
+import { RecipeCard } from '@/components/recipe-card'
 import { formatDate } from '@/lib/content'
 
 export const revalidate = 60
@@ -40,14 +41,12 @@ export default async function ArticleDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const [article, allArticles] = await Promise.all([
-    getArticleBySlug(slug),
-    getAllArticles(),
-  ])
+  const article = await getArticleBySlug(slug)
   if (!article) notFound()
 
   const category = getCategory(article.category)
-  const related = allArticles.filter((a) => a.slug !== article.slug).slice(0, 3)
+  const related = (article as any).relatedArticles ?? []
+  const relatedRecipes = (article as any).relatedRecipes ?? []
   const comments = await getApprovedComments('artikel', article.slug)
   const affiliateProducts = getAffiliateProducts(article)
 
@@ -174,6 +173,21 @@ export default async function ArticleDetailPage({
         )}
       </div>
 
+      {relatedRecipes.length > 0 && (
+        <section className="border-t border-border bg-card">
+          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+            <h2 className="mb-8 font-serif text-2xl font-bold text-foreground">
+              Passende Rezepte
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedRecipes.map((r: any) => (
+                <RecipeCard key={r.slug} recipe={r} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {related.length > 0 && (
         <section className="border-t border-border bg-card">
           <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -181,7 +195,7 @@ export default async function ArticleDetailPage({
               Das könnte dich auch interessieren
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((a) => (
+              {related.map((a: any) => (
                 <ArticleCard key={a.slug} post={a} basePath="artikel" />
               ))}
             </div>
