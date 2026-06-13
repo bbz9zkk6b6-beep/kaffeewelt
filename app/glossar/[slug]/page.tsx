@@ -8,7 +8,6 @@ import { ArticleCard } from '@/components/article-card'
 import { RecipeCard } from '@/components/recipe-card'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { BackLink } from '@/components/author-byline'
-import { GlossaryDiscovery } from '@/components/glossary-discovery'
 import type { Article } from '@/lib/content/types'
 
 export const revalidate = 60
@@ -219,7 +218,6 @@ export default async function GlossaryTermPage({
         </section>
       )}
 
-      <GlossaryDiscovery />
     </article>
   )
 }
