@@ -26,7 +26,7 @@ async function loadRecipes(): Promise<Recipe[]> {
         title,
         excerpt,
         type,
-        "image": mainImage.asset->url,
+        "image": image.asset->url,
         "rating": coalesce(rating, 0),
         "ratingCount": coalesce(ratingCount, 0),
         "totalTime": coalesce(cookTime + prepTime, 5),
