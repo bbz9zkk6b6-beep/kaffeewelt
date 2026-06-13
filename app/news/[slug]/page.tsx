@@ -122,16 +122,16 @@ export default async function NewsDetailPage({
               </div>
             )}
 
-            {affiliateProducts.length > 0 && (
-              <div className="rounded-xl border border-accent/30 bg-secondary/40 p-5">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="font-serif text-sm font-semibold text-foreground">
-                    Empfehlungen
-                  </p>
-                  <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent">
-                    Anzeige
-                  </span>
-                </div>
+            <div className="rounded-xl border border-accent/30 bg-secondary/40 p-5">
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-serif text-sm font-semibold text-foreground">
+                  Empfehlungen
+                </p>
+                <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent">
+                  Anzeige
+                </span>
+              </div>
+              {affiliateProducts.length > 0 ? (
                 <ul className="mt-4 flex flex-col gap-3">
                   {affiliateProducts.slice(0, 2).map((product) => (
                     <li key={product.id}>
@@ -154,11 +154,15 @@ export default async function NewsDetailPage({
                     </li>
                   ))}
                 </ul>
-                <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground">
-                  Affiliate-Links — wir erhalten eine kleine Provision. Für dich ändert sich der Preis nicht.
+              ) : (
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Passende Produkte folgen in Kürze.
                 </p>
-              </div>
-            )}
+              )}
+              <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground">
+                Affiliate-Links — wir erhalten eine kleine Provision. Für dich ändert sich der Preis nicht.
+              </p>
+            </div>
           </div>
         </aside>
       </div>
