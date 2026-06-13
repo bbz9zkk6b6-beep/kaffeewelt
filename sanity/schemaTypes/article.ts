@@ -74,33 +74,24 @@ export default defineType({
       type: 'array',
       of: [
         {
-          type: 'object',
-          name: 'heading',
-          fields: [
-            {name: 'text', type: 'string', title: 'Text'},
+          type: 'block',
+          styles: [
+            {title: 'Normal', value: 'normal'},
+            {title: 'Überschrift H2', value: 'h2'},
+            {title: 'Überschrift H3', value: 'h3'},
+            {title: 'Zitat', value: 'blockquote'},
           ],
+          marks: {
+            decorators: [
+              {title: 'Fett', value: 'strong'},
+              {title: 'Kursiv', value: 'em'},
+            ],
+          },
         },
         {
-          type: 'object',
-          name: 'paragraph',
+          type: 'image',
+          options: {hotspot: true},
           fields: [
-            {name: 'text', type: 'text', title: 'Text', rows: 3},
-          ],
-        },
-        {
-          type: 'object',
-          name: 'quote',
-          fields: [
-            {name: 'text', type: 'text', title: 'Zitat', rows: 2},
-            {name: 'cite', type: 'string', title: 'Quelle'},
-          ],
-        },
-        {
-          type: 'object',
-          name: 'inlineImage',
-          title: 'Bild',
-          fields: [
-            {name: 'image', type: 'image', title: 'Bild', options: {hotspot: true}},
             {name: 'alt', type: 'string', title: 'Bildbeschreibung (Alt-Text)'},
             {name: 'caption', type: 'string', title: 'Bildunterschrift (optional)'},
           ],

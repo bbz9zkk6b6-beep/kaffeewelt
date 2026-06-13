@@ -15,15 +15,7 @@ export const ARTICLE_QUERY = groq`
     slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
     "image": image.asset->url,
-    "content": content[]{
-      "type": _type,
-      "id": _key,
-      text,
-      cite,
-      "url": image.asset->url,
-      alt,
-      caption
-    }
+    content
   }
 `
 
@@ -79,15 +71,7 @@ export const GLOSSARY_TERM_QUERY = groq`
     "slug": slug.current, term, definition, synonyms,
     "category": category->value.current,
     "categoryTitle": category->title,
-    "content": content[]{
-      "type": _type,
-      "id": _key,
-      text,
-      cite,
-      "url": image.asset->url,
-      alt,
-      caption
-    },
+    content,
     "faq": faq[]{question, answer},
     "relatedTerms": relatedTerms[]->{term, "slug": slug.current, definition},
     "relatedArticles": relatedArticles[]->{

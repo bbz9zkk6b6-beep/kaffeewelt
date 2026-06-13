@@ -9,16 +9,6 @@ import {
 } from './queries'
 import type { Article, ArticleBlock } from '@/lib/content/types'
 
-type SanityBlock = {
-  type: string
-  id: string
-  text?: string
-  cite?: string
-  url?: string
-  alt?: string
-  caption?: string
-}
-
 type SanityArticleRaw = {
   slug: { current: string }
   title: string
@@ -28,23 +18,39 @@ type SanityArticleRaw = {
   featured?: boolean
   category?: string
   image?: string
-  content?: SanityBlock[]
+  content?: any[]
 }
 
-function mapBlock(b: SanityBlock): ArticleBlock | null {
-  switch (b.type) {
-    case 'heading':
-      return { type: 'heading', id: b.id, text: b.text ?? '' }
-    case 'paragraph':
-      return { type: 'paragraph', text: b.text ?? '' }
-    case 'quote':
-      return { type: 'quote', text: b.text ?? '', cite: b.cite }
-    case 'inlineImage':
-      if (!b.url) return null
-      return { type: 'inlineImage', url: b.url, alt: b.alt, caption: b.caption }
-    default:
-      return null
-  }
+function parsePortableText(blocks: any[]): ArticleBlock[] {
+  if (!Array.isArray(blocks)) return []
+  const result: ArticleBlock[] = []
+  let headingCount = 0
+
+  blocks.forEach((b) => {
+    if (!b) return
+
+    // Bild
+    if (b._type === 'image' && b.asset) {
+      const url = b.asset?.url ?? b.asset?._ref ?? ''
+      if (url) result.push({ type: 'inlineImage', url, alt: b.alt, caption: b.caption })
+      return
+    }
+
+    if (b._type !== 'block' || !Array.isArray(b.children)) return
+    const text = b.children.map((c: any) => c.text ?? '').join('')
+    const parts = text.split(/\n\s*\n+/).map((p: string) => p.trim()).filter(Boolean)
+    if (!parts.length) return
+
+    if (b.style === 'h2' || b.style === 'h3') {
+      result.push({ type: 'heading', id: `h${headingCount++}`, text: parts.join(' ') })
+    } else if (b.style === 'blockquote') {
+      result.push({ type: 'quote', text: parts.join(' ') })
+    } else {
+      parts.forEach((p: string) => result.push({ type: 'paragraph', text: p }))
+    }
+  })
+
+  return result
 }
 
 // Sanity CDN-URL auf optimierte Größe bringen:
@@ -66,9 +72,7 @@ function toArticle(raw: SanityArticleRaw): Article {
     category: raw.category ?? '',
     author: '',
     image: optimizeSanityImage(raw.image),
-    content: (raw.content ?? [])
-      .map(mapBlock)
-      .filter((b): b is ArticleBlock => b !== null),
+    content: parsePortableText(raw.content ?? []),
   }
 }
 
@@ -117,37 +121,6 @@ function toNews(raw: SanityNewsRaw): NewsItem {
   }
 }
 
-function parseNewsContent(blocks: any[]): ArticleBlock[] {
-  if (!Array.isArray(blocks)) return []
-  const result: ArticleBlock[] = []
-  let headingCount = 0
-
-  blocks.forEach((b) => {
-    if (!b) return
-    if (b._type !== 'block' || !Array.isArray(b.children)) return
-
-    const text = b.children.map((c: any) => c.text ?? '').join('')
-    const paragraphs = text
-      .split(/\n\s*\n+/)
-      .map((part: string) => part.trim())
-      .filter(Boolean)
-    if (paragraphs.length === 0) return
-
-    if (b.style === 'h2' || b.style === 'h3') {
-      result.push({
-        type: 'heading' as const,
-        id: `h${headingCount++}`,
-        text: paragraphs.join(' '),
-      })
-    } else {
-      paragraphs.forEach((paragraph: string) => {
-        result.push({ type: 'paragraph' as const, text: paragraph })
-      })
-    }
-  })
-
-  return result
-}
 
 export async function getAllNews(): Promise<NewsItem[]> {
   const sanityData: SanityNewsRaw[] = await client.fetch(NEWS_QUERY, {}, fetchOpts)
@@ -158,7 +131,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
   const data: any = await client.fetch(NEWS_ITEM_QUERY, { slug }, fetchOpts)
   if (data) {
     const item = toNews(data)
-    item.content = parseNewsContent(data.content)
+    item.content = parsePortableText(data.content)
     return item
   }
   return null
@@ -175,7 +148,7 @@ export type SanityGlossaryTerm = {
   category: string
   categoryTitle: string
   synonyms?: string[]
-  content?: { type: string; id: string; text?: string; cite?: string; url?: string; alt?: string; caption?: string }[]
+  content?: any[]
   faq?: { question: string; answer: string }[]
   relatedTerms?: { term: string; slug: string; definition: string }[]
   relatedArticles?: { slug: string; title: string; excerpt: string; date: string; readingTime: number; featured?: boolean; category?: string; image?: string }[]
@@ -189,7 +162,8 @@ export async function getAllGlossaryTerms(): Promise<SanityGlossaryTerm[]> {
 
 export async function getGlossaryTermBySlug(slug: string): Promise<SanityGlossaryTerm | null> {
   const data = await client.fetch(GLOSSARY_TERM_QUERY, { slug }, fetchOpts)
-  return data ?? null
+  if (!data) return null
+  return { ...data, content: parsePortableText(data.content ?? []) }
 }
 
 // ── Produkte ──────────────────────────────────────────────────────────────
