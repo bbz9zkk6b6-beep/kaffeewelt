@@ -11,6 +11,8 @@ import { BackLink } from '@/components/author-byline'
 import { GlossaryDiscovery } from '@/components/glossary-discovery'
 import type { Article } from '@/lib/content/types'
 
+export const revalidate = 60
+
 const SITE_URL = 'https://meine-kleine-kaffeewelt.de'
 
 export async function generateStaticParams() {
