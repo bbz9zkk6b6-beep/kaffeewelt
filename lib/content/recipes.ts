@@ -2,7 +2,7 @@ import type { Recipe } from './types'
 
 export const recipes: Recipe[] = [
   {
-    slug: 'klassischer-espresso',
+    slug: 'espresso',
     title: 'Klassischer Espresso',
     excerpt:
       'Die Grundlage jeder guten Kaffeekreation – kräftig, aromatisch und mit feiner Crema.',
@@ -33,7 +33,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 3, fett: 0, kohlenhydrate: 0, eiweiss: 0 },
   },
   {
-    slug: 'handgebruehter-filterkaffee',
+    slug: 'pour-over-filterkaffee',
     title: 'Handgebrühter Filterkaffee',
     excerpt:
       'Mit dem Handaufguss holst du feine, klare Aromen aus deiner Lieblingsbohne heraus.',
@@ -64,7 +64,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 5, fett: 0, kohlenhydrate: 1, eiweiss: 0 },
   },
   {
-    slug: 'cold-brew-klassisch',
+    slug: 'cold-brew',
     title: 'Cold Brew klassisch',
     excerpt:
       'Über Nacht kalt extrahiert – mild, säurearm und herrlich erfrischend.',
@@ -96,7 +96,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 8, fett: 0, kohlenhydrate: 2, eiweiss: 0 },
   },
   {
-    slug: 'cremiger-cappuccino',
+    slug: 'cappuccino',
     title: 'Cremiger Cappuccino',
     excerpt:
       'Espresso und samtiger Milchschaum im perfekten Gleichgewicht.',
@@ -127,7 +127,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 80, fett: 4, kohlenhydrate: 6, eiweiss: 4 },
   },
   {
-    slug: 'latte-macchiato-schichten',
+    slug: 'latte-macchiato',
     title: 'Latte Macchiato in Schichten',
     excerpt:
       'Drei Schichten aus Milch, Espresso und Schaum – ein echter Hingucker.',
@@ -158,7 +158,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 140, fett: 7, kohlenhydrate: 11, eiweiss: 7 },
   },
   {
-    slug: 'iced-coffee-erfrischend',
+    slug: 'iced-coffee',
     title: 'Erfrischender Iced Coffee',
     excerpt:
       'Schnell gemacht und ideal für heiße Tage – mit Milch und einem Hauch Süße.',
@@ -190,7 +190,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 95, fett: 4, kohlenhydrate: 9, eiweiss: 5 },
   },
   {
-    slug: 'wiener-mokka-sahne',
+    slug: 'cafe-mocha',
     title: 'Wiener Mokka mit Sahne',
     excerpt:
       'Eine süße Versuchung: kräftiger Kaffee mit Schlagsahne und Kakao.',
@@ -222,7 +222,7 @@ export const recipes: Recipe[] = [
     nutrition: { kcal: 180, fett: 15, kohlenhydrate: 9, eiweiss: 2 },
   },
   {
-    slug: 'kuerbis-gewuerz-latte',
+    slug: 'pumpkin-spice-latte',
     title: 'Kürbis-Gewürz-Latte (alkoholfrei)',
     excerpt:
       'Die herbstliche Spezialität mit Kürbispüree und wärmenden Gewürzen.',

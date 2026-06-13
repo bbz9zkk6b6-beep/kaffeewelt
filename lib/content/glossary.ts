@@ -55,7 +55,7 @@ export const glossary: GlossaryTerm[] = [
     synonyms: ['Arabica-Bohne', 'Coffea arabica'],
     related: ['robusta', 'single-origin', 'crema'],
     relatedArticles: ['kaffeeanbau-weltweit', 'roestgrade-verstehen'],
-    relatedRecipes: ['handgebruehter-filterkaffee'],
+    relatedRecipes: ['pour-over-filterkaffee'],
     faq: [
       {
         question: 'Warum gilt Arabica als hochwertiger als Robusta?',
@@ -102,7 +102,7 @@ export const glossary: GlossaryTerm[] = [
     synonyms: ['Robusta-Bohne', 'Coffea canephora', 'Canephora'],
     related: ['arabica', 'crema', 'espresso'],
     relatedArticles: ['kaffeeanbau-weltweit'],
-    relatedRecipes: ['klassischer-espresso'],
+    relatedRecipes: ['espresso'],
     content: [
       {
         type: 'paragraph',
@@ -127,7 +127,7 @@ export const glossary: GlossaryTerm[] = [
     category: 'zubereitung',
     synonyms: ['Crema-Schicht'],
     related: ['espresso', 'robusta', 'extraktion'],
-    relatedRecipes: ['klassischer-espresso', 'cremiger-cappuccino'],
+    relatedRecipes: ['espresso', 'cappuccino'],
     content: [
       {
         type: 'paragraph',
@@ -153,7 +153,7 @@ export const glossary: GlossaryTerm[] = [
     synonyms: ['Espresso-Shot', 'Espressi'],
     related: ['crema', 'extraktion', 'mahlgrad'],
     relatedArticles: ['latte-art-fuer-einsteiger'],
-    relatedRecipes: ['klassischer-espresso', 'cremiger-cappuccino', 'latte-macchiato-schichten'],
+    relatedRecipes: ['espresso', 'cappuccino', 'latte-macchiato'],
     faq: [
       {
         question: 'Ist Espresso stärker als normaler Kaffee?',
@@ -220,7 +220,7 @@ export const glossary: GlossaryTerm[] = [
     synonyms: ['Mahlgrade', 'gemahlen'],
     related: ['extraktion', 'espresso', 'french-press'],
     relatedArticles: ['die-richtige-muehle'],
-    relatedRecipes: ['klassischer-espresso', 'handgebruehter-filterkaffee'],
+    relatedRecipes: ['espresso', 'pour-over-filterkaffee'],
     content: [
       {
         type: 'paragraph',
@@ -264,7 +264,7 @@ export const glossary: GlossaryTerm[] = [
     category: 'zubereitung',
     synonyms: ['Cold-Brew', 'Cold Brew Coffee', 'Kaltbrühkaffee'],
     related: ['french-press', 'extraktion', 'mahlgrad'],
-    relatedRecipes: ['cold-brew-klassisch', 'iced-coffee-erfrischend'],
+    relatedRecipes: ['cold-brew', 'iced-coffee'],
     content: [
       {
         type: 'paragraph',
@@ -337,7 +337,7 @@ export const glossary: GlossaryTerm[] = [
     synonyms: ['Pre-Infusion', 'Vorquellen', 'Bloom', 'Vorbrühen'],
     related: ['extraktion', 'mahlgrad'],
     relatedArticles: ['wasser-die-unterschaetzte-zutat'],
-    relatedRecipes: ['handgebruehter-filterkaffee'],
+    relatedRecipes: ['pour-over-filterkaffee'],
     faq: [
       {
         question: 'Wie lange sollte das Blooming dauern?',
