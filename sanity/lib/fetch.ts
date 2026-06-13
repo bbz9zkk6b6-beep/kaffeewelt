@@ -166,28 +166,24 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
 
 // ── Glossar ───────────────────────────────────────────────────────────────
 
+import { GLOSSARY_QUERY, GLOSSARY_TERM_QUERY } from './queries'
+
 export type SanityGlossaryTerm = {
   slug: string
   term: string
   definition: string
   category: string
+  categoryTitle: string
+  relatedTerms?: { term: string; slug: string; definition: string }[]
 }
 
 export async function getAllGlossaryTerms(): Promise<SanityGlossaryTerm[]> {
-  const data = await client.fetch(
-    `*[_type == "glossaryTerm"] | order(term asc) { "slug": slug.current, term, definition, category }`,
-    {},
-    fetchOpts,
-  )
+  const data = await client.fetch(GLOSSARY_QUERY, {}, fetchOpts)
   return data
 }
 
 export async function getGlossaryTermBySlug(slug: string): Promise<SanityGlossaryTerm | null> {
-  const data = await client.fetch(
-    `*[_type == "glossaryTerm" && slug.current == $slug][0] { "slug": slug.current, term, definition, category }`,
-    { slug },
-    fetchOpts,
-  )
+  const data = await client.fetch(GLOSSARY_TERM_QUERY, { slug }, fetchOpts)
   return data ?? null
 }
 

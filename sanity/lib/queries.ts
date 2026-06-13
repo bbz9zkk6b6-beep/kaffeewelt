@@ -68,9 +68,18 @@ export const NEWS_ITEM_QUERY = groq`
 // Glossar
 export const GLOSSARY_QUERY = groq`
   *[_type == "glossaryTerm"] | order(term asc) {
-    slug, term, definition,
+    "slug": slug.current, term, definition,
     "category": category->value.current,
     "categoryTitle": category->title
+  }
+`
+
+export const GLOSSARY_TERM_QUERY = groq`
+  *[_type == "glossaryTerm" && slug.current == $slug][0] {
+    "slug": slug.current, term, definition,
+    "category": category->value.current,
+    "categoryTitle": category->title,
+    "relatedTerms": relatedTerms[]->{term, "slug": slug.current, definition}
   }
 `
 

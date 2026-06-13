@@ -1,11 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BookOpen } from 'lucide-react'
-import {
-  getGlossaryByLetter,
-  glossaryCategoryLabels,
-  type GlossaryCategory,
-} from '@/lib/content'
+import { getAllGlossaryTerms } from '@/sanity/lib/fetch'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
@@ -14,7 +10,7 @@ export const metadata: Metadata = {
     'Von Arabica bis Terroir – das Kaffee-Glossar von Meine kleine Kaffeewelt erklärt die wichtigsten Begriffe rund um Bohne, Röstung, Mahlgrad und Zubereitung.',
 }
 
-const categoryStyles: Record<GlossaryCategory, string> = {
+const categoryStyles: Record<string, string> = {
   bohne: 'bg-primary/10 text-primary',
   roesten: 'bg-accent/15 text-accent',
   mahlen: 'bg-secondary text-secondary-foreground',
@@ -23,9 +19,17 @@ const categoryStyles: Record<GlossaryCategory, string> = {
   ausstattung: 'bg-muted text-muted-foreground',
 }
 
-export default function GlossaryPage() {
-  const groups = getGlossaryByLetter()
-  const letters = groups.map((g) => g.letter)
+export default async function GlossaryPage() {
+  const terms = await getAllGlossaryTerms()
+
+  // A–Z gruppieren
+  const grouped = terms.reduce<Record<string, typeof terms>>((acc, term) => {
+    const letter = term.term[0].toUpperCase()
+    if (!acc[letter]) acc[letter] = []
+    acc[letter].push(term)
+    return acc
+  }, {})
+  const letters = Object.keys(grouped).sort()
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
@@ -47,7 +51,6 @@ export default function GlossaryPage() {
         </p>
       </header>
 
-      {/* A–Z Sprungnavigation */}
       <nav
         aria-label="Alphabetische Navigation"
         className="mt-8 flex flex-wrap gap-2"
@@ -64,17 +67,17 @@ export default function GlossaryPage() {
       </nav>
 
       <div className="mt-10 flex flex-col gap-10">
-        {groups.map((group) => (
+        {letters.map((letter) => (
           <section
-            key={group.letter}
-            id={`buchstabe-${group.letter}`}
+            key={letter}
+            id={`buchstabe-${letter}`}
             className="scroll-mt-24"
           >
             <h2 className="mb-4 font-serif text-2xl font-bold text-accent">
-              {group.letter}
+              {letter}
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              {group.terms.map((term) => (
+              {grouped[letter].map((term) => (
                 <Link
                   key={term.slug}
                   href={`/glossar/${term.slug}`}
@@ -84,14 +87,16 @@ export default function GlossaryPage() {
                     <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-accent">
                       {term.term}
                     </h3>
-                    <span
-                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${categoryStyles[term.category]}`}
-                    >
-                      {glossaryCategoryLabels[term.category]}
-                    </span>
+                    {term.categoryTitle && (
+                      <span
+                        className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${categoryStyles[term.category] ?? 'bg-muted text-muted-foreground'}`}
+                      >
+                        {term.categoryTitle}
+                      </span>
+                    )}
                   </div>
                   <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">
-                    {term.shortDef}
+                    {term.definition}
                   </p>
                 </Link>
               ))}
