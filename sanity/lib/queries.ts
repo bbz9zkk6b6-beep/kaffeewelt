@@ -74,15 +74,28 @@ export const GLOSSARY_TERM_QUERY = groq`
     content,
     "faq": faq[]{question, answer},
     "relatedTerms": relatedTerms[]->{term, "slug": slug.current, definition},
-    "relatedArticles": relatedArticles[]->{
-      "slug": slug.current, title, excerpt, date, readingTime, featured,
-      "category": category->slug.current,
-      "image": image.asset->url
-    },
-    "relatedRecipes": relatedRecipes[]->{
-      "slug": slug.current, title, excerpt, type, difficulty, totalTime,
-      "image": image.asset->url
-    }
+    "relatedArticles": select(
+      count(relatedArticles) > 0 => relatedArticles[0...3]->{
+        "slug": slug.current, title, excerpt, date, readingTime, featured,
+        "category": category->slug.current,
+        "image": image.asset->url
+      },
+      *[_type == "article"] | order(date desc)[0...3]{
+        "slug": slug.current, title, excerpt, date, readingTime, featured,
+        "category": category->slug.current,
+        "image": image.asset->url
+      }
+    ),
+    "relatedRecipes": select(
+      count(relatedRecipes) > 0 => relatedRecipes[0...3]->{
+        "slug": slug.current, title, excerpt, type, difficulty, totalTime,
+        "image": image.asset->url
+      },
+      *[_type == "recipe"] | order(date desc)[0...3]{
+        "slug": slug.current, title, excerpt, type, difficulty, totalTime,
+        "image": image.asset->url
+      }
+    )
   }
 `
 
