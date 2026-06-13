@@ -243,6 +243,61 @@ export async function getGlossaryTermBySlug(slug: string): Promise<SanityGlossar
   return { ...data, content: parsePortableText(data.content ?? []) }
 }
 
+// ── Rezepte ───────────────────────────────────────────────────────────────
+
+import { RECIPES_QUERY, RECIPE_QUERY } from './queries'
+import type { Recipe } from '@/lib/content/types'
+
+type SanityRecipeRaw = {
+  slug: { current: string }
+  title: string
+  excerpt: string
+  type: string
+  difficulty: string
+  totalTime: number
+  baseServings: number
+  ingredients: any[]
+  steps: any[]
+  tips: string[]
+  nutrition: any
+  image?: string
+  featured?: boolean
+  date?: string
+}
+
+function toRecipe(raw: SanityRecipeRaw): Recipe {
+  return {
+    slug: raw.slug.current,
+    title: raw.title,
+    excerpt: raw.excerpt ?? '',
+    type: raw.type as Recipe['type'],
+    difficulty: raw.difficulty as Recipe['difficulty'],
+    totalTime: raw.totalTime ?? 0,
+    baseServings: raw.baseServings ?? 1,
+    rating: 0,
+    ratingCount: 0,
+    image: optimizeSanityImage(raw.image, 800),
+    author: '',
+    date: raw.date?.slice(0, 10) ?? '',
+    featured: raw.featured ?? false,
+    ingredients: raw.ingredients ?? [],
+    steps: raw.steps ?? [],
+    tips: raw.tips ?? [],
+    nutrition: raw.nutrition ?? { kcal: 0, fett: 0, kohlenhydrate: 0, eiweiss: 0 },
+  }
+}
+
+export async function getAllRecipes(): Promise<Recipe[]> {
+  const data: SanityRecipeRaw[] = await client.fetch(RECIPES_QUERY, {}, fetchOpts)
+  return data.map(toRecipe)
+}
+
+export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
+  const data: SanityRecipeRaw | null = await client.fetch(RECIPE_QUERY, { slug }, fetchOpts)
+  if (!data) return null
+  return toRecipe(data)
+}
+
 // ── Produkte ──────────────────────────────────────────────────────────────
 
 export type SanityProduct = {

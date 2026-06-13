@@ -4,8 +4,10 @@ import { PageHeader } from '@/components/page-header'
 import { RecipeFilter } from '@/components/recipe-filter'
 import { Newsletter } from '@/components/newsletter'
 import { Breadcrumbs } from '@/components/breadcrumbs'
-import { recipes } from '@/lib/content/recipes'
 import { sectionCrumbs } from '@/lib/content/taxonomy'
+import { getAllRecipes } from '@/sanity/lib/fetch'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Kaffee-Rezepte',
@@ -13,7 +15,9 @@ export const metadata: Metadata = {
     'Von Espresso über Cold Brew bis zu süßen Spezialitäten – Rezepte mit praktischem Portionsrechner.',
 }
 
-export default function RecipesPage() {
+export default async function RecipesPage() {
+  const recipes = await getAllRecipes()
+
   return (
     <>
       <PageHeader

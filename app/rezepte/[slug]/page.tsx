@@ -3,13 +3,12 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Clock, Gauge, Flame, Lightbulb, Thermometer } from 'lucide-react'
 import {
-  getRecipe,
-  recipes,
   recipeTypeLabels,
   formatTime,
   recipeCrumbs,
   getBrewingRecommendation,
 } from '@/lib/content'
+import { getAllRecipes, getRecipeBySlug } from '@/sanity/lib/fetch'
 import { PortionCalculator } from '@/components/portion-calculator'
 import { RatingStars } from '@/components/rating-stars'
 import { RecipeCard } from '@/components/recipe-card'
@@ -23,7 +22,10 @@ import { getRecipeRating } from '@/app/actions/ratings'
 import { getApprovedComments } from '@/app/actions/comments'
 import { autolinkGlossary } from '@/lib/glossary-autolink'
 
-export function generateStaticParams() {
+export const revalidate = 60
+
+export async function generateStaticParams() {
+  const recipes = await getAllRecipes()
   return recipes.map((r) => ({ slug: r.slug }))
 }
 
@@ -33,7 +35,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const recipe = getRecipe(slug)
+  const recipe = await getRecipeBySlug(slug)
   if (!recipe) return { title: 'Rezept nicht gefunden' }
   return {
     title: recipe.title,
@@ -48,7 +50,7 @@ export default async function RecipeDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const recipe = getRecipe(slug)
+  const recipe = await getRecipeBySlug(slug)
   if (!recipe) notFound()
 
   const ratingData = await getRecipeRating(recipe.slug)
@@ -95,9 +97,10 @@ export default async function RecipeDetailPage({
   }
 
 
-  const related = recipes
+  const allRecipes = await getAllRecipes()
+  const related = allRecipes
     .filter((r) => r.slug !== recipe.slug && r.type === recipe.type)
-    .concat(recipes.filter((r) => r.slug !== recipe.slug && r.type !== recipe.type))
+    .concat(allRecipes.filter((r) => r.slug !== recipe.slug && r.type !== recipe.type))
     .slice(0, 3)
 
   const nutritionItems = [
@@ -134,7 +137,7 @@ export default async function RecipeDetailPage({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className="site-image-look object-cover"
           />
           <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
             {recipeTypeLabels[recipe.type]}
