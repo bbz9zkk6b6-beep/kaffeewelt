@@ -13,19 +13,19 @@ interface LogoProps {
 
 const iconSizes = {
   sm: 'h-7 w-7',
-  md: 'h-11 w-11',
-  lg: 'h-12 w-12',
+  md: 'h-14 w-14',
+  lg: 'h-16 w-16',
 }
 
 const titleSizes = {
   sm: 'text-base',
-  md: 'text-xl',
-  lg: 'text-2xl',
+  md: 'text-2xl',
+  lg: 'text-3xl',
 }
 
 const kickerSizes = {
   sm: 'text-[10px]',
-  md: 'text-xs',
+  md: 'text-[11px]',
   lg: 'text-xs',
 }
 
