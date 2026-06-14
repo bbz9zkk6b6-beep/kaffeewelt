@@ -37,6 +37,8 @@ const SUGGESTIONS = [
   'Was bedeutet Blooming?',
 ]
 
+const MAX_QUESTION_LENGTH = 500
+
 type Props = {
   isOpen: boolean
   onClose: () => void
@@ -89,6 +91,13 @@ export function UnifiedSearchOverlay({ isOpen, onClose }: Props) {
       })
 
       const data = (await res.json()) as BaristaRecommendation & { aiText?: string }
+      if (!res.ok) {
+        throw new Error(
+          'error' in data && typeof data.error === 'string'
+            ? data.error
+            : 'Anfrage fehlgeschlagen.',
+        )
+      }
 
       const replyText = stripMarkdown(
         data.aiText ?? (data.paragraphs?.join(' ') || 'Ich habe leider keine passende Antwort gefunden.')
@@ -102,10 +111,16 @@ export function UnifiedSearchOverlay({ isOpen, onClose }: Props) {
           recommendation: data,
         },
       ])
-    } catch {
+    } catch (error) {
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: 'Kurz offline — versuch es gleich noch mal. ☕' },
+        {
+          role: 'assistant',
+          content:
+            error instanceof Error
+              ? error.message
+              : 'Kurz offline — versuch es gleich noch mal. ☕',
+        },
       ])
     } finally {
       setLoading(false)
@@ -268,6 +283,7 @@ export function UnifiedSearchOverlay({ isOpen, onClose }: Props) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            maxLength={MAX_QUESTION_LENGTH}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault()

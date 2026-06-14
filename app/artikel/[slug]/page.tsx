@@ -88,6 +88,8 @@ export default async function ArticleDetailPage({
             fill
             priority
             sizes="(max-width: 768px) 100vw, 896px"
+            placeholder={article.imageLqip ? 'blur' : 'empty'}
+            blurDataURL={article.imageLqip}
             className="site-image-look object-cover"
           />
         </div>

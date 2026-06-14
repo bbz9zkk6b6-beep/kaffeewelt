@@ -134,6 +134,12 @@
   }
 }
 
+@layer utilities {
+  .site-image-look {
+    filter: brightness(0.95) saturate(0.85) sepia(0.12);
+  }
+}
+
 @media print {
   .no-print {
     display: none !important;

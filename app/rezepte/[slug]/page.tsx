@@ -137,6 +137,8 @@ export default async function RecipeDetailPage({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
+            placeholder={recipe.imageLqip ? 'blur' : 'empty'}
+            blurDataURL={recipe.imageLqip}
             className="site-image-look object-cover"
           />
           <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">

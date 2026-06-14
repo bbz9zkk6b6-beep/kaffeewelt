@@ -6,7 +6,8 @@ export const ARTICLES_QUERY = groq`
     slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
     "author": author->slug.current,
-    "image": image.asset->url
+    "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip
   }
 `
 
@@ -15,15 +16,18 @@ export const ARTICLE_QUERY = groq`
     slug, title, excerpt, date, readingTime, featured,
     "category": category->slug.current,
     "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip,
     content,
     "relatedArticles": *[_type == "article" && slug.current != $slug] | order(date desc)[0...3]{
       "slug": slug.current, title, excerpt, date, readingTime, featured,
       "category": category->slug.current,
-      "image": image.asset->url
+      "image": image.asset->url,
+      "imageLqip": image.asset->metadata.lqip
     },
     "relatedRecipes": *[_type == "recipe"] | order(date desc)[0...3]{
       "slug": slug.current, title, excerpt, type, difficulty, totalTime,
-      "image": image.asset->url
+      "image": image.asset->url,
+      "imageLqip": image.asset->metadata.lqip
     }
   }
 `
@@ -33,7 +37,8 @@ export const RECIPES_QUERY = groq`
   *[_type == "recipe"] | order(date desc) {
     slug, title, excerpt, type, difficulty, totalTime, baseServings, featured,
     "author": author->slug.current,
-    "image": image.asset->url
+    "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip
   }
 `
 
@@ -42,7 +47,8 @@ export const RECIPE_QUERY = groq`
     slug, title, excerpt, type, difficulty, totalTime, baseServings,
     ingredients, steps, tips, nutrition,
     "author": author->{name, role, bio, "avatar": avatar.asset->url},
-    "image": image.asset->url
+    "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip
   }
 `
 
@@ -52,7 +58,8 @@ export const NEWS_QUERY = groq`
     slug, title, excerpt, date, readingTime,
     "category": category->slug.current,
     "author": author->slug.current,
-    "image": image.asset->url
+    "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip
   }
 `
 
@@ -62,16 +69,19 @@ export const NEWS_ITEM_QUERY = groq`
     "category": category->slug.current,
     "author": author->slug.current,
     "image": image.asset->url,
+    "imageLqip": image.asset->metadata.lqip,
     content,
     "relatedNews": *[_type == "news" && slug.current != $slug] | order(date desc)[0...3]{
       "slug": slug.current, title, excerpt, date, readingTime,
       "category": category->slug.current,
-      "image": image.asset->url
+      "image": image.asset->url,
+      "imageLqip": image.asset->metadata.lqip
     },
     "relatedArticles": *[_type == "article"] | order(date desc)[0...2]{
       "slug": slug.current, title, excerpt, date, readingTime,
       "category": category->slug.current,
-      "image": image.asset->url
+      "image": image.asset->url,
+      "imageLqip": image.asset->metadata.lqip
     }
   }
 `

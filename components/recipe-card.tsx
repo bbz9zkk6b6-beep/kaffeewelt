@@ -17,6 +17,8 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
           alt={recipe.title}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
+          placeholder={recipe.imageLqip ? 'blur' : 'empty'}
+          blurDataURL={recipe.imageLqip}
           className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <span className="absolute left-3 top-3 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">

@@ -18,6 +18,7 @@ type SanityArticleRaw = {
   featured?: boolean
   category?: string
   image?: string
+  imageLqip?: string
   content?: any[]
   relatedArticles?: any[]
   relatedRecipes?: any[]
@@ -108,6 +109,7 @@ function toArticle(raw: SanityArticleRaw): Article {
     category: raw.category ?? '',
     author: '',
     image: optimizeSanityImage(raw.image),
+    imageLqip: raw.imageLqip,
     content: parsePortableText(raw.content ?? []),
   }
 }
@@ -133,6 +135,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     readingTime: a.readingTime ?? 5,
     featured: a.featured ?? false,
     image: optimizeSanityImage(a.image),
+    imageLqip: a.imageLqip,
     content: [],
   }))
   article.relatedRecipes = (data.relatedRecipes ?? []).map((r: any) => ({
@@ -143,6 +146,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     difficulty: r.difficulty ?? '',
     totalTime: r.totalTime ?? 0,
     image: optimizeSanityImage(r.image, 800),
+    imageLqip: r.imageLqip,
   }))
   return article
 }
@@ -158,6 +162,7 @@ type SanityNewsRaw = {
   date?: string
   readingTime?: number
   image?: string
+  imageLqip?: string
   category?: string
 }
 
@@ -171,6 +176,7 @@ function toNews(raw: SanityNewsRaw): NewsItem {
     date: raw.date?.slice(0, 10) ?? '',
     readingTime: raw.readingTime ?? 2,
     image: optimizeSanityImage(raw.image, 800),
+    imageLqip: raw.imageLqip,
     content: [],
   }
 }
@@ -195,6 +201,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
       date: n.date?.slice(0, 10) ?? '',
       readingTime: n.readingTime ?? 2,
       image: optimizeSanityImage(n.image, 800),
+      imageLqip: n.imageLqip,
       content: [],
     }))
     item.relatedArticles = (data.relatedArticles ?? []).map((a: any) => ({
@@ -207,6 +214,7 @@ export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
       readingTime: a.readingTime ?? 5,
       featured: a.featured ?? false,
       image: optimizeSanityImage(a.image),
+      imageLqip: a.imageLqip,
       content: [],
     }))
     return item
@@ -261,6 +269,7 @@ type SanityRecipeRaw = {
   tips: string[]
   nutrition: any
   image?: string
+  imageLqip?: string
   featured?: boolean
   date?: string
 }
@@ -277,6 +286,7 @@ function toRecipe(raw: SanityRecipeRaw): Recipe {
     rating: 0,
     ratingCount: 0,
     image: optimizeSanityImage(raw.image, 800),
+    imageLqip: raw.imageLqip,
     author: '',
     date: raw.date?.slice(0, 10) ?? '',
     featured: raw.featured ?? false,

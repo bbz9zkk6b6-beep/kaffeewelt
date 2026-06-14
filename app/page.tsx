@@ -157,6 +157,8 @@ export default async function HomePage() {
                     src={featured.image || '/placeholder.svg'}
                     alt={featured.title}
                     fill
+                    placeholder={featured.imageLqip ? 'blur' : 'empty'}
+                    blurDataURL={featured.imageLqip}
                     className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, 40vw"
                   />

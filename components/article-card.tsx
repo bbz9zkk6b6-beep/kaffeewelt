@@ -27,7 +27,9 @@ export function ArticleCard({
           alt={post.title}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105 [filter:brightness(0.95)_saturate(0.85)_sepia(0.12)]"
+          placeholder={post.imageLqip ? 'blur' : 'empty'}
+          blurDataURL={post.imageLqip}
+          className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {category && (
           <span className="absolute left-3 top-3 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground backdrop-blur">

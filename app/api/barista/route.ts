@@ -6,9 +6,24 @@ import { client } from '@/sanity/lib/client'
 
 export const runtime = 'nodejs'
 
-const MISTRAL_URL = process.env.MISTRAL_URL ?? 'http://localhost:1234/v1/chat/completions'
+const MISTRAL_URL =
+  process.env.MISTRAL_URL ??
+  (process.env.NODE_ENV === 'development'
+    ? 'http://localhost:1234/v1/chat/completions'
+    : undefined)
 const MISTRAL_MODEL = process.env.MISTRAL_MODEL ?? 'mistralai/ministral-3b-reasoning'
 const MISTRAL_TIMEOUT_MS = 15_000
+const MAX_QUESTION_LENGTH = 500
+const MAX_REQUEST_BYTES = 2_000
+const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_MAX = 10
+
+type RateLimitEntry = {
+  count: number
+  resetAt: number
+}
+
+const rateLimitStore = new Map<string, RateLimitEntry>()
 
 const SYSTEM_PROMPT = `Du bist Max, Kaffee-Sommelier auf meine-kleine-kaffeewelt.de.
 Antworte AUSSCHLIESSLICH auf Kaffee-Themen. Fragen über KI, Programmierung, dich selbst oder andere Themen beantwortest du nicht — antworte dann: "Ich bin nur für Kaffee-Fragen da! ☕ Was möchtest du über Kaffee wissen?"
@@ -70,6 +85,8 @@ async function loadKnowledge(question: string): Promise<string> {
 }
 
 async function askMistral(question: string, context: string): Promise<string | null> {
+  if (!MISTRAL_URL) return null
+
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), MISTRAL_TIMEOUT_MS)
@@ -107,7 +124,42 @@ async function askMistral(question: string, context: string): Promise<string | n
 
 type RequestBody = { question?: unknown }
 
+function getClientIp(request: Request): string {
+  return (
+    request.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
+  )
+}
+
+function isRateLimited(request: Request): boolean {
+  const now = Date.now()
+  const key = getClientIp(request)
+  const entry = rateLimitStore.get(key)
+
+  if (!entry || entry.resetAt <= now) {
+    rateLimitStore.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return false
+  }
+
+  entry.count += 1
+  return entry.count > RATE_LIMIT_MAX
+}
+
 export async function POST(request: Request) {
+  const contentLength = Number(request.headers.get('content-length') ?? 0)
+  if (contentLength > MAX_REQUEST_BYTES) {
+    return NextResponse.json({ error: 'Die Anfrage ist zu groß.' }, { status: 413 })
+  }
+
+  if (isRateLimited(request)) {
+    return NextResponse.json(
+      { error: 'Zu viele Fragen in kurzer Zeit. Bitte warte eine Minute.' },
+      { status: 429 },
+    )
+  }
+
   let body: RequestBody
   try {
     body = (await request.json()) as RequestBody
@@ -118,6 +170,12 @@ export async function POST(request: Request) {
   const question = typeof body.question === 'string' ? body.question.trim() : ''
   if (!question) {
     return NextResponse.json({ error: 'Bitte stelle eine Frage.' }, { status: 400 })
+  }
+  if (question.length > MAX_QUESTION_LENGTH) {
+    return NextResponse.json(
+      { error: `Deine Frage darf höchstens ${MAX_QUESTION_LENGTH} Zeichen lang sein.` },
+      { status: 400 },
+    )
   }
 
   // Rezepte + Wissen parallel aus Sanity laden

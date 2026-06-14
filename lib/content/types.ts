@@ -25,6 +25,7 @@ export type Article = {
   date: string // ISO
   readingTime: number // minutes
   image: string
+  imageLqip?: string
   featured?: boolean
   content: ArticleBlock[]
 }
@@ -38,6 +39,7 @@ export type NewsItem = {
   date: string
   readingTime: number
   image: string
+  imageLqip?: string
   content: ArticleBlock[]
 }
 
@@ -89,6 +91,7 @@ export type Recipe = {
   rating: number
   ratingCount: number
   image: string
+  imageLqip?: string
   author: string
   date: string
   featured?: boolean
