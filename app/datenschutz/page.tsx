@@ -47,6 +47,9 @@ export default function DatenschutzPage() {
               Wenn du das Kommentarformular nutzt, speichern wir deinen Namen und deinen Kommentartext. Kommentare werden erst nach manueller Freigabe veröffentlicht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).
             </p>
             <p className="mt-3">
+              Wenn du das Kontaktformular nutzt, speichern wir deinen Namen, deine E-Mail-Adresse, den Betreff und deine Nachricht, um deine Anfrage zu beantworten. Die Daten werden in unserem Content-Management-System Sanity gespeichert und nach abgeschlossener Bearbeitung manuell gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei vorvertraglichen Anfragen sowie Art. 6 Abs. 1 lit. f DSGVO bei sonstigen Anfragen.
+            </p>
+            <p className="mt-3">
               Wenn du dich für den Newsletter anmeldest, speichern wir deine E-Mail-Adresse. Die Verarbeitung erfolgt ausschließlich auf Grundlage deiner Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Du kannst deine Einwilligung jederzeit widerrufen, indem du dich über den Abmeldelink im Newsletter abmeldest oder uns per E-Mail kontaktierst.
             </p>
           </section>

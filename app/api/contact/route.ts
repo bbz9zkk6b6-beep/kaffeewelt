@@ -1,34 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createHash } from 'crypto'
+import { writeClient } from '@/sanity/lib/client'
 
-// Basis-Validierung für Kontaktformular-Einsendungen.
-const RATE_LIMIT_KEY_PREFIX = 'contact_rate_'
-const RATE_LIMIT_WINDOW = 3600 // 1 Stunde in Sekunden
-const RATE_LIMIT_MAX = 5 // Max 5 Nachrichten pro IP pro Stunde
-
-// In-Memory Rate Limiter (Produktiv: Redis/Upstash empfohlen).
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000
+const RATE_LIMIT_MAX = 5
 
 function getClientIp(request: NextRequest): string {
   return (
-    request.headers.get('x-forwarded-for')?.split(',')[0] ||
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     request.headers.get('x-real-ip') ||
-    '127.0.0.1'
+    ''
   )
 }
 
-function isRateLimited(ip: string): boolean {
-  const key = RATE_LIMIT_KEY_PREFIX + ip
-  const now = Date.now() / 1000
-  const entry = rateLimitMap.get(key)
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW })
-    return false
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) return true
-  entry.count++
-  return false
+function hashIp(ip: string): string | null {
+  return ip ? createHash('sha256').update(ip).digest('hex') : null
 }
 
 function validateEmail(email: string): boolean {
@@ -47,15 +33,6 @@ function sanitizeInput(input: string, maxLength: number): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate-Limiting nach IP.
-    const ip = getClientIp(request)
-    if (isRateLimited(ip)) {
-      return NextResponse.json(
-        { error: 'Zu viele Anfragen. Bitte versuche es später erneut.' },
-        { status: 429 },
-      )
-    }
-
     const body = await request.json()
     const { name, email, subject, message, website } = body
 
@@ -92,20 +69,48 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       )
     }
+    if (
+      name.length > 100 ||
+      email.length > 254 ||
+      subject.length > 200 ||
+      message.length > 5000
+    ) {
+      return NextResponse.json(
+        { error: 'Eine Eingabe ist zu lang.' },
+        { status: 400 },
+      )
+    }
 
     const sanitizedName = sanitizeInput(name, 100)
     const sanitizedEmail = sanitizeInput(email, 254)
     const sanitizedSubject = sanitizeInput(subject, 200)
     const sanitizedMessage = sanitizeInput(message, 5000)
+    const ipHash = hashIp(getClientIp(request))
 
-    // Hier: Nachricht an Email-Service, Datenbank, etc. senden.
-    // Beispiel: await sendContactEmail({ name, email, subject, message })
-    console.log('[Contact] Neue Nachricht von:', {
+    if (ipHash) {
+      const since = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString()
+      const recent = await writeClient.fetch<number>(
+        `count(*[_type == "contactSubmission" && ipHash == $ipHash && createdAt > $since])`,
+        { ipHash, since },
+      )
+
+      if (recent >= RATE_LIMIT_MAX) {
+        return NextResponse.json(
+          { error: 'Zu viele Anfragen. Bitte versuche es später erneut.' },
+          { status: 429 },
+        )
+      }
+    }
+
+    await writeClient.create({
+      _type: 'contactSubmission',
       name: sanitizedName,
       email: sanitizedEmail,
       subject: sanitizedSubject,
-      ip,
-      timestamp: new Date().toISOString(),
+      message: sanitizedMessage,
+      status: 'new',
+      ipHash,
+      createdAt: new Date().toISOString(),
     })
 
     return NextResponse.json(
