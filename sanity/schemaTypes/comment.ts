@@ -23,7 +23,11 @@ export default defineType({
       title: 'Content-Typ',
       type: 'string',
       options: {
-        list: ['article', 'news', 'recipe'],
+        list: [
+          {title: 'Artikel', value: 'artikel'},
+          {title: 'News', value: 'news'},
+          {title: 'Rezept', value: 'rezepte'},
+        ],
       },
       validation: (Rule) => Rule.required(),
     }),
@@ -46,6 +50,13 @@ export default defineType({
         ],
       },
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'ipHash',
+      title: 'IP-Prüfwert',
+      type: 'string',
+      hidden: true,
+      readOnly: true,
     }),
     defineField({
       name: 'createdAt',

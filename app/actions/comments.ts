@@ -59,6 +59,12 @@ export async function submitComment(
   body: string,
   honeypot: string,
 ): Promise<SubmitCommentResult> {
+  if (!['artikel', 'news', 'rezepte'].includes(contentType)) {
+    return { ok: false, error: 'Ungültiger Inhaltstyp.' }
+  }
+  if (!/^[a-z0-9-]+$/.test(contentSlug)) {
+    return { ok: false, error: 'Ungültiger Beitrag.' }
+  }
   if (honeypot && honeypot.trim() !== '') {
     return { ok: false, error: 'Ungültige Anfrage.' }
   }
@@ -124,7 +130,18 @@ export async function setCommentStatus(
   id: string,
   status: 'approved' | 'rejected' | 'pending',
 ): Promise<{ ok: true }> {
+  const comment = await writeClient.fetch<{
+    contentType?: CommentContentType
+    contentSlug?: string
+  } | null>(
+    `*[_type == "comment" && _id == $id][0]{contentType, contentSlug}`,
+    { id },
+  )
+
   await writeClient.patch(id).set({ status }).commit()
   revalidatePath('/admin/kommentare')
+  if (comment?.contentType && comment.contentSlug) {
+    revalidatePath(`/${pathFor[comment.contentType]}/${comment.contentSlug}`)
+  }
   return { ok: true }
 }
