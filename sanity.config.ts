@@ -2,6 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './sanity/schemaTypes'
+import {sendContactReply} from './sanity/documentActions/sendContactReply'
 
 export default defineConfig({
   name: 'kaffeewelt',
@@ -14,5 +15,11 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
+  },
+  document: {
+    actions: (previous, context) =>
+      context.schemaType === 'contactSubmission'
+        ? [...previous, sendContactReply]
+        : previous,
   },
 })

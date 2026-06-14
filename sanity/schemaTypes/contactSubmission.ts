@@ -51,6 +51,53 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'replySubject',
+      title: 'Antwort-Betreff',
+      type: 'string',
+      description: 'Ohne Eingabe wird „Re: Betreff“ verwendet.',
+    }),
+    defineField({
+      name: 'replyBody',
+      title: 'Antwort',
+      type: 'text',
+      rows: 10,
+      description: 'Antwort schreiben, veröffentlichen und danach „Antwort senden“ wählen.',
+    }),
+    defineField({
+      name: 'replyStatus',
+      title: 'Versandstatus',
+      type: 'string',
+      readOnly: true,
+      initialValue: 'draft',
+      options: {
+        list: [
+          {title: 'Entwurf', value: 'draft'},
+          {title: 'Versendet', value: 'sent'},
+          {title: 'Fehlgeschlagen', value: 'failed'},
+        ],
+      },
+    }),
+    defineField({
+      name: 'sentAt',
+      title: 'Versendet am',
+      type: 'datetime',
+      readOnly: true,
+    }),
+    defineField({
+      name: 'brevoMessageId',
+      title: 'Brevo Nachrichten-ID',
+      type: 'string',
+      readOnly: true,
+      hidden: ({document}) => !document?.brevoMessageId,
+    }),
+    defineField({
+      name: 'sendError',
+      title: 'Versandfehler',
+      type: 'text',
+      readOnly: true,
+      hidden: ({document}) => !document?.sendError,
+    }),
+    defineField({
       name: 'ipHash',
       title: 'IP-Prüfwert',
       type: 'string',
