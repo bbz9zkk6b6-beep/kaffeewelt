@@ -20,10 +20,24 @@ export async function generateMetadata({
   const { slug } = await params
   const product = await getProductBySlug(slug)
   if (!product) return { title: 'Produkt nicht gefunden' }
+  const canonical = `/produkte/${product.slug}`
   return {
-    title: `${product.title} — Meine kleine Kaffeewelt`,
+    title: product.title,
     description: product.excerpt,
-    openGraph: { images: [product.image] },
+    alternates: { canonical },
+    openGraph: {
+      title: product.title,
+      description: product.excerpt,
+      url: canonical,
+      type: 'article',
+      images: [product.image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.title,
+      description: product.excerpt,
+      images: [product.image],
+    },
   }
 }
 
@@ -71,7 +85,7 @@ export default async function ProduktDetailPage({
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover [filter:brightness(0.95)_saturate(0.85)_sepia(0.12)]"
+            className="site-image-look object-cover"
           />
         </div>
 

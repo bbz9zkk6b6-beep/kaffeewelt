@@ -26,10 +26,24 @@ export async function generateMetadata({
   const { slug } = await params
   const item = await getNewsBySlug(slug)
   if (!item) return { title: 'News nicht gefunden' }
+  const canonical = `/news/${item.slug}`
   return {
     title: item.title,
     description: item.excerpt,
-    openGraph: { images: [item.image] },
+    alternates: { canonical },
+    openGraph: {
+      title: item.title,
+      description: item.excerpt,
+      url: canonical,
+      type: 'article',
+      images: [item.image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: item.title,
+      description: item.excerpt,
+      images: [item.image],
+    },
   }
 }
 

@@ -4,9 +4,17 @@ import { ContactForm } from '@/components/contact-form'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Kontakt | Meine kleine Kaffeewelt',
+  title: 'Kontakt',
   description:
     'Nimm Kontakt mit dem Team von Meine kleine Kaffeewelt auf. Wir freuen uns auf deine Fragen, dein Feedback und deine Ideen.',
+  alternates: { canonical: '/kontakt' },
+  openGraph: {
+    title: 'Kontakt',
+    description:
+      'Nimm Kontakt mit dem Team von Meine kleine Kaffeewelt auf. Wir freuen uns auf deine Fragen, dein Feedback und deine Ideen.',
+    url: '/kontakt',
+    type: 'website',
+  },
 }
 
 export default function KontaktPage() {

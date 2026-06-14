@@ -8,9 +8,17 @@ import { categories, articles, recipes, news } from '@/lib/content'
 import { sectionCrumbs } from '@/lib/content/taxonomy'
 
 export const metadata: Metadata = {
-  title: 'Kategorien | Meine kleine Kaffeewelt',
+  title: 'Kategorien',
   description:
     'Entdecke alle Themenbereiche rund um Kaffee – von Bohnenkunde über Zubereitung bis zu Rezepten und Produkttests.',
+  alternates: { canonical: '/kategorien' },
+  openGraph: {
+    title: 'Kategorien',
+    description:
+      'Entdecke alle Themenbereiche rund um Kaffee – von Bohnenkunde über Zubereitung bis zu Rezepten und Produkttests.',
+    url: '/kategorien',
+    type: 'website',
+  },
 }
 
 function countForCategory(slug: string): number {

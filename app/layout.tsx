@@ -5,6 +5,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { SearchProvider } from '@/components/search-context'
 import { RootClientWrapper } from '@/app/root-client'
+import { getSiteUrl } from '@/lib/site'
 import './globals.css'
 
 const inter = Inter({
@@ -20,7 +21,7 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://meine-kleine-kaffeewelt.de'),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: 'Meine kleine Kaffeewelt – Das Magazin rund um Kaffee',
     template: '%s | Meine kleine Kaffeewelt',
@@ -36,7 +37,6 @@ export const metadata: Metadata = {
     'Kaffee-News',
     'Bohnenkunde',
   ],
-  generator: 'v0.app',
   openGraph: {
     title: 'Meine kleine Kaffeewelt',
     description:
@@ -71,5 +71,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-

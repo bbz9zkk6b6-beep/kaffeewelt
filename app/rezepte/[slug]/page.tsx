@@ -37,10 +37,24 @@ export async function generateMetadata({
   const { slug } = await params
   const recipe = await getRecipeBySlug(slug)
   if (!recipe) return { title: 'Rezept nicht gefunden' }
+  const canonical = `/rezepte/${recipe.slug}`
   return {
     title: recipe.title,
     description: recipe.excerpt,
-    openGraph: { images: [recipe.image] },
+    alternates: { canonical },
+    openGraph: {
+      title: recipe.title,
+      description: recipe.excerpt,
+      url: canonical,
+      type: 'article',
+      images: [recipe.image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: recipe.title,
+      description: recipe.excerpt,
+      images: [recipe.image],
+    },
   }
 }
 

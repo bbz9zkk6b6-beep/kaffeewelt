@@ -28,10 +28,24 @@ export async function generateMetadata({
   const { slug } = await params
   const article = await getArticleBySlug(slug)
   if (!article) return { title: 'Artikel nicht gefunden' }
+  const canonical = `/artikel/${article.slug}`
   return {
     title: article.title,
     description: article.excerpt,
-    openGraph: { images: [article.image] },
+    alternates: { canonical },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      url: canonical,
+      type: 'article',
+      images: [article.image],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt,
+      images: [article.image],
+    },
   }
 }
 

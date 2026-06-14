@@ -3,9 +3,10 @@ import { PageHeader } from '@/components/page-header'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Datenschutz | Meine kleine Kaffeewelt',
+  title: 'Datenschutz',
   description:
     'Datenschutzerklärung von Meine kleine Kaffeewelt – wie wir mit deinen Daten umgehen.',
+  alternates: { canonical: '/datenschutz' },
 }
 
 export default function DatenschutzPage() {

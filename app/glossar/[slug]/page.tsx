@@ -28,13 +28,23 @@ export async function generateMetadata({
   const term = await getGlossaryTermBySlug(slug)
   if (!term) return { title: 'Begriff nicht gefunden' }
   const canonical = `/glossar/${term.slug}`
-  const title = `${term.term} – Kaffee-Glossar | Meine kleine Kaffeewelt`
+  const title = `${term.term} – Kaffee-Glossar`
   const description = term.definition
   return {
     title,
     description,
     alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: 'article' },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   }
 }
 

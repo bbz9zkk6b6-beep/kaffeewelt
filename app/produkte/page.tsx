@@ -7,8 +7,16 @@ import { getAllProducts } from '@/sanity/lib/fetch'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Empfehlungen — Meine kleine Kaffeewelt',
+  title: 'Empfehlungen',
   description: 'Kaffee-Zubehör das ich selbst nutze und empfehle — Mühlen, Maschinen, Zubehör.',
+  alternates: { canonical: '/produkte' },
+  openGraph: {
+    title: 'Empfehlungen',
+    description:
+      'Kaffee-Zubehör das ich selbst nutze und empfehle — Mühlen, Maschinen, Zubehör.',
+    url: '/produkte',
+    type: 'website',
+  },
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -71,7 +79,7 @@ export default async function ProdukteUebersichtPage() {
                       alt={product.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105 [filter:brightness(0.95)_saturate(0.85)_sepia(0.12)]"
+                      className="site-image-look object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {product.featured && (
                       <span className="absolute left-3 top-3 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">

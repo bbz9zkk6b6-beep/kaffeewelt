@@ -6,9 +6,17 @@ import { PageHeader } from '@/components/page-header'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Über mich | Meine kleine Kaffeewelt',
+  title: 'Über mich',
   description:
     'Wer steckt hinter Meine kleine Kaffeewelt? Die Geschichte, die Idee und die Leidenschaft für guten Kaffee.',
+  alternates: { canonical: '/ueber-uns' },
+  openGraph: {
+    title: 'Über mich',
+    description:
+      'Wer steckt hinter Meine kleine Kaffeewelt? Die Geschichte, die Idee und die Leidenschaft für guten Kaffee.',
+    url: '/ueber-uns',
+    type: 'website',
+  },
 }
 
 const values = [
@@ -47,7 +55,7 @@ export default function UeberUnsPage() {
               alt="Das Team von Meine kleine Kaffeewelt"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
+              className="site-image-look object-cover"
             />
           </div>
           <div>

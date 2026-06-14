@@ -3,8 +3,9 @@ import { PageHeader } from '@/components/page-header'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 
 export const metadata: Metadata = {
-  title: 'Impressum | Meine kleine Kaffeewelt',
+  title: 'Impressum',
   description: 'Impressum und Anbieterkennzeichnung von Meine kleine Kaffeewelt.',
+  alternates: { canonical: '/impressum' },
 }
 
 export default function ImpressumPage() {

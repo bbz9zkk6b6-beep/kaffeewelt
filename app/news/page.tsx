@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   title: 'Kaffee-News',
   description:
     'Aktuelle Neuigkeiten, Trends und Entwicklungen aus der Welt des Kaffees.',
+  alternates: { canonical: '/news' },
+  openGraph: {
+    title: 'Kaffee-News',
+    description:
+      'Aktuelle Neuigkeiten, Trends und Entwicklungen aus der Welt des Kaffees.',
+    url: '/news',
+    type: 'website',
+  },
 }
 
 export default async function NewsPage() {
